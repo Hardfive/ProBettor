@@ -59,8 +59,8 @@ results = pd.DataFrame(dataset)
 results[['1st_away', '1st_home', 'goal_home', 'goal_away']].astype(int)
 driver.quit()
 #on recupère le contenu du fichier dans un dataframe
-chemin = r"C:\Users\hhdur\DataGoal\collecte\Ligues2022_23\Ligue1"
+chemin = path
 df= pd.read_csv(chemin)
 #On additionne nos dataframes et on enregistre les modifications dans un fichier.
 concatenation = pd.concat([results, df], axis=0)
-concatenation.to_csv(r"C:\Users\hhdur\DataGoal\collecte\Ligues2022_23\Ligue1", index=False)
+concatenation.to_csv(path, index=False)
