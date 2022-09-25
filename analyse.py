@@ -59,4 +59,4 @@ df_home.groupby('home')[['goal_scored', 'goal_conceded']].mean().plot.bar(rot=66
 df_away.groupby('away')[['1st_scored','1st_conceded', '2st_scored', '2st_conceded']].mean().plot.bar(rot=66, legend=True, figsize=(13,7))
 df_away.groupby('away')[['goal_scored', 'goal_conceded']].mean().plot.bar(rot=66, legend=True, figsize=(13,7))
 #on enregistre les modifications dans un fichier csv
-df.to_csv(r"C:\Users\hhdur\DataGoal\traitement\ligues2022_23\Ligue1")
+df.to_csv(path)
