@@ -1,0 +1,7 @@
+# ignore the logger create during scraping
+*.log
+# ignore pycache module
+__pycache__
+# ignore jupyter notebook file
+.ipynb*
+*.ipynb
