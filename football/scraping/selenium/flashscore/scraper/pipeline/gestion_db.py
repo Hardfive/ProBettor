@@ -1,3 +1,6 @@
+"""
+Gestion module contains methods for handle database
+"""
 from dict_db import Description
 import os
 
@@ -5,89 +8,87 @@ import pymysql
 
 
 class Admin(Description):
-    """Contains methode for handle database when error
-    occurs during preprocessing"""
 
     PWD = os.environ.get('DB_PWD')
-    USER = 'hh'
-    DATABASE = 'football'
-    SAVE_POINT = '/home/hhanstein/Projects/IA/sports/football/data/collect\
-/2022_23/'
 
-    def __init__(self, surfix):
+    def __init__(self, lig_id):
         super().__init__()
-        self.surfix = surfix
+        self.lig_id = lig_id
         self.connection = pymysql.connect(
             host='localhost',
-            user=Admin.USER,
+            user='hh',
             passwd=Admin.PWD,
-            database=Admin.DATABASE)
+            database='football')
 
-    def create(self, tables, views):
-        """Create tables, views and triggers describe in db_dict
+    def create_table(self, tables):
+        """Create tables, views and triggers describe in Description class
          when it does not exists yet."""
         with self.connection.cursor() as cur:
             for table in tables:
-                req = f"CREATE TABLE IF NOT EXISTS {table+self.surfix}\
+                req = f"CREATE TABLE IF NOT EXISTS {self.lig_id}_{table}\
  ("
                 for descr in tables[table]:
                     col_name = descr[0]
-                    typeCol = descr[1]
-                    if typeCol == 'tiU':
-                        typeCol = 'TINYINT UNSIGNED NOT NULL DEFAULT 0, '
-                    elif typeCol == 'De':
-                        typeCol = 'DECIMAL(2,1) NOT NULL DEFAULT 0, '
-                    elif typeCol == 'dT':
-                        typeCol = 'DATETIME NOT NULL, '
+                    type_col = descr[1]
+                    if type_col == 'tiU':
+                        type_col = 'TINYINT UNSIGNED NOT NULL DEFAULT 0, '
+                    elif type_col == 'tiU Key':
+                        type_col = 'TINYINT UNSIGNED NOT NULL DEFAULT 0 KEY, '
+                    elif type_col == 'De':
+                        type_col = 'DECIMAL(2,1) NOT NULL DEFAULT 0, '
+                    elif type_col == 'dT':
+                        type_col = 'DATETIME NOT NULL, '
+                    elif type_col == 'Da':
+                        type_col = 'DATE NOT NULL, '
                     else:
-                        typeCol = 'VARCHAR(%s) NOT NULL, ' % typeCol
-                    req = req + "%s %s" % (col_name, typeCol)
+                        type_col = 'VARCHAR(%s) NOT NULL, ' % type_col
+                    req = req + "%s %s" % (col_name, type_col)
                     if 'pKey' in descr[:]:
                         if 'fKey' in descr[:]:
-                            fk = "fk_"+table+"_"+descr[5]+self.surfix
-                            rf = descr[5]+self.surfix+"("+descr[0]+")"
+                            fk = "fk__"+table+"__"+descr[4]+"_"+self.lig_id
+                            rf = self.lig_id+"_"+descr[4]+"("+descr[0]+")"
                             req = req + "PRIMARY KEY (%s), \
 CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s ON DELETE CASCADE ON UPDATE CASCADE, "\
     % (descr[0], fk, descr[0], rf)
                         else:
                             req = req + " PRIMARY KEY (%s), " % (descr[0])
-                    elif 'cKey' in descr[:]:
-                        if 'fKey' in descr[:]:
-                            fk = "fk_"+table+"_"+descr[5]+self.surfix
-                            rf = descr[5]+self.surfix+"(team)"
-                            req = req + "PRIMARY KEY (%s, %s, %s), \
-CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s ON DELETE CASCADE ON UPDATE \
-CASCADE, " % ("home_team", "away_team", "date_time", fk, descr[0], rf)
-                        else:
-                            req = req + "PRIMARY KEY (%s, %s, %s), " % \
-                                ("date_time", "home_team", "away_team")
-                    elif 'fKey' in descr[:] and descr[0] == 'home_team':
-                        fk = "fk_"+table+"_"+descr[4]+self.surfix
-                        rf = descr[5]+self.surfix+"(team)"
+                    if 'cKey' in descr[:]:
+                        keys = descr[3].split()
                         req = req + "PRIMARY KEY (%s, %s, %s), \
-CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s ON DELETE CASCADE ON UPDATE \
-CASCADE, " % ("home_team", "away_team", "date_time", fk, descr[0], rf)
+" % (keys[0], keys[1], keys[2])
+                    if 'index' in descr[:]:
+                        keys = descr[3].split()
+                        req = req + "INDEX %s (%s, %s), \
+" % (keys[0]+"_"+keys[1], keys[0], keys[1])
                 req = req[:-2] + ")"
-                # cur.execute(req)
+                # print(f"{req}\n")
+                cur.execute(req)
+            self.connection.commit()
+
+    def create_views(self, views):
+        with self.connection.cursor() as cur:
             for view in views:
-                req = f"CREATE OR REPLACE VIEW {view+self.surfix} AS\
- SELECT ROW_NUMBER() OVER (ORDER BY total_avg DESC) AS ranking, "
+                req = f"CREATE VIEW IF NOT EXISTS {view[:2]}{self.lig_id}_\
+{view[2:]} AS SELECT ROW_NUMBER() OVER (ORDER BY average DESC) AS ranking, "
                 for descr in views[view]:
                     col_name = descr
                     req = req + "%s, " % col_name
-                req = req[:-2] + " FROM %s" % view[2:]+self.surfix
-                print(f"{req}\n")
-                # cur.execute(req)
-            triggers = super().create_trigger()
-            for trigger in triggers:
-                print(trigger)
-                # cur.execute(trigger)
-            # self.connection.commit()
+                req = req[:-2] + " FROM %s" % self.lig_id+"_"+view[2:]
+                # print(f"{req}\n")
+                cur.execute(req)
+            self.connection.commit()
 
-    def reset(self):
-        pass
+    def create_triggers(self):
+        with self.connection.cursor() as cur:
+            triggers = super().write_trigger()
+            for trigger in triggers:
+                # print(trigger)
+                cur.execute(trigger)
+            # self.connection.commit()
 
 
 if __name__ == "__main__":
-    test = Admin('Sl')
-    test.create(Description.TABLES, Description.VIEWS)
+    test = Admin('liga')
+    # test.create_table(Description.TABLES)
+    # test.create_views(Description.VIEWS)
+    # test.create_triggers()

@@ -1,15 +1,9 @@
 from ligue1 import Process
 
-fix_url = ('https://www.flashscore.com/football/germany/bundesliga/\
-fixtures/')
-fix_fPath = ("/home/hhanstein/Projects/IA/probettor/football/data/event\
-/2022_23/fixtures/bundesliga.txt")
-rsl_url = ('https://www.flashscore.com/football/germany/bundesliga/\
-results/')
-rsl_fPath = ("/home/hhanstein/Projects/IA/probettor/football/data/event\
-/2022_23/results/bundesliga.csv")
-nm_table = 'home_resultsBdL'
-surfix = 'BdL'
+fixture_url = ('https://www.flashscore.fr/football/allemagne/bundesliga\
+/calendrier/')
+result_url = ('https://www.flashscore.fr/football/allemagne/bundesliga\
+/resultats/')
+lig_id = 'bdliga'
 
-my_spider = Process(fix_url, fix_fPath, rsl_url, rsl_fPath,
-                    nm_table, surfix).pipeline()
+my_spider = Process(fixture_url, result_url, lig_id, events=9).pipeline()

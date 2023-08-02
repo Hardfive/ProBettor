@@ -8,86 +8,151 @@ import pymysql
 
 
 class Preprocessing(Admin):
+    """Manipulate and clean the data before storage"""
 
-    path = "/home/hhanstein/Projects/IA/probettor/football/data/event\
-/2022_23/results/test"
     PWD = os.environ.get('DB_PWD')
 
-    def __init__(self, rsl_fPath, nm_table, surfix):
-        super().__init__(surfix)
-        self.rsl_fPath = rsl_fPath
-        self.nm_table = nm_table
-        self.surfix = surfix
+    def __init__(self, lig_id):
+        super().__init__(lig_id)
+        self.lig_id = lig_id
         self.connection = pymysql.connect(
                             host='localhost',
                             user='hh',
                             passwd=Preprocessing.PWD,
                             database='football')
 
-    def processing(self, df):
-        """Use existing columns to create new features
-        rename and store them into database.
-        return : dataframe.
+    def fixture_processing(self, fixture):
+        """Store fixture data into the database.
         """
-        df = pd.DataFrame(df)
-        numeric_col = ['mp', 'home_goal', 'away_goal', '1st_home_goal',
-                       '1st_away_goal']
-        for col in df.columns:
-            if col in numeric_col:
-                df[col] = df[col].astype(int)
-        df['date_time'] = ["2023-"+row[3:5]+"-"+row[:2]+" "+row[7:]
-                           for row in df['date_time']]
-        df['2nd_home_goal'] = df['home_goal']-df['1st_home_goal']
-        df['2nd_away_goal'] = df['away_goal']-df['1st_away_goal']
-        df['1st_goal'] = df['1st_home_goal']+df['1st_away_goal']
-        df['2nd_goal'] = df['2nd_home_goal']+df['2nd_away_goal']
-        df['global'] = df['home_goal']+df['away_goal']
-        home_dict = {
-            '1st_home_goal': '1st_score',
-            '1st_away_goal': '1st_concede',
-            '1st_goal': '1st_global',
-            '2nd_home_goal': '2nd_score',
-            '2nd_away_goal': '2nd_concede',
-            '2nd_goal': '2nd_global',
-            'home_goal': 'total_score',
-            'away_goal': 'total_concede',
-        }
-        df = df[['mp', 'date_time', 'home_team', 'away_team',
-                 '1st_home_goal', '1st_away_goal', '1st_goal',
-                 '2nd_home_goal', '2nd_away_goal', '2nd_goal',
-                 'home_goal', 'away_goal', 'global']]
-        df.rename(columns=(home_dict), inplace=True)
-        old_csv = pd.read_csv(self.rsl_fPath)
-        new_csv = pd.concat([df, old_csv], axis=0)
-        # remove duplicates if there are any
-        new_csv.drop_duplicates(subset=["date_time", "home_team", "away_team"],
-                                keep="last", inplace=True)
-        new_csv.sort_values(by='date_time', ascending=False, inplace=True)
-        new_csv.to_csv(self.rsl_fPath, index=False)
-        """with self.connection.cursor() as cur:
+        df = pd.DataFrame([fixture], columns=['journée', 'date_time',
+                                              'home_team', 'away_team'])
+        df['date_time'] = pd.to_datetime(df['date_time'],
+                                         format='%d.%m.%Y %H:%M')
+        with self.connection.cursor() as cur:
             try:
                 cols = "`,`".join([str(i) for i in df.
                                   columns.tolist()])
                 for i, row in df.iterrows():
-                    insert_df = (f"INSERT INTO {self.nm_table}\
-             (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
+                    insert_df = (f"INSERT INTO {self.lig_id}_fixture\
+                (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
                     cur.execute(insert_df, tuple(row))
                 self.connection.commit()
             except pymysql.err.ProgrammingError:
-                super().create(self, Description.TABLES, Description.VIEWS)
+                super().create_table(Description.TABLES)
+                super().create_views(Description.VIEWS)
+                super().create_triggers()
+                cols = "`,`".join([str(i) for i in df.
+                                  columns.tolist()])
+                for i, row in df.iterrows():
+                    insert_df = (f"INSERT INTO {self.lig_id}_fixture\
+                (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
+                    cur.execute(insert_df, tuple(row))
+                self.connection.commit()
+
+    def summary_processing(self, summary):
+        """Load results data into a DataFrame
+        make différence between colums to create new feature
+        store the dataframe into the database.
+        """
+        df = pd.DataFrame(summary)
+        numeric_col = ['journée', 'total_home_team_goal',
+                       'total_away_team_goal', '1st_home_team_goal',
+                       '1st_away_team_goal']
+        for col in df.columns:
+            if col in numeric_col:
+                df[col] = df[col].astype(int)
+        df['date_time'] = pd.to_datetime(df['date_time'],
+                                         format='%d.%m.%Y %H:%M')
+        df['2nd_home_team_goal'] = df['total_home_team_goal']-df['1st_\
+home_team_goal']
+        df['2nd_away_team_goal'] = df['total_away_team_goal']-df['1st_\
+away_team_goal']
+        df['1st_total_goal'] = df['1st_home_team_goal']+df['1st_\
+team_away_goal']
+        df['2nd_total_goal'] = df['2nd_home_team_goal']+df['2nd_\
+away_team_goal']
+        df['global'] = df['total_home_team_goal']+df['total_away_team_goal']
+        df = df[['round', 'date_time', 'home_team', 'away_team',
+                 '1st_home_team_goal', '1st_away_team_goal', '1st_total_goal',
+                 '2nd_home_team_goal', '2nd_away_team_goal', '2nd_total_goal',
+                 'total_home_team_goal', 'total_away_team_goal', 'global']]
+        with self.connection.cursor() as cur:
+            table = self.lig_id+"_overall_standing"
+            select_sql = f"SELECT team FROM {table}"
+            cur.execute(select_sql)
+            result = cur.fetchone()
+            if result is None:
                 teams = pd.concat([df.home_team, df.away_team], axis=0)
                 teams = teams.pd.drop_duplicates()
                 for i, row in teams.iterrows():
-                    table = homeGlobal_stats + self.nm_table[12:]
                     insert_teams = (f"INSERT INTO {table}\
-                                 VALUES (" + " %s, " * (len(row) - 1) + " %s)")
+                             VALUES (" + " %s, " * (len(row) - 1) + " %s)")
                     cur.execute(insert_teams)
-                for i, row in df.iterrows():
-                    insert_df = (f"INSERT INTO {self.nm_table}\
-             (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
-                    cur.execute(insert_df, tuple(row))
-                self.connection.commit()
-            except pymysql.err.IntegrityError as err:
-                print(f"{err} IntegrityError")
-            finally:
-                self.connection.close()"""
+            cols = "`,`".join([str(i) for i in df.
+                              columns.tolist()])
+            for i, row in df.iterrows():
+                insert_df = (f"INSERT INTO {self.lig_id}_summary\
+            (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
+                cur.execute(insert_df, tuple(row))
+            self.connection.commit()
+
+    def goal_processing(self, goal):
+        """Store into the database incidents like player who has scored
+        and much more about it.
+        """
+        df = pd.DataFrame(goal,
+                          columns=['round', 'player', 'time_goal',
+                                   'team', 'opponent'])
+        with self.connection.cursor() as cur:
+            cols = "`,`".join([str(i) for i in df.
+                              columns.tolist()])
+            for i, row in df.iterrows():
+                insert_df = (f"INSERT INTO {self.lig_id}_scorer\
+            (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
+                cur.execute(insert_df, tuple(row))
+            self.connection.commit()
+
+    def stat_processing(self, stats):
+        """
+        store match statistics, such as:
+        shoot, accurate shoot, cards, and corners
+        into the database.
+        """
+        df = pd.DataFrame(stats)
+        df.fillna(0, inplace=True)
+        with self.connection.cursor() as cur:
+            cols = "`,`".join([str(i) for i in df.
+                              columns.tolist()])
+            for i, row in df.iterrows():
+                insert_df = (f"INSERT INTO {self.lig_id}_stats\
+            (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
+                cur.execute(insert_df, tuple(row))
+            self.connection.commit()
+
+    def h2h_processing(self, h2h):
+        """
+        Handle head to head data between the teams
+        store the data into h2h table of the dataset.
+        """
+        df = pd.DataFrame([h2h], columns=['date', 'home_team',
+                          'away_team', 'home_team_goal', 'away_team_goal'])
+        df['date'] = pd.to_datetime(df['date'], format='%d.%m.%y')
+        with self.connection.cursor() as cur:
+            cols = "`,`".join([str(i) for i in df.
+                              columns.tolist()])
+            for i, row in df.iterrows():
+                request = (f"INSERT INTO {self.lig_id}_h2h\
+            (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
+                cur.execute(request, tuple(row))
+            self.connection.commit()
+            # self.connection.close()
+
+
+if __name__ == "__main__":
+    lig_id = 'liga'
+
+    # goal_df = pd.read_csv(goal_data)
+    # shoot_df = pd.read_csv(shoot_data)
+    # script = Preprocessing(lig_id)
+    # script.goal_processing(goal_df)
+    # script.stat_processing(shoot_df)

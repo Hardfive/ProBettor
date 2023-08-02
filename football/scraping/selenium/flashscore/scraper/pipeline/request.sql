@@ -1,879 +1,1204 @@
-#Ceci est un ensemble de requête sql pour ma base de données rélationnel. L''idée est d''avoir un produit minimal viable (PMV)
-#Eliminer tout superflu qui ne servirai pas aux tests primaires.
-
-#home statistiques tables 
-CREATE TABLE IF NOT EXISTS homeGlobal_statsL1 (
+# Sql request for football database
+CREATE TABLE IF NOT EXISTS overall_standing (
 	team VARCHAR(30) NOT NULL,
-	total_sum TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_avg DECIMAL(2,1) NOT NULL DEFAULT 0,
-	total_max TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_min TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    total_btts TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team));
-
-CREATE TABLE IF NOT EXISTS homeScore_statsL1 (
-	team VARCHAR(30) NOT NULL,
-	total_sum TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_avg DECIMAL(2,1) NOT NULL DEFAULT 0,
-	total_max TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_min TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    total_wSc TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team),
-	CONSTRAINT fk_homeScore_statsL1_homeGlobal_statsL1 FOREIGN KEY (team) REFERENCES homeGlobal_statsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-
-CREATE TABLE IF NOT EXISTS homeConcede_statsL1 (
-	team VARCHAR(30) NOT NULL,
-	total_sum TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_avg DECIMAL(2,1) NOT NULL DEFAULT 0,
-	total_max TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_min TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    total_clS TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team),
-	CONSTRAINT fk_homeConcede_statsL1_homeGlobal_statsL1 FOREIGN KEY (team) REFERENCES homeGlobal_statsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-
-#away statistiques tables 
-CREATE TABLE IF NOT EXISTS awayGlobal_statsL1 (
-	team VARCHAR(30) NOT NULL,
-	total_sum TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_avg DECIMAL(2,1) NOT NULL DEFAULT 0,
-	total_max TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_min TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    total_btts TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team));
-
-CREATE TABLE IF NOT EXISTS awayScore_statsL1 (
-	team VARCHAR(30) NOT NULL,
-	total_sum TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_avg DECIMAL(2,1) NOT NULL DEFAULT 0,
-	total_max TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_min TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    total_wSc TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team),
-	CONSTRAINT fk_awayScore_statsL1_awayGlobal_statsL1 FOREIGN KEY (team) REFERENCES awayGlobal_statsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-
-CREATE TABLE IF NOT EXISTS awayConcede_statsL1 (
-	team VARCHAR(30) NOT NULL,
-	total_sum TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_avg DECIMAL(2,1) NOT NULL DEFAULT 0,
-	total_max TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	total_min TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    total_clS TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team),
-	CONSTRAINT fk_awayConcede_statsL1_awayGlobal_statsL1 FOREIGN KEY (team) REFERENCES awayGlobal_statsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-
-#home bins tables 
-CREATE TABLE IF NOT EXISTS homeGlobal_binsL1 (
-	team VARCHAR(30) NOT NULL,
-	under0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0, 
-	under1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	under2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team),
-	CONSTRAINT fk_homeGlobal_binsL1_homeGlobal_statsL1 FOREIGN KEY (team) REFERENCES homeGlobal_statsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-
-CREATE TABLE IF NOT EXISTS homeScore_binsL1 (
-	team VARCHAR(30) NOT NULL,
-	under0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0, 
-	under1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	under2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team),
-	CONSTRAINT fk_homeScore_bins_homeGlobal_binsL1 FOREIGN KEY (team) REFERENCES homeGlobal_binsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-
-CREATE TABLE IF NOT EXISTS homeConcede_binsL1 (
-	team VARCHAR(30) NOT NULL,
-	under0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0, 
-	under1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	under2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team),
-	CONSTRAINT fk_homeConcede_binsL1_homeGLobal_binsL1 FOREIGN KEY (team) REFERENCES homeGlobal_binsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-
-#away bins tables 
-CREATE TABLE IF NOT EXISTS awayGlobal_binsL1 (
-	team VARCHAR(30) NOT NULL,
-	under0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0, 
-	under1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	under2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team),
-	CONSTRAINT fk_awayGlobal_binsL1_awayGlobal_statsL1 FOREIGN KEY (team) REFERENCES awayGlobal_statsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-
-CREATE TABLE IF NOT EXISTS awayScore_binsL1 (
-	team VARCHAR(30) NOT NULL,
-	under0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0, 
-	under1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	under2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team),
-	CONSTRAINT fk_awayScore_binsL1_awayGlobal_binsL1 FOREIGN KEY (team) REFERENCES awayGlobal_binsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-
-CREATE TABLE IF NOT EXISTS awayConcede_binsL1 (
-	team VARCHAR(30) NOT NULL,
-	under0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0, 
-	under1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	under2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over0_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over1_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	over2_5 TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	PRIMARY KEY (team),
-	CONSTRAINT fk_awayConcede_binsL1_awayGlobal_binsL1 FOREIGN KEY (team) REFERENCES awayGlobal_binsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-	
-#home results table 
-CREATE TABLE IF NOT EXISTS home_resultsL1 (
-	mp TINYINT UNSIGNED NOT NULL,
-	date_time DATETIME NOT NULL,
-	home_team VARCHAR(30) NOT NULL,
-	away_team VARCHAR(30) NOT NULL,
-	1st_score TINYINT UNSIGNED NOT NULL,
-	1st_concede TINYINT UNSIGNED NOT NULL,
-	1st_global TINYINT UNSIGNED NOT NULL,
-	2nd_score TINYINT UNSIGNED NOT NULL,
-	2nd_concede TINYINT UNSIGNED NOT NULL,
-	2nd_global TINYINT UNSIGNED NOT NULL,
-	total_score TINYINT UNSIGNED NOT NULL,
-	total_concede TINYINT UNSIGNED NOT NULL,
-	global TINYINT UNSIGNED NOT NULL,
-	PRIMARY KEY (date_time, home_team, away_team),
-	CONSTRAINT fk_home_resultsL1_homeGlobal_statsL1 FOREIGN KEY (home_team) REFERENCES homeGlobal_statsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-
-#away results table 
-CREATE TABLE IF NOT EXISTS away_resultsL1 (
-	mp TINYINT UNSIGNED NOT NULL,
-	date_time DATETIME NOT NULL,
-	home_team VARCHAR(30) NOT NULL,
-	away_team VARCHAR(30) NOT NULL,
-	1st_score TINYINT UNSIGNED NOT NULL,
-	1st_concede TINYINT UNSIGNED NOT NULL,
-	1st_global TINYINT UNSIGNED NOT NULL,
-	2nd_score TINYINT UNSIGNED NOT NULL,
-	2nd_concede TINYINT UNSIGNED NOT NULL,
-	2nd_global TINYINT UNSIGNED NOT NULL,
-	total_score TINYINT UNSIGNED NOT NULL,
-	total_concede TINYINT UNSIGNED NOT NULL,
-	global TINYINT UNSIGNED NOT NULL,
-	PRIMARY KEY (date_time, home_team, away_team),
-	CONSTRAINT fk_away_resultsL1_awayGlobal_statsL1 FOREIGN KEY (away_team) REFERENCES awayGlobal_statsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
-
-CREATE TABLE IF NOT EXISTS global_ranking (
-    team VARCHAR(30) NOT NULL,
-    mp TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    draw TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    lose TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    win TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    sco TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    con TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    diff, TINYINT NOT NULL DEFAULT 0,
-    points TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(team),
-	CONSTRAINT fk_global_ranking_homeGlobal_statsL1 FOREIGN KEY (team) REFERENCES homeGlobal_statsL1(team)
-	ON DELETE CASCADE ON UPDATE CASCADE);
+    journée TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	draw VARCHAR(4) NOT NULL,
+	lose TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	win TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	points TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    scored TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    conceded TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	average DECIMAL(2,1) NOT NULL DEFAULT 0,
+	PRIMARY KEY (team)
 );
-
-#home dataset tables
-CREATE TABLE IF NOT EXISTS homeScore_datasetL1 (
-	mp TINYINT UNSIGNED,
+CREATE TABLE IF NOT EXISTS home_standing (
+	team VARCHAR(30) NOT NULL,
+    journée TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	draw VARCHAR(4) NOT NULL,
+	lose TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	win TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	points TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    scored TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    conceded TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	average DECIMAL(2,1) NOT NULL DEFAULT 0,
+	PRIMARY KEY (team),
+	CONSTRAINT fk__home_standing__overall_standing FOREIGN KEY (team) REFERENCES overall_standing(team)
+	ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS away_standing (
+	team VARCHAR(30) NOT NULL,
+    journée TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	draw VARCHAR(4) NOT NULL,
+	lose TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	win TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	points TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    scored TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    conceded TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	average DECIMAL(2,1) NOT NULL DEFAULT 0,
+	PRIMARY KEY (team),
+	CONSTRAINT fk__away_standing__overall_standing FOREIGN KEY (team) REFERENCES overall_standing(team)
+	ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS summary (
+	journée TINYINT UNSIGNED NOT NULL,
 	date_time DATETIME NOT NULL,
 	home_team VARCHAR(30) NOT NULL,
 	away_team VARCHAR(30) NOT NULL,
-	ranking TINYINT UNSIGNED NOT NULL,
-	total_sum TINYINT UNSIGNED NOt NULL,
-	total_avg DECIMAL(2,1) NOt NULL,
-	total_max TINYINT UNSIGNED NOT NULL,
-	total_min TINYINT UNSIGNED NOT NULL,
-    total_wSc TINYINT UNSIGNED NOT NULL,
-	under_0_5 TINYINT UNSIGNED NOT NULL,
-	under_1_5 TINYINT UNSIGNED NOT NULL,
-	under_2_5 TINYINT UNSIGNED NOT NULL,
-	over_0_5 TINYINT UNSIGNED NOT NULL,
-	over_1_5 TINYINT UNSIGNED NOT NULL,
-	over_2_5 TINYINT UNSIGNED NOT NULL,
-	total_score TINYINT UNSIGNED NOT NULL,
-	PRimARY kEY (date_time, home_team, away_team));
-
-CREATE TABLE IF NOT EXISTS homeConcede_datasetL1 (
-	mp TINYINT UNSIGNED,
-	date_time DATETIME NOT NULL,
-	home_team VARCHAR(30) NOT NULL,
-	away_team VARCHAR(30) NOT NULL,
-	ranking TINYINT UNSIGNED NOT NULL,
-	total_sum TINYINT UNSIGNED NOt NULL,
-	total_avg DECIMAL(2,1) NOt NULL,
-	total_max TINYINT UNSIGNED NOT NULL,
-	total_min TINYINT UNSIGNED NOT NULL,
-    total_clS TINYINT UNSIGNED NOT NULL,
-	under_0_5 TINYINT UNSIGNED NOT NULL,
-	under_1_5 TINYINT UNSIGNED NOT NULL,
-	under_2_5 TINYINT UNSIGNED NOT NULL,
-	over_0_5 TINYINT UNSIGNED NOT NULL,
-	over_1_5 TINYINT UNSIGNED NOT NULL,
-	over_2_5 TINYINT UNSIGNED NOT NULL,
-	total_concede TINYINT UNSIGNED NOT NULL,
-	PRimARY kEY (date_time, home_team, away_team));
-
-CREATE TABLE IF NOT EXISTS homeGlobal_datasetL1 (
-	mp TINYINT UNSIGNED,
-	date_time DATETIME NOT NULL,
-	home_team VARCHAR(30) NOT NULL,
-	away_team VARCHAR(30) NOT NULL,
-	ranking TINYINT UNSIGNED NOT NULL,
-	total_sum TINYINT UNSIGNED NOt NULL,
-	total_avg DECIMAL(2,1) NOt NULL,
-	total_max TINYINT UNSIGNED NOT NULL,
-	total_min TINYINT UNSIGNED NOT NULL,
-    total_btts TINYINT UNSIGNED NOT NULL,
-	under_0_5 TINYINT UNSIGNED NOT NULL,
-	under_1_5 TINYINT UNSIGNED NOT NULL,
-	under_2_5 TINYINT UNSIGNED NOT NULL,
-	over_0_5 TINYINT UNSIGNED NOT NULL,
-	over_1_5 TINYINT UNSIGNED NOT NULL,
-	over_2_5 TINYINT UNSIGNED NOT NULL,
+	1st_home_team_goal TINYINT UNSIGNED NOT NULL,
+	1st_away_team_goal TINYINT UNSIGNED NOT NULL,
+	1st_total_goal TINYINT UNSIGNED NOT NULL,
+	2nd_home_team_goal TINYINT UNSIGNED NOT NULL,
+	2nd_away_team_goal TINYINT UNSIGNED NOT NULL,
+	2nd_total_goal TINYINT UNSIGNED NOT NULL,
+	total_home_team_goal TINYINT UNSIGNED NOT NULL,
+	total_away_team_goal TINYINT UNSIGNED NOT NULL,
 	global TINYINT UNSIGNED NOT NULL,
-	PRimARY kEY (date_time, home_team, away_team));
+    result VARCHAR(30) NOT NULL,
+	PRIMARY KEY (date_time, home_team, away_team));
 
-#away dataset tables 
-CREATE TABLE IF NOT EXISTS awayScore_datasetL1 (
-	mp TINYINT UNSIGNED,
+CREATE TABLE scorer (
+    journée TINYINT UNSIGNED NOT NULL,
+    player VARCHAR(30) NOT NULL,
+    time_goal TINYINT UNSIGNED NOT NULL,
+    team VARCHAR(30) NOT NULL,
+    opponent VARCHAR(30) NOT NULL, 
+    PRIMARY KEY(journée, player, time_goal)
+);
+CREATE TABLE IF NOT EXISTS stats (
+    journée TINYINT UNSIGNED NOT NULL,
+	home_team VARCHAR(30) NOT NULL,
+	away_team VARCHAR(30) NOT NULL,
+    home_team_shoot TINYINT UNSIGNED NOT NULL,
+    away_team_shoot TINYINT UNSIGNED NOT NULL,
+    home_team_acc_shoot TINYINT UNSIGNED NOT NULL,
+    away_team_acc_shoot TINYINT UNSIGNED NOT NULL,
+    home_team_corner TINYINT UNSIGNED NOT NULL,
+    away_team_corner TINYINT UNSIGNED NOT NULL,
+    home_team_yellow_card TINYINT UNSIGNED NOT NULL,
+    away_team_yellow_card TINYINT UNSIGNED NOT NULL,
+    home_team_exg TINYINT UNSIGNED NOT NULL,
+    away_team_exg TINYINT UNSIGNED NOT NULL,
+    PRIMARY KEY(journée, home_team, away_team)
+);
+CREATE TABLE IF NOT EXISTS h2h (
+    date DATE NOT NULL,
+    home_team VARCHAR(30) NOT NULL,
+    away_team VARCHAR(30) NOT NULL,
+    home_team_goal VARCHAR(30) NOT NULL,
+    away_team_goal TINYINT UNSIGNED NOT NULL,
+    PRIMARY KEY(date, home_team, away_team)
+);
+# datasets
+CREATE TABLE IF NOT EXISTS global_overall_ds (
+	journée TINYINT UNSIGNED NOT NULL,
 	date_time DATETIME NOT NULL,
 	home_team VARCHAR(30) NOT NULL,
 	away_team VARCHAR(30) NOT NULL,
-	ranking TINYINT UNSIGNED NOT NULL,
-	total_sum TINYINT UNSIGNED NOt NULL,
-	total_avg DECIMAL(2,1) NOt NULL,
-	total_max TINYINT UNSIGNED NOT NULL,
-	total_min TINYINT UNSIGNED NOT NULL,
-    total_wSc TINYINT UNSIGNED NOT NULL,
-	under_0_5 TINYINT UNSIGNED NOT NULL,
-	under_1_5 TINYINT UNSIGNED NOT NULL,
-	under_2_5 TINYINT UNSIGNED NOT NULL,
-	over_0_5 TINYINT UNSIGNED NOT NULL,
-	over_1_5 TINYINT UNSIGNED NOT NULL,
-	over_2_5 TINYINT UNSIGNED NOT NULL,
-	total_score TINYINT UNSIGNED NOT NULL,
-	PRimARY kEY (date_time, home_team, away_team));
-
-CREATE TABLE IF NOT EXISTS awayConcede_datasetL1 (
-	mp TINYINT UNSIGNED,
+    journée5_ht TINYINT UNSIGNED DEFAULT 0,
+	journée4_ht TINYINT UNSIGNED DEFAULT 0, 
+	journée3_ht TINYINT UNSIGNED DEFAULT 0,
+	journée2_ht TINYINT UNSIGNED DEFAULT 0,
+	journée1_ht TINYINT UNSIGNED DEFAULT 0,
+	journée5_at TINYINT UNSIGNED DEFAULT 0, 
+	journée4_at TINYINT UNSIGNED DEFAULT 0,
+	journée3_at TINYINT UNSIGNED DEFAULT 0,
+	journée2_at TINYINT UNSIGNED DEFAULT 0,
+	journée1_at TINYINT UNSIGNED DEFAULT 0,
+    over0_all_ht TINYINT UNSIGNED DEFAULT 0,
+    over1_all_ht TINYINT UNSIGNED DEFAULT 0,
+    over2_all_ht TINYINT UNSIGNED DEFAULT 0,
+    over0_all_at TINYINT UNSIGNED DEFAULT 0,
+    over1_all_at TINYINT UNSIGNED DEFAULT 0,
+    over2_all_at TINYINT UNSIGNED DEFAULT 0,
+    global TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	INDEX ind_journée_date_time (journée, date_time)
+);
+CREATE TABLE IF NOT EXISTS global_ds (
+	journée TINYINT UNSIGNED NOT NULL,
 	date_time DATETIME NOT NULL,
 	home_team VARCHAR(30) NOT NULL,
 	away_team VARCHAR(30) NOT NULL,
-	ranking TINYINT UNSIGNED NOT NULL,
-	total_sum TINYINT UNSIGNED NOt NULL,
-	total_avg DECIMAL(2,1) NOt NULL,
-	total_max TINYINT UNSIGNED NOT NULL,
-	total_min TINYINT UNSIGNED NOT NULL,
-    total_clS TINYINT UNSIGNED NOT NULL,
-	under_0_5 TINYINT UNSIGNED NOT NULL,
-	under_1_5 TINYINT UNSIGNED NOT NULL,
-	under_2_5 TINYINT UNSIGNED NOT NULL,
-	over_0_5 TINYINT UNSIGNED NOT NULL,
-	over_1_5 TINYINT UNSIGNED NOT NULL,
-	over_2_5 TINYINT UNSIGNED NOT NULL,
-	total_concede TINYINT UNSIGNED NOT NULL,
-	PRimARY kEY (date_time, home_team, away_team));
-
-CREATE TABLE IF NOT EXISTS awayGlobal_datasetL1 (
-	mp TINYINT UNSIGNED,
+    journée5_ht TINYINT UNSIGNED DEFAULT 0,
+	journée4_ht TINYINT UNSIGNED DEFAULT 0, 
+	journée3_ht TINYINT UNSIGNED DEFAULT 0,
+	journée2_ht TINYINT UNSIGNED DEFAULT 0,
+	journée1_ht TINYINT UNSIGNED DEFAULT 0,
+	journée5_at TINYINT UNSIGNED DEFAULT 0, 
+	journée4_at TINYINT UNSIGNED DEFAULT 0,
+	journée3_at TINYINT UNSIGNED DEFAULT 0,
+	journée2_at TINYINT UNSIGNED DEFAULT 0,
+	journée1_at TINYINT UNSIGNED DEFAULT 0,
+    over0_all_ht TINYINT UNSIGNED DEFAULT 0,
+    over1_all_ht TINYINT UNSIGNED DEFAULT 0,
+    over2_all_ht TINYINT UNSIGNED DEFAULT 0,
+    over0_all_at TINYINT UNSIGNED DEFAULT 0,
+    over1_all_at TINYINT UNSIGNED DEFAULT 0,
+    over2_all_at TINYINT UNSIGNED DEFAULT 0,
+    global TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	INDEX ind_journée_date_time (journée, date_time)
+);
+CREATE TABLE IF NOT EXISTS scored_conceded_all_ds (
+	journée TINYINT UNSIGNED NOT NULL,
 	date_time DATETIME NOT NULL,
 	home_team VARCHAR(30) NOT NULL,
 	away_team VARCHAR(30) NOT NULL,
-	ranking TINYINT UNSIGNED NOT NULL,
-	total_sum TINYINT UNSIGNED NOt NULL,
-	total_avg DECIMAL(2,1) NOt NULL,
-	total_max TINYINT UNSIGNED NOT NULL,
-	total_min TINYINT UNSIGNED NOT NULL,
-    total_btts TINYINT UNSIGNED NOT NULL,
-	under_0_5 TINYINT UNSIGNED NOT NULL,
-	under_1_5 TINYINT UNSIGNED NOT NULL,
-	under_2_5 TINYINT UNSIGNED NOT NULL,
-	over_0_5 TINYINT UNSIGNED NOT NULL,
-	over_1_5 TINYINT UNSIGNED NOT NULL,
-	over_2_5 TINYINT UNSIGNED NOT NULL,
-	global TINYINT UNSIGNED NOT NULL,
-	PRimARY kEY (date_time, home_team, away_team));
-
-#home_stats view
-CREATE OR REPLACE VIEW V_homeScore_statsL1 AS 
-SELECT ROW_NUMBER() OVER (ORDER BY total_avg DESC) AS ranking,
+    journée5_ht TINYINT UNSIGNED DEFAULT 0,
+	journée4_ht TINYINT UNSIGNED DEFAULT 0, 
+	journée3_ht TINYINT UNSIGNED DEFAULT 0,
+	journée2_ht TINYINT UNSIGNED DEFAULT 0,
+	journée1_ht TINYINT UNSIGNED DEFAULT 0,
+	journée5_at TINYINT UNSIGNED DEFAULT 0, 
+	journée4_at TINYINT UNSIGNED DEFAULT 0,
+	journée3_at TINYINT UNSIGNED DEFAULT 0,
+	journée2_at TINYINT UNSIGNED DEFAULT 0,
+	journée1_at TINYINT UNSIGNED DEFAULT 0,
+    over0_scored_ht TINYINT UNSIGNED DEFAULT 0,
+    over1_scored_ht TINYINT UNSIGNED DEFAULT 0,
+    over2_scored_ht TINYINT UNSIGNED DEFAULT 0,
+    over0_conceded_at TINYINT UNSIGNED DEFAULT 0,
+    over1_conceded_at TINYINT UNSIGNED DEFAULT 0,
+    over2_conceded_at TINYINT UNSIGNED DEFAULT 0,
+    without_scoring_ht TINYINT UNSIGNED DEFAULT 0,
+    average_ht TINYINT UNSIGNED DEFAULT 0,
+    clean_sheet_at TINYINT UNSIGNED DEFAULT 0,
+    average_at TINYINT UNSIGNED DEFAULT 0,
+    total_home_team_goal TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	INDEX ind_journée_date_time (journée, date_time)
+);
+CREATE TABLE IF NOT EXISTS scored_conceded_ds (
+	journée TINYINT UNSIGNED NOT NULL,
+	date_time DATETIME NOT NULL,
+	home_team VARCHAR(30) NOT NULL,
+	away_team VARCHAR(30) NOT NULL,
+    journée5_ht TINYINT UNSIGNED DEFAULT 0,
+	journée4_ht TINYINT UNSIGNED DEFAULT 0, 
+	journée3_ht TINYINT UNSIGNED DEFAULT 0,
+	journée2_ht TINYINT UNSIGNED DEFAULT 0,
+	journée1_ht TINYINT UNSIGNED DEFAULT 0,
+	journée5_at TINYINT UNSIGNED DEFAULT 0, 
+	journée4_at TINYINT UNSIGNED DEFAULT 0,
+	journée3_at TINYINT UNSIGNED DEFAULT 0,
+	journée2_at TINYINT UNSIGNED DEFAULT 0,
+	journée1_at TINYINT UNSIGNED DEFAULT 0,
+    over0_scored_ht TINYINT UNSIGNED DEFAULT 0,
+    over1_scored_ht TINYINT UNSIGNED DEFAULT 0,
+    over2_scored_ht TINYINT UNSIGNED DEFAULT 0,
+    over0_conceded_at TINYINT UNSIGNED DEFAULT 0,
+    over1_conceded_at TINYINT UNSIGNED DEFAULT 0,
+    over2_conceded_at TINYINT UNSIGNED DEFAULT 0,
+    without_scoring_ht TINYINT UNSIGNED DEFAULT 0,
+    average_ht TINYINT UNSIGNED DEFAULT 0,
+    clean_sheet_at TINYINT UNSIGNED DEFAULT 0,
+    average_at TINYINT UNSIGNED DEFAULT 0,
+    total_home_team_goal TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	INDEX ind_journée_date_time (journée, date_time)
+);
+CREATE TABLE IF NOT EXISTS conceded_scored_all_ds (
+	journée TINYINT UNSIGNED NOT NULL,
+	date_time DATETIME NOT NULL,
+	home_team VARCHAR(30) NOT NULL,
+	away_team VARCHAR(30) NOT NULL,
+    journée5_ht TINYINT UNSIGNED DEFAULT 0,
+	journée4_ht TINYINT UNSIGNED DEFAULT 0, 
+	journée3_ht TINYINT UNSIGNED DEFAULT 0,
+	journée2_ht TINYINT UNSIGNED DEFAULT 0,
+	journée1_ht TINYINT UNSIGNED DEFAULT 0,
+	journée5_at TINYINT UNSIGNED DEFAULT 0, 
+	journée4_at TINYINT UNSIGNED DEFAULT 0,
+	journée3_at TINYINT UNSIGNED DEFAULT 0,
+	journée2_at TINYINT UNSIGNED DEFAULT 0,
+	journée1_at TINYINT UNSIGNED DEFAULT 0,
+    over0_conceded_ht TINYINT UNSIGNED DEFAULT 0,
+    over1_conceded_ht TINYINT UNSIGNED DEFAULT 0,
+    over2_conceded_ht TINYINT UNSIGNED DEFAULT 0,
+    over0_scored_at TINYINT UNSIGNED DEFAULT 0,
+    over1_scored_at TINYINT UNSIGNED DEFAULT 0,
+    over2_scored_at TINYINT UNSIGNED DEFAULT 0,
+    clean_sheet_ht TINYINT UNSIGNED DEFAULT 0,
+    average_ht TINYINT UNSIGNED DEFAULT 0,
+    without_scoring_at TINYINT UNSIGNED DEFAULT 0,
+    average_at TINYINT UNSIGNED DEFAULT 0,
+    total_away_team_goal TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	INDEX ind_journée_date_time (journée, date_time)
+);
+CREATE TABLE IF NOT EXISTS conceded_scored_ds (
+	journée TINYINT UNSIGNED NOT NULL,
+	date_time DATETIME NOT NULL,
+	home_team VARCHAR(30) NOT NULL,
+	away_team VARCHAR(30) NOT NULL,
+    journée5_ht TINYINT UNSIGNED DEFAULT 0,
+	journée4_ht TINYINT UNSIGNED DEFAULT 0, 
+	journée3_ht TINYINT UNSIGNED DEFAULT 0,
+	journée2_ht TINYINT UNSIGNED DEFAULT 0,
+	journée1_ht TINYINT UNSIGNED DEFAULT 0,
+	journée5_at TINYINT UNSIGNED DEFAULT 0, 
+	journée4_at TINYINT UNSIGNED DEFAULT 0,
+	journée3_at TINYINT UNSIGNED DEFAULT 0,
+	journée2_at TINYINT UNSIGNED DEFAULT 0,
+	journée1_at TINYINT UNSIGNED DEFAULT 0,
+    over0_conceded_ht TINYINT UNSIGNED DEFAULT 0,
+    over1_conceded_ht TINYINT UNSIGNED DEFAULT 0,
+    over2_conceded_ht TINYINT UNSIGNED DEFAULT 0,
+    over0_scored_at TINYINT UNSIGNED DEFAULT 0,
+    over1_scored_at TINYINT UNSIGNED DEFAULT 0,
+    over2_scored_at TINYINT UNSIGNED DEFAULT 0,
+    clean_sheet_ht TINYINT UNSIGNED DEFAULT 0,
+    average_ht TINYINT UNSIGNED DEFAULT 0,
+    without_scoring_at TINYINT UNSIGNED DEFAULT 0,
+    average_at TINYINT UNSIGNED DEFAULT 0,
+    total_away_team_goal TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	INDEX ind_journée_date_time (journée, date_time)
+);
+# Views allow us to put ranking in the standing tables
+CREATE OR REPLACE VIEW V_overall_standing AS 
+SELECT ROW_NUMBER() OVER (ORDER BY points DESC) AS ranking,
 team,
-total_sum,
-total_avg,
-total_max,
-total_min,
-total_wSc
-FROM homeScore_statsL1;
-
-CREATE OR REPLACE VIEW V_homeConcede_statsL1 AS
-SELECT ROW_NUMBER() OVER (ORDER BY total_avg DESC) AS ranking,
-team,
-total_sum,
-total_avg,
-total_max,
-total_min,
-total_clS
-FROM homeConcede_statsL1;
-
-CREATE OR REPLACE VIEW V_homeGlobal_statsL1 AS
-SELECT ROW_NUMBER() OVER (ORDER BY total_avg DESC) AS ranking,
-team,
-total_sum,
-total_avg,
-total_max,
-total_min,
-total_btts
-FROM homeGlobal_statsL1;
-
-#away_stats view
-CREATE OR REPLACE VIEW V_awayScore_statsL1 AS 
-SELECT ROW_NUMBER() OVER (ORDER BY total_avg DESC) AS ranking,
-team,
-total_sum,
-total_avg,
-total_max,
-total_min,
-total_wSc
-FROM awayScore_statsL1;
-
-CREATE OR REPLACE VIEW V_awayConcede_statsL1 AS
-SELECT ROW_NUMBER() OVER (ORDER BY total_avg DESC) AS ranking,
-team,
-total_sum,
-total_avg,
-total_max,
-total_min,
-total_clS
-FROM awayConcede_statsL1;
-
-CREATE OR REPLACE VIEW V_awayGlobal_statsL1 AS
-SELECT ROW_NUMBER() OVER (ORDER BY total_avg DESC) AS ranking,
-team,
-total_sum,
-total_avg,
-total_max,
-total_min,
-total_btts
-FROM awayGlobal_statsL1;
-
-CREATE OR REPLACE VIEW V_global_ranking AS 
-SELECT ROW_NUMBER() OVER (ORDER BY PTS DESC) AS ranking
-team,
-mp,
+journée,
 draw,
 lose,
 win,
-sco,
-con,
-diff,
-points FROM global_ranking;
+points,
+scored,
+conceded,
+average
+FROM overall_standing;
 
-# Away results trigger
-# Ce trigger se déclenche pendant l''insertion de données dans home_results. Mets a jour la table away_results
-CREATE TRIGGER afterInsert_home_resultsL1_away_resultsL1 AFTER INSERT ON home_resultsL1 FOR EACH ROW
+CREATE OR REPLACE VIEW V_home_standing AS 
+SELECT ROW_NUMBER() OVER (ORDER BY points DESC) AS ranking,
+team,
+journée,
+draw,
+lose,
+win,
+points,
+scored,
+conceded,
+average
+FROM home_standing;
+
+CREATE OR REPLACE VIEW V_away_standing AS 
+SELECT ROW_NUMBER() OVER (ORDER BY points DESC) AS ranking,
+team,
+journée,
+draw,
+lose,
+win,
+points,
+scored,
+conceded,
+average
+FROM away_standing;
+
+CREATE TRIGGER afterInsert__overall_standing__team AFTER INSERT ON overall_standing FOR EACH ROW
 BEGIN
-
-	INSERT INTO away_resultsL1 
-	VALUES
-	(NEW.mp, NEW.date_time, NEW.home_team, NEW.away_team, NEW.1st_concede, NEW.1st_score, NEW.1st_global, NEW.2nd_concede, NEW.2nd_score, NEW.2nd_global, NEW.total_score, NEW.total_concede, NEW.global);
+	INSERT INTO home_standing (team)
+	VALUES (NEW.team);
+	INSERT INTO away_standing (team)
+	VALUES (NEW.team);
 END //
 
-
-
-#home Trigger
-# L''insertion des équipes dans homeGlobal_stats, déclenche l''insertion des équipes dans les tables "stats".
-CREATE TRIGGER afterInsert_homeGlobal_statsL1 AFTER INSERT ON homeGlobal_statsL1 FOR EACH ROW
+# Ce trigger se charge de designer le vainqueur et d''attribuer les points aux participants
+# Calcule le pourcentage des différents résultats possible (Win, Lose, Draw)
+# mets a jour les tables standing
+CREATE TRIGGER afterInsert__summary__result_standing AFTER INSERT ON summary FOR EACH ROW
 BEGIN
-	INSERT INTO homeScore_statsL1 (team)
-	VALUES (NEW.team);
-	INSERT INTO homeConcede_statsL1 (team)
-	VALUES (NEW.team);
-	INSERT INTO awayGlobal_statsL1 (team)
-	VALUES (NEW.team);
-	INSERT INTO awayScore_statsL1 (team)
-	VALUES (NEW.team);
-	INSERT INTO awayConcede_statsL1 (team)
-	VALUES (NEW.team);
-	INSERT INTO homeGlobal_binsL1 (team)
-	VALUES (NEW.team);
-    INSERT INTO global_ranking (team)
-    VALUES (NEW.team)
-END //
-
-# L''insertion des équipes dans homeGlobal_bins, déclenche l''insertion des équipes dans les tables "bins".
-CREATE TRIGGER afterInsert_homeGlobal_binsL1 AFTER INSERT ON homeGlobal_binsL1 FOR EACH ROW
-BEGIN
-	INSERT INTO homeScore_binsL1 (team)
-	VALUES (NEW.team);
-	INSERT INTO homeConcede_binsL1 (team)
-	VALUES (NEW.team);
-	INSERT INTO awayGlobal_binsL1 (team)
-	VALUES (NEW.team);
-	INSERT INTO awayScore_binsL1 (team)
-	VALUES (NEW.team);
-	INSERT INTO awayConcede_binsL1 (team)
-	VALUES (NEW.team);
-
-END //
-
-#home stats trigger
-# L''insertion des résultats dans home_results, déclenche une serie d''opération pour remplir les tables de statistiques.
-CREATE TRIGGER afterInsert_home_resultsL1_home__Stats AFTER INSERT ON home_resultsL1 FOR EACH ROW
-BEGIN
-	DECLARE sumVar_total_score TINYINT UNSIGNED;
-	DECLARE avgVar_total_score DECIMAL(2,1);
-	DECLARE maxVar_total_score TINYINT UNSIGNED;
-	DECLARE minVar_total_score TINYINT UNSIGNED;
-    DECLARE wScVar_total_score TINYINT UNSIGNED;
-	DECLARE sumVar_total_concede TINYINT UNSIGNED;
-	DECLARE avgVar_total_concede DECIMAL(2,1);
-	DECLARE maxVar_total_concede TINYINT UNSIGNED;
-	DECLARE minVar_total_concede TINYINT UNSIGNED;
-	DECLARE clSVar_total_concede TINYINT UNSIGNED;
-	DECLARE sumVar_global TINYINT UNSIGNED;
-	DECLARE avgVar_global DECIMAL(2,1);
-	DECLARE maxVar_global TINYINT UNSIGNED;
-	DECLARE minVar_global TINYINT UNSIGNED;
-	DECLARE bttsVar_global TINYINT UNSIGNED;
-
-	SELECT SUM(total_score) INTO sumVar_total_score
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeScore_statsL1 SET total_sum = sumVar_total_score WHERE team = NEW.home_team;
-	SELECT AVG(total_score) INTO avgVar_total_score
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeScore_statsL1 SET total_avg = avgVar_total_score WHERE team = NEW.home_team;
-	SELECT MAX(total_score) INTO maxVar_total_score
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeScore_statsL1 SET total_max = maxVar_total_score WHERE team = NEW.home_team;
-	SELECT MIN(total_score) INTO minVar_total_score
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeScore_statsL1 SET total_min = minVar_total_score WHERE team = NEW.home_team;
-	SELECT COUNT(total_score) INTO wScVar_total_score
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_score < 1) ;
-	SET wScVar_total_score = ((wScVar_total_score / total) * 100);
-	UPDATE homeScore_statsL1 SET total_wSc = wScVar_total_score WHERE team = NEW.home_team;
-
-
-	SELECT SUM(total_concede) INTO sumVar_total_concede
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeConcede_statsL1 SET total_sum = sumVar_total_concede WHERE team = NEW.home_team;
-	SELECT AVG(total_concede) INTO avgVar_total_concede
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeConcede_statsL1 SET total_avg = avgVar_total_concede WHERE team = NEW.home_team;
-	SELECT MAX(total_concede) INTO maxVar_total_concede
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeConcede_statsL1 SET total_max = maxVar_total_concede WHERE team = NEW.home_team;
-	SELECT MIN(total_concede) INTO minVar_total_concede
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeConcede_statsL1 SET total_min = minVar_total_concede WHERE team = NEW.home_team;
-	SELECT COUNT(*) INTO clSVar_total_concede
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_concede < 1 ) ;
-	SET clSVar_total_concede = ((clSVar_total_concede / total) * 100);
-	UPDATE homeConcede_statsL1 SET total_clS = clSVar_total_concede WHERE team = NEW.home_team;
-
-
-	SELECT SUM(global) INTO sumVar_global
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeGlobal_statsL1 SET total_sum = sumVar_global WHERE team = NEW.home_team;
-	SELECT AVG(global) INTO avgVar_global
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeGlobal_statsL1 SET total_avg = avgVar_global WHERE team = NEW.home_team;
-	SELECT MAX(global) INTO maxVar_global
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeGlobal_statsL1 SET total_max = maxVar_global WHERE team = NEW.home_team;
-	SELECT MIN(global) INTO minVar_global
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	UPDATE homeGlobal_statsL1 SET total_min = minVar_global WHERE team = NEW.home_team;
-	SELECT COUNT(*) INTO bttsVar_global
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_score >= 1 AND total_concede >=1 ) ;
-	SET bttsVar_total_score = ((bttsVar_global / total) * 100);
-	UPDATE homeGlobal_statsL1 SET total_btts = bttsVar_global WHERE team = NEW.home_team;
-END //
-
-
-#away stats trigger
-CREATE TRIGGER afterInsert_away_resultsL1_away__Stats AFTER INSERT ON away_resultsL1 FOR EACH ROW
-BEGIN
-	
-	DECLARE sumVar_total_score TINYINT UNSIGNED;
-	DECLARE avgVar_total_score DECIMAL(2,1);
-	DECLARE maxVar_total_score TINYINT UNSIGNED;
-	DECLARE minVar_total_score TINYINT UNSIGNED;
-	DECLARE wScVar_total_score TINYINT UNSIGNED;
-	DECLARE sumVar_total_concede TINYINT UNSIGNED;
-	DECLARE avgVar_total_concede DECIMAL(2,1);
-	DECLARE maxVar_total_concede TINYINT UNSIGNED;
-	DECLARE minVar_total_concede TINYINT UNSIGNED;
-	DECLARE clSVar_total_concede TINYINT UNSIGNED;
-	DECLARE sumVar_global TINYINT UNSIGNED;
-	DECLARE avgVar_global DECIMAL(2,1);
-	DECLARE maxVar_global TINYINT UNSIGNED;
-	DECLARE minVar_global TINYINT UNSIGNED;
-	DECLARE bttsVar_global TINYINT UNSIGNED;
-
-	SELECT SUM(total_score) INTO sumVar_total_score
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayScore_statsL1 SET total_sum = sumVar_total_score WHERE team = NEW.away_team;
-	SELECT AVG(total_score) INTO avgVar_total_score
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayScore_statsL1 SET total_avg = avgVar_total_score WHERE team = NEW.away_team;
-	SELECT MAX(total_score) INTO maxVar_total_score
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayScore_statsL1 SET total_max = maxVar_total_score WHERE team = NEW.away_team;
-	SELECT MIN(total_score) INTO minVar_total_score
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayScore_statsL1 SET total_min = minVar_total_score WHERE team = NEW.away_team;
-	SELECT COUNT(total_score) INTO wScVar_total_score
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_score < 1 ) ;
-	SET wScVar_total_score = ((wScVar_total_score / total) * 100);
-	UPDATE awayConcede_statsL1 SET total_wSc = wScVar_total_score WHERE team = NEW.away_team;
-
-	SELECT SUM(total_concede) INTO sumVar_total_concede
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayConcede_statsL1 SET total_sum = sumVar_total_concede WHERE team = NEW.away_team;
-	SELECT AVG(total_concede) INTO avgVar_total_concede
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayConcede_statsL1 SET total_avg = avgVar_total_concede WHERE team = NEW.away_team;
-	SELECT MAX(total_concede) INTO maxVar_total_concede
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayConcede_statsL1 SET total_max = maxVar_total_concede WHERE team = NEW.away_team;
-	SELECT MIN(total_concede) INTO minVar_total_concede
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayConcede_statsL1 SET total_min = minVar_total_concede WHERE team = NEW.away_team;
-	SELECT COUNT(total_concede) INTO clSVar_total_concede
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_concede < 1 ) ;
-	SET clSVar_total_concede = ((clSVar_total_concede / total) * 100);
-	UPDATE awayConcede_statsL1 SET total_clS = clSVar_total_concede WHERE team = NEW.away_team;
-
-	SELECT SUM(global) INTO sumVar_global
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayGlobal_statsL1 SET total_sum = sumVar_global WHERE team = NEW.away_team;
-	SELECT AVG(global) INTO avgVar_global
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayGlobal_statsL1 SET total_avg = avgVar_global WHERE team = NEW.away_team;
-	SELECT MAX(global) INTO maxVar_global
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayGlobal_statsL1 SET total_max = maxVar_global WHERE team = NEW.away_team;
-	SELECT MIN(global) INTO minVar_global
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	UPDATE awayGlobal_statsL1 SET total_min = minVar_global WHERE team = NEW.away_team;
-	SELECT COUNT(*) INTO bttsVar_global
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_score >= 1 AND total_concede >=1 ) ;
-	SET bttsVar_total_score = ((bttsVar_global / total) * 100);
-	UPDATE awayGlobal_statsL1 SET total_btts = bttsVar_global WHERE team = NEW.away_team;
-END //
-
-
-#home bins trigger 
-# L''insertion des resultats dans home_results déclenche une série d''opération dans les tables "bins"
-CREATE TRIGGER afterInsert_home_resultsL1_home__bins AFTER INSERT ON home_resultsL1 FOR EACH ROW
-BEGIN
-	DECLARE total, var0_under, var1_under, var2_under, var0_over, var1_over, var2_over TINYINT UNSIGNED;
-	SELECT COUNT(total_score) INTO total
-	FROM home_resultsL1 WHERE home_team = NEW.home_team;
-	# under scored 
-	SELECT COUNT(total_score) INTO var0_under
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_score < 1) ;
-	SET var0_under = ((var0_under / total) * 100);
-	UPDATE homeScore_binsL1 SET under0_5 = var0_under WHERE team = NEW.home_team;
-	SELECT COUNT(total_score) INTO var1_under
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_score <= 1) ;
-	SET var1_under = ((var1_under / total) * 100);
-	UPDATE homeScore_binsL1 SET under1_5 = var1_under WHERE team = NEW.home_team;
-	SELECT COUNT(total_score) INTO var2_under
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_score <= 2) ;
-	SET var2_under = ((var2_under / total) * 100);
-	UPDATE homeScore_binsL1 SET under2_5 = var2_under WHERE team = NEW.home_team;
-	# over scored	
-	SELECT COUNT(total_score) INTO var0_over
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_score >= 1) ;
-	SET var0_over = ((var0_over / total) * 100);
-	UPDATE homeScore_binsL1 SET over0_5 = var0_over WHERE team = NEW.home_team;
-	SELECT COUNT(total_score) INTO var1_over
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_score >= 2) ;
-	SET var1_over = ((var1_over / total) * 100);
-	UPDATE homeScore_binsL1 SET over1_5 = var1_over WHERE team = NEW.home_team;
-	SELECT COUNT(total_score) INTO var2_over
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_score >= 3) ;
-	SET var2_over = ((var2_over / total) * 100);
-	UPDATE homeScore_binsL1 SET over2_5 = var2_over WHERE team = NEW.home_team;
-	
-	# under concede 
-	SELECT COUNT(total_concede) INTO var0_under
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_concede < 1) ;
-	SET var0_under = ((var0_under / total) * 100);
-	UPDATE homeConcede_binsL1 SET under0_5 = var0_under WHERE team = NEW.home_team;
-	SELECT COUNT(total_concede) INTO var1_under
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_concede <= 1) ;
-	SET var1_under = ((var1_under / total) * 100);
-	UPDATE homeConcede_binsL1 SET under1_5 = var1_under WHERE team = NEW.home_team;
-	SELECT COUNT(total_concede) INTO var2_under
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_concede <= 2) ;
-	SET var2_under = ((var2_under / total) * 100);
-	UPDATE homeConcede_binsL1 SET under2_5 = var2_under WHERE team = NEW.home_team;
-	# over concede	
-	SELECT COUNT(total_concede) INTO var0_over
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_concede >= 1) ;
-	SET var0_over = ((var0_over / total) * 100);
-	UPDATE homeConcede_binsL1 SET over0_5 = var0_over WHERE team = NEW.home_team;
-	SELECT COUNT(total_concede) INTO var1_over
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_concede >= 2) ;
-	SET var1_over = ((var1_over / total) * 100);
-	UPDATE homeConcede_binsL1 SET over1_5 = var1_over WHERE team = NEW.home_team;
-	SELECT COUNT(total_concede) INTO var2_over
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (total_concede >= 3) ;
-	SET var2_over = ((var2_over / total) * 100);
-	UPDATE homeConcede_binsL1 SET over2_5 = var2_over WHERE team = NEW.home_team;
-	 
-	# under global 
-	SELECT COUNT(global) INTO var0_under
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (global < 1);
-	SET var0_under = ((var0_under / total) * 100);
-	UPDATE homeGlobal_binsL1 SET under0_5 = var0_under WHERE team = NEW.home_team;
-	SELECT COUNT(global) INTO var1_under
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (global <= 1) ;
-	SET var1_under = ((var1_under / total) * 100);
-	UPDATE homeGlobal_binsL1 SET under1_5 = var1_under WHERE team = NEW.home_team;
-	SELECT COUNT(global) INTO var2_under
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (global <= 2) ;
-	SET var2_under = ((var2_under / total) * 100);
-	UPDATE homeGlobal_binsL1 SET under2_5 = var2_under WHERE team = NEW.home_team;
-	# over global	
-	SELECT COUNT(global) INTO var0_over
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (global >= 1) ;
-	SET var0_over = ((var0_over / total) * 100);
-	UPDATE homeGlobal_binsL1 SET over0_5 = var0_over WHERE team = NEW.home_team;
-	SELECT COUNT(global) INTO var1_over
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (global >= 2) ;
-	SET var1_over = ((var1_over / total) * 100);
-	UPDATE homeGlobal_binsL1 SET over1_5 = var1_over WHERE team = NEW.home_team;
-	SELECT COUNT(global) INTO var2_over
-	FROM home_resultsL1 WHERE home_team = NEW.home_team AND (global >= 3) ;
-	SET var2_over = ((var2_over / total) * 100);
-	UPDATE homeGlobal_binsL1 SET over2_5 = var2_over WHERE team = NEW.home_team;
-END //
-
-
-#away bins trigger 
-CREATE TRIGGER afterInsert_away_resultsL1_away__bins AFTER INSERT ON away_resultsL1 FOR EACH ROW
-BEGIN
-	DECLARE total, var0_under, var1_under, var2_under, var0_over, var1_over, var2_over TINYINT UNSIGNED;
-	SELECT COUNT(total_score) INTO total
-	FROM away_resultsL1 WHERE away_team = NEW.away_team;
-	# under scored 
-	SELECT COUNT(total_score) INTO var0_under
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_score < 1) ;
-	SET var0_under = ((var0_under / total) * 100);
-	UPDATE awayScore_binsL1 SET under0_5 = var0_under WHERE team = NEW.away_team;
-	SELECT COUNT(total_score) INTO var1_under
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_score <= 1) ;
-	SET var1_under = ((var1_under / total) * 100);
-	UPDATE awayScore_binsL1 SET under1_5 = var1_under WHERE team = NEW.away_team;
-	SELECT COUNT(total_score) INTO var2_under
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_score <= 2) ;
-	SET var2_under = ((var2_under / total) * 100);
-	UPDATE awayScore_binsL1 SET under2_5 = var2_under WHERE team = NEW.away_team;
-	# over scored	
-	SELECT COUNT(total_score) INTO var0_over
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_score >= 1) ;
-	SET var0_over = ((var0_over / total) * 100);
-	UPDATE awayScore_binsL1 SET over0_5 = var0_over WHERE team = NEW.away_team;
-	SELECT COUNT(total_score) INTO var1_over
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_score >= 2) ;
-	SET var1_over = ((var1_over / total) * 100);
-	UPDATE awayScore_binsL1 SET over1_5 = var1_over WHERE team = NEW.away_team;
-	SELECT COUNT(total_score) INTO var2_over
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_score >= 3) ;
-	SET var2_over = ((var2_over / total) * 100);
-	UPDATE awayScore_binsL1 SET over2_5 = var2_over WHERE team = NEW.away_team;
-	
-	# under concede 
-	SELECT COUNT(total_concede) INTO var0_under
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_concede < 1) ;
-	SET var0_under = ((var0_under / total) * 100);
-	UPDATE awayConcede_binsL1 SET under0_5 = var0_under WHERE team = NEW.away_team;
-	SELECT COUNT(total_concede) INTO var1_under
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_concede <= 1) ;
-	SET var1_under = ((var1_under / total) * 100);
-	UPDATE awayConcede_binsL1 SET under1_5 = var1_under WHERE team = NEW.away_team;
-	SELECT COUNT(total_concede) INTO var2_under
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_concede <= 2) ;
-	SET var2_under = ((var2_under / total) * 100);
-	UPDATE awayConcede_binsL1 SET under2_5 = var2_under WHERE team = NEW.away_team;
-	# over concede	
-	SELECT COUNT(total_concede) INTO var0_over
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_concede >= 1) ;
-	SET var0_over = ((var0_over / total) * 100);
-	UPDATE awayConcede_binsL1 SET over0_5 = var0_over WHERE team = NEW.away_team;
-	SELECT COUNT(total_concede) INTO var1_over
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_concede >= 2) ;
-	SET var1_over = ((var1_over / total) * 100);
-	UPDATE awayConcede_binsL1 SET over1_5 = var1_over WHERE team = NEW.away_team;
-	SELECT COUNT(total_concede) INTO var2_over
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (total_concede >= 3) ;
-	SET var2_over = ((var2_over / total) * 100);
-	UPDATE awayConcede_binsL1 SET over2_5 = var2_over WHERE team = NEW.away_team;
-	 
-	# under global 
-	SELECT COUNT(global) INTO var0_under
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (global < 1);
-	SET var0_under = ((var0_under / total) * 100);
-	UPDATE awayGlobal_binsL1 SET under0_5 = var0_under WHERE team = NEW.away_team;
-	SELECT COUNT(global) INTO var1_under
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (global <= 1) ;
-	SET var1_under = ((var1_under / total) * 100);
-	UPDATE awayGlobal_binsL1 SET under1_5 = var1_under WHERE team = NEW.away_team;
-	SELECT COUNT(global) INTO var2_under
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (global <= 2) ;
-	SET var2_under = ((var2_under / total) * 100);
-	UPDATE awayGlobal_binsL1 SET under2_5 = var2_under WHERE team = NEW.away_team;
-	# over global	
-	SELECT COUNT(global) INTO var0_over
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (global >= 1) ;
-	SET var0_over = ((var0_over / total) * 100);
-	UPDATE awayGlobal_binsL1 SET over0_5 = var0_over WHERE team = NEW.away_team;
-	SELECT COUNT(global) INTO var1_over
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (global >= 2) ;
-	SET var1_over = ((var1_over / total) * 100);
-	UPDATE awayGlobal_binsL1 SET over1_5 = var1_over WHERE team = NEW.away_team;
-	SELECT COUNT(global) INTO var2_over
-	FROM away_resultsL1 WHERE away_team = NEW.away_team AND (global >= 3) ;
-	SET var2_over = ((var2_over / total) * 100);
-	UPDATE awayGlobal_binsL1 SET over2_5 = var2_over WHERE team = NEW.away_team;
-END //
-
-#ranking trigger
-# ce Trigger mets a jour les résultats de championnats
-CREATE TRIGGER afterInsert_home_resultsL1_global_ranking AFTER INSERT ON home_results FOR EACH ROW
-BEGIN
-    DECLARE hScore_sum_hT, aScore_sum_hT, hScore_sum_aT, aScore_sum_aT TINYINT UNSIGNED NOT NULL;
-    DECLARE hConcede_sum_hT, aConcede_sum_hT, hConcede_sum_aT, aConcede_sum_aT TINYINT UNSIGNED NOT NULL;
-    
-    SELECT total_sum INTO hScore_sum_hT
-    FROM homeScore_stats WHERE team = NEW.home_team;
-    SELECT total_sum INTO aScore_sum_hT
-    FROM awayScore_stats WHERE team = NEW.home_team;
-    SELECT total_sum INTO hScore_sum_aT
-    FROM awayScore_stats WHERE team = NEW.away_team;
-    SELECT total_sum INTO aScore_sum_aT
-    FROM awayScore_stats WHERE team = NEW.away_team;
-    UPDATE global_ranking
-    SET sco = hScore_sum_hT + aScore_sum_hT WHERE team = NEW.home_team;
-    UPDATE global_ranking
-    SET con = hConcede_sum_hT + aConcede_sum_hT WHERE team = NEW.home_team;
-    UPDATE global_ranking
-    SET diff = (hScore_sum_hT + hScore_sum_aT) - (hConcede_sum_hT + hConcede_sum_aT)
+    DECLARE var_overall_home_team_points, var_overall_away_team_points, var_home_team_points, var_away_team_points TINYINT UNSIGNED; 
+    DECLARE var_home_team_goal, var_away_team_goal TINYINT UNSIGNED;
+    DECLARE var_total_win, var_total_draw, var_total_lose TINYINT UNSIGNED;
+    DECLARE var_total_journée_home_team, var_total_journée_away_team TINYINT UNSIGNED;
+    DECLARE var_total_home_team_conceded, var_total_home_team_scored, var_total_away_team_scored, var_total_away_team_conceded TINYINT UNSIGNED;
+    DECLARE var_scored_at_away, var_scored_at_home, var_conceded_at_away, var_conceded_at_home TINYINT UNSIGNED;
+    DECLARE var_global_average DECIMAL(2,1) NOT NULL;
+    SELECT points INTO var_overall_home_team_points
+    FROM overall_standing
     WHERE team = NEW.home_team;
-    UPDATE global_ranking
-    SET sco = hScore_sum_aT + aScore_sum_aT WHERE team = NEW.away_team;
-    UPDATE global_ranking
-    SET con = hConcede_sum_aT + aConcede_sum_aT WHERE team = NEW.away_team;
-    UPDATE global_ranking
-    SET diff = (aScore_sum_hT + aScore_sum_aT) - (aConcede_sum_hT + aConcede_sum_aT)
+    SELECT points INTO var_overall_away_team_points
+    FROM overall_standing
     WHERE team = NEW.away_team;
-    IF NEW.total_score > NEW.total_concede
-        UPDATE global_ranking
-        SET points = OLD.points + 3 WHERE team = NEW.home_team;
-        UPDATE global_ranking
-        SET win = OLD.win + 1 WHERE team = NEW.home_team;
-        UPDATE global_ranking
-        SET lose = OLD.lose + 1 WHERE team = NEW.away_team;
-    ELSE IF NEW.total_score < NEW.total_concede
-        UPDATE global_ranking
-        SET points = OLD.points + 3 WHERE team = NEW.away_team;
-        UPDATE global_ranking
-        SET win = OLD.win + 1 WHERE team = NEW.away_team;
-        UPDATE global_ranking
-        SET lose = OLD.lose + 1 WHERE team = NEW.home_team;
-    ELSE
-        UPDATE global_ranking
-        SET points = OLD.points + 1 WHERE team = NEW.home_team;
-        UPDATE global_ranking
-        SET draw = OLD.draw + 1 WHERE team = NEW.home_team;
-        UPDATE global_ranking
-        SET points = OLD.points + 1 WHERE team = NEW.away_team;
-        UPDATE global_ranking
-        SET draw = OLD.draw + 1 WHERE team = NEW.away_team;
+    SELECT points INTO var_home_team_points
+    FROM home_standing
+    WHERE team = NEW.home_team;
+    SELECT points INTO var_away_team_points
+    FROM away_standing
+    WHERE team = NEW.away_team;
+    SELECT total_home_team_goal, total_away_team_goal INTO var_home_team_goal, var_away_team_goal
+    FROM summary
+    WHERE home_team = NEW.home_team;
+    IF (var_home_team_goal > var_away_team_goal) THEN
+        UPDATE summary
+        SET result = NEW.home_team
+        WHERE home_team = NEW.home_team;
+        UPDATE overall_standing
+        SET points = var_overall_home_team_points + 3
+        WHERE team = NEW.home_team;
+        UPDATE home_standing
+        SET points = var_home_team_points + 3
+        WHERE team = NEW.home_team;
+    ELSEIF (var_home_team_goal < var_away_team_goal) THEN
+        UPDATE summary 
+        SET result = NEW.away_team
+        WHERE away_team = NEW.away_team;
+        UPDATE overall_standing 
+        SET points = var_overall_away_team_points + 3
+        WHERE team = NEW.away_team;
+        UPDATE away_standing
+        SET points = var_away_team_points + 3
+        WHERE team = NEW.away_team;
+    ELSE 
+        UPDATE summary
+        SET result = "Draw"
+        WHERE home_team = NEW.home_team;
+        UPDATE overall_standing
+        SET points = var_overall_home_team_points + 1
+        WHERE team = NEW.home_team;
+        UPDATE overall_standing
+        SET points = var_overall_away_team_points + 1
+        WHERE team = NEW.away_team;
+        UPDATE home_standing 
+        SET points = var_home_team_points + 1
+        WHERE team = NEW.home_team;
+        UPDATE away_standing 
+        SET points = var_away_team_points + 1
+        WHERE team = NEW.away_team;
+    END IF;
+# Home standing
+    SELECT COUNT(journée) INTO var_total_journée_home_team
+    FROM summary
+    WHERE home_team = NEW.home_team;
+	SELECT COUNT(result) INTO var_total_win
+    FROM summary
+    WHERE home_team = NEW.home_team AND result = NEW.home_team;
+    UPDATE home_standing
+    SET win = ((var_total_win / total_journée_home) * 100)
+    WHERE team = NEW.home_team;
+	SELECT COUNT(result) INTO var_total_lose
+    FROM summary
+    WHERE home_team = NEW.home_team AND result = NEW.away_team;
+    UPDATE home_standing
+    SET lose = ((var_total_lose / total_journée_home) * 100)
+    WHERE team = NEW.home_team;
+	SELECT COUNT(result) INTO var_total_draw
+    FROM summary
+    WHERE home_team = NEW.home_team AND result = "Draw";
+    UPDATE home_standing
+    SET draw = ((var_total_draw / total_journée_home) * 100)
+    WHERE team = NEW.home_team;
+    SELECT SUM(total_home_goal) INTO var_total_home_team_scored 
+    FROM summary
+    WHERE home_team = NEW.home_team;
+    UPDATE home_standing
+    SET scored = var_total_home_team_scored
+    WHERE team = NEW.home_team;
+    SELECT SUM(total_away_goal) INTO var_total_away_team_conceded
+    FROM summary
+    WHERE home_team = NEW.home_team;
+    UPDATE home_standing
+    SET conceded = var_total_away_team_conceded
+    WHERE team = NEW.home_team;
+    SELECT AVG(global) INTO var_global_average
+    FROM summary
+    WHERE home_team = NEW.home_team;
+    UPDATE home_standing
+    SET average = var_global_average
+    WHERE team = NEW.home_team; 
+# Away standing
+    SELECT COUNT(away_team) INTO var_total_journée_away_team
+    FROM summary
+    WHERE away_team = NEW.away_team;
+	SELECT COUNT(result) INTO var_total_win
+    FROM summary
+    WHERE away_team = NEW.away_team AND result = NEW.away_team;
+    UPDATE away_standing
+    SET win = ((var_total_win / total_mp) * 100)
+    WHERE team = NEW.away_team;
+	SELECT COUNT(result) INTO var_total_lose
+    FROM summary
+    WHERE away_team = NEW.away_team AND result = NEW.home_team;
+    UPDATE away_standing
+    SET lose = ((var_total_lose / total_mp) * 100)
+    WHERE team = NEW.away_team;
+	SELECT COUNT(result) INTO var_total_draw
+    FROM summary
+    WHERE away_team = NEW.away_team AND result = "Draw";
+    UPDATE away_standing
+    SET draw = ((var_total_draw / total_mp) * 100)
+    WHERE team = NEW.away_team;
+    SELECT SUM(total_away_goal) INTO var_total_away_team_scored 
+    FROM summary
+    WHERE away_team = NEW.away_team;
+    UPDATE away_standing
+    SET scored = var_total_away_team_scored
+    WHERE team = NEW.away_team;
+    SELECT SUM(total_home_goal) INTO var_total_away_team_conceded 
+    FROM summary
+    WHERE away_team = NEW.away_team;
+    UPDATE away_standing
+    SET conceded = var_total_away_team_conceded
+    WHERE team = NEW.away_team;
+    SELECT AVG(global) INTO var_global_average
+    FROM summary
+    WHERE away_team = NEW.away_team;
+    UPDATE away_standing
+    SET average = var_global_average
+    WHERE team = NEW.away_team; 
+# Overall home
+    SELECT COUNT(journée) INTO var_total_journée_home_team
+    FROM summary
+    WHERE home_team = NEW.home_team OR away_team = NEW.home_team;
+	SELECT COUNT(result) INTO var_total_win
+    FROM summary
+    WHERE (home_team = NEW.home_team OR away_team = NEW.home_team) AND result = NEW.home_team;
+    UPDATE overall_standing
+    SET win = ((var_total_win / var_total_journée_home_team) * 100)
+    WHERE team = NEW.home_team;
+	SELECT COUNT(result) INTO var_total_lose
+    FROM summary
+    WHERE (home_team = NEW.home_team OR away_team = NEW.home_team) AND result = NEW.away_team;
+    UPDATE overall_standing
+    SET lose = ((var_total_lose / var_total_journée_home_team) * 100)
+    WHERE team = NEW.home_team;
+	SELECT COUNT(result) INTO var_total_draw
+    FROM summary
+    WHERE (home_team = NEW.home_team OR away_team = NEW.home_team) AND result = "Draw";
+    UPDATE overall_standing
+    SET draw = ((var_total_draw / var_total_journée_home_team) * 100)
+    WHERE team = NEW.home_team;
+    SELECT scored, conceded INTO var_scored_at_home, var_conceded_at_home
+    FROM home_standing
+    WHERE team = NEW.home_team;
+    SELECT scored, conceded INTO var_scored_at_away, var_conceded_at_away
+    FROM away_standing
+    WHERE team = NEW.home_team;
+    UPDATE overall_standing
+    SET scored = (scored_at_home + scored_at_away)
+    WHERE team = NEW.home_team;
+    UPDATE overall_standing
+    SET conceded = (conceded_at_home + conceded_at_away)
+    WHERE team = NEW.home_team;
+    SELECT AVG(global) INTO var_global_average
+    FROM summary
+    WHERE home_team = NEW.home_team OR away_team = NEW.home_team;
+    UPDATE overall_standing
+    SET average = var_global_average
+    WHERE team = NEW.home_team; 
+# Overall away
+    SELECT COUNT(journée) INTO var_total_journée_away_team
+    FROM summary
+    WHERE home_team = NEW.away_team OR away_team = NEW.away_team;
+	SELECT COUNT(result) INTO var_total_win
+    FROM summary
+    WHERE (home_team = NEW.away_team OR away_team = NEW.away_team) AND result = NEW.away_team;
+    UPDATE overall_standing
+    SET win = ((var_total_win / var_total_journée_away_team) * 100)
+    WHERE team = NEW.away_team;
+	SELECT COUNT(result) INTO var_total_lose
+    FROM summary
+    WHERE (home_team = NEW.away_team OR away_team = NEW.away_team) AND result = NEW.home_team;
+    UPDATE overall_standing
+    SET lose = ((var_total_lose / var_total_journée_away_team) * 100)
+    WHERE team = NEW.away_team;
+	SELECT COUNT(result) INTO var_total_draw
+    FROM summary
+    WHERE (home_team = NEW.away_team OR away_team = NEW.away_team) AND result = "Draw";
+    UPDATE overall_standing
+    SET draw = ((var_total_draw / var_total_journée_away_team) * 100)
+    WHERE team = NEW.away_team;
+    SELECT scored, conceded INTO var_scored_at_home, var_conceded_at_home
+    FROM home_standing
+    WHERE team = NEW.away_team;
+    SELECT scored, conceded INTO var_scored_at_away, var_conceded_at_away
+    FROM away_standing
+    WHERE team = NEW.away_team;
+    UPDATE overall_standing
+    SET scored = (var_scored_at_home + var_scored_at_away)
+    WHERE team = NEW.away_team;
+    UPDATE overall_standing
+    SET conceded = (var_conceded_at_home + var_conceded_at_away)
+    WHERE team = NEW.away_team;
+    SELECT AVG(global) INTO var_global_average
+    FROM summary
+    WHERE home_team = NEW.away_team OR away_team = NEW.away_team;
+    UPDATE overall_standing
+    SET average = var_global_average
+    WHERE team = NEW.away_team; 
 END //
 
-
-# Ces triggers mettent a jour les dataset en puisant dans les tables "statistiques, bins, results".
-# Les dataset contiennes les stats des équipes avant un match.
-#home trigger dataset
-CREATE TRIGGER beforeInsert_homeresultsL1_home_dataset BEFORE INSERT ON home_resultsL1 FOR EACH ROW
+CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__global_overall_ds BEFORE INSERT ON summary FOR EACH ROW 
 BEGIN
-	DECLARE var_rank, var_min, var_max, var_sum, var_wSc, var_clS, var_btts TINYINT UNSIGNED;
-	DECLARE var_avg DECIMAL(2,1);
-	DECLARE var_under0, var_under1, var_under2, var_over0, var_over1, var_over2  TINYINT UNSIGNED;
+    DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
+    journée1_at, journée2_at, journée3_at, journée4_at, journée5_at, var_total_journée TINYINT;
+    DECLARE var_over0_all_ht, var_over1_all_ht, var_over2_all_ht, var_over0_all_at, var_over1_all_at, var_over2_all_at TINYINT UNSIGNED;
+    DECLARE var_over0, var_over1, var_over2, average_ht, average_at, ONEorZERO TINYINT UNSIGNED;
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab
+    SELECT journée, global FROM summary
+    WHERE home_team = NEW.home_team OR away_team = NEW.home_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) INTO current_journée_var
+    FROM temp_tab;
+    SELECT AVG(global) INTO average_ht
+    FROM temp_tab;
+    SELECT global INTO journée1_ht
+    FROM temp_tab WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_ht = average_ht;
+    END IF;
+    SELECT global INTO journée2_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_ht = average_ht;
+    END IF;
+    SELECT global INTO journée3_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_ht = average_ht;
+    END IF;
+    SELECT global INTO journée4_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_ht = average_ht;
+    END IF;
+    SELECT global INTO journée5_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_ht = average_ht;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab WHERE (global > 0);
+    SET var_over0_all_ht = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab WHERE (global > 1);
+    SET var_over1_all_ht = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab WHERE (global > 2);
+    SET var_over2_all_ht = ((var_over2 / var_total_journée)* 100);
 
-	SELECT ranking, total_sum, total_avg, total_max, total_min, total_wSc INTO var_rank, var_sum, var_avg, var_max, var_min, var_wSc
-	fROm V_homeScore_statsL1 WHERE team = NEW.home_team;
-	SELECT under0_5, under1_5, under2_5, over0_5, over1_5, over1_5 INTO var_under0, var_under1, var_under2, var_over0, var_over1, var_over2
-	FROM homeScore_binsL1 WHERE team = NEW.home_team;
-	INSERT INTO homeScore_datasetL1 
-	VALUES (NEW.mp, NEW.date_time, NEW.home_team, NEW.away_team, var_rank, var_sum, var_avg, var_max, var_min, var_wSc, var_under0, var_under1, var_under2, var_over0, var_over1, var_over2, NEW.total_score);
-	
-	SELECT ranking, total_sum, total_avg, total_max, total_min, total_clS INTO var_rank, var_sum, var_avg, var_max, var_min, var_clS
-	fROm V_homeConcede_statsL1 WHERE team = NEW.home_team ;
-	SELECT under0_5, under1_5, under2_5, over0_5, over1_5, over1_5 INTO var_under0, var_under1, var_under2, var_over0, var_over1, var_over2
-	FROM homeConcede_binsL1 WHERE team = NEW.home_team;
-	INSERT INTO homeConcede_datasetL1 
-	VALUES (NEW.mp, NEW.date_time, NEW.home_team, NEW.away_team, var_rank, var_sum, var_avg, var_max, var_min, var_clS, var_under0, var_under1, var_under2, var_over0, var_over1, var_over2, NEW.total_concede);
-
-	SELECT ranking, total_sum, total_avg, total_max, total_min, total_btts INTO var_rank, var_sum, var_avg, var_max, var_min, var_btts
-	fROm V_homeGlobal_statsL1 WHERE team = NEW.home_team ;
-	SELECT under0_5, under1_5, under2_5, over0_5, over1_5, over1_5 INTO var_under0, var_under1, var_under2, var_over0, var_over1, var_over2
-	FROM homeGlobal_binsL1 WHERE team = NEW.home_team;
-	INSERT INTO homeGlobal_datasetL1 
-	VALUES (NEW.mp, NEW.date_time, NEW.home_team, NEW.away_team, var_rank, var_sum, var_avg, var_max, var_min, var_btts, var_under0, var_under1, var_under2, var_over0, var_over1, var_over2, NEW.global);
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
+    SELECT journée, global FROM summary
+    WHERE away_team = NEW.away_team OR home_team = NEW.away_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) INTO current_journée_var
+    FROM temp_tab_away;
+    SELECT AVG(global) INTO average_at
+    FROM temp_tab_away;
+    SELECT global INTO journée1_at
+    FROM temp_tab_away WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_at = average_at;
+    END IF;
+    SELECT global INTO journée2_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_at = average_at;
+    END IF;
+    SELECT global INTO journée3_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_at = average_at;
+    END IF;
+    SELECT global INTO journée4_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_at = average_at;
+    END IF;
+    SELECT global INTO journée5_at
+    FROM temp_tab_away WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_at = average_at;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab_away; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab_away WHERE (global > 0);
+    SET var_over0_all_at = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab_away WHERE (global > 1);
+    SET var_over1_all_at = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab_away WHERE (global > 2);
+    SET var_over2_all_at = ((var_over2 / var_total_journée)* 100);
+    INSERT INTO global_overall_ds
+    VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
+        journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, var_over0_all_ht, var_over1_all_ht, var_over2_all_ht,
+        var_over0_all_at, var_over1_all_at, var_over2_all_at, NEW.global);
 END //
 
-
-#away trigger dataset
-CREATE TRIGGER beforeInsert_away_resultsL1_away__dataset BEFORE INSERT ON away_resultsL1 FOR EACH ROW
+CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__global_ds BEFORE INSERT ON summary FOR EACH ROW 
 BEGIN
-	DECLARE var_rank, var_min, var_max, var_sum, var_wSc, var_clS, var_btts TINYINT UNSIGNED;
-	DECLARE var_avg DECIMAL(2,1);
-	DECLARE var_under0, var_under1, var_under2, var_over0, var_over1, var_over2  TINYINT UNSIGNED;
+    DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
+    journée1_at, journée2_at, journée3_at, journée4_at, journée5_at, var_total_journée TINYINT;
+    DECLARE var_over0_all_ht, var_over1_all_ht, var_over2_all_ht, var_over0_all_at, var_over1_all_at, var_over2_all_at TINYINT UNSIGNED;
+    DECLARE var_over0, var_over1, var_over2, average_ht, average_at, ONEorZERO TINYINT UNSIGNED;
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab
+    SELECT journée, global FROM summary
+    WHERE home_team = NEW.home_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) INTO current_journée_var
+    FROM temp_tab;
+    SELECT AVG(global) INTO average_ht
+    FROM temp_tab;
+    SELECT global INTO journée1_ht
+    FROM temp_tab WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_ht = average_ht;
+    END IF;
+    SELECT global INTO journée2_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_ht = average_ht;
+    END IF;
+    SELECT global INTO journée3_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_ht = average_ht;
+    END IF;
+    SELECT global INTO journée4_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_ht = average_ht;
+    END IF;
+    SELECT global INTO journée5_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_ht = average_ht;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab WHERE (global > 0);
+    SET var_over0_all_ht = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab WHERE (global > 1);
+    SET var_over1_all_ht = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab WHERE (global > 2);
+    SET var_over2_all_ht = ((var_over2 / var_total_journée)* 100);
 
-	SELECT ranking, total_sum, total_avg, total_max, total_min, total_wSc INTO var_rank, var_sum, var_avg, var_max, var_min, var_wSc
-	fROm V_awayScore_statsL1 WHERE team = NEW.away_team;
-	SELECT under0_5, under1_5, under2_5, over0_5, over1_5, over1_5 INTO var_under0, var_under1, var_under2, var_over0, var_over1, var_over2
-	FROM awayScore_binsL1 WHERE team = NEW.away_team;
-	INSERT INTO awayScore_datasetL1 
-	VALUES (NEW.mp, NEW.date_time, NEW.home_team, NEW.away_team, var_rank, var_sum, var_avg, var_max, var_min, var_wSc, var_under0, var_under1, var_under2, var_over0, var_over1, var_over2, NEW.total_score);
-	
-	SELECT ranking, total_sum, total_avg, total_max, total_min, total_clS INTO var_rank, var_sum, var_avg, var_max, var_min, var_clS
-	fROm V_awayConcede_statsL1 WHERE team = NEW.away_team ;
-	SELECT under0_5, under1_5, under2_5, over0_5, over1_5, over1_5 INTO var_under0, var_under1, var_under2, var_over0, var_over1, var_over2
-	FROM awayConcede_binsL1 WHERE team = NEW.away_team;
-	INSERT INTO awayConcede_datasetL1 
-	VALUES (NEW.mp, NEW.date_time, NEW.home_team, NEW.away_team, var_rank, var_sum, var_avg, var_max, var_min, var_clS, var_under0, var_under1, var_under2, var_over0, var_over1, var_over2, NEW.total_concede);
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
+    SELECT journée, global FROM summary
+    WHERE away_team = NEW.away_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) INTO current_journée_var
+    FROM temp_tab_away;
+    SELECT AVG(global) INTO average_at
+    FROM temp_tab_away;
+    SELECT global INTO journée1_at
+    FROM temp_tab_away WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_at = average_at;
+    END IF;
+    SELECT global INTO journée2_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_at = average_at;
+    END IF;
+    SELECT global INTO journée3_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_at = average_at;
+    END IF;
+    SELECT global INTO journée4_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_at = average_at;
+    END IF;
+    SELECT global INTO journée5_at
+    FROM temp_tab_away WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_at = average_at;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab_away; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab_away WHERE (global > 0);
+    SET var_over0_all_at = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab_away WHERE (global > 1);
+    SET var_over1_all_at = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab_away WHERE (global > 2);
+    SET var_over2_all_at = ((var_over2 / var_total_journée)* 100);
+    INSERT INTO global_ds
+    VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
+        journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, var_over0_all_ht, var_over1_all_ht, var_over2_all_ht,
+        var_over0_all_at, var_over1_all_at, var_over2_all_at, NEW.global);
+END //
 
-	SELECT ranking, total_sum, total_avg, total_max, total_min, total_btts INTO var_rank, var_sum, var_avg, var_max, var_min, var_btts
-	fROm V_awayGlobal_statsL1 WHERE team = NEW.away_team ;
-	SELECT under0_5, under1_5, under2_5, over0_5, over1_5, over1_5 INTO var_under0, var_under1, var_under2, var_over0, var_over1, var_over2
-	FROM awayGlobal_binsL1 WHERE team = NEW.away_team;
-	INSERT INTO awayGlobal_datasetL1 
-	VALUES (NEW.mp, NEW.date_time, NEW.home_team, NEW.away_team, var_rank, var_sum, var_avg, var_max, var_min, var_btts, var_under0, var_under1, var_under2, var_over0, var_over1, var_over2, NEW.global);
+CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__scored_conceded_all_ds BEFORE INSERT ON summary FOR EACH ROW 
+BEGIN
+    DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
+    journée1_at, journée2_at, journée3_at, journée4_at, journée5_at, var_total_journée TINYINT;
+    DECLARE var_over0, var_over1, var_over2, var_w_scoring, var_clean_sheet TINYINT UNSIGNED;
+    DECLARE over0_scored_ht, over1_scored_ht, over2_scored_ht, over0_conceded_at, over1_conceded_at, over2_conceded_at TINYINT UNSIGNED;
+    DECLARE average_ht, average_at, ONEorZERO TINYINT UNSIGNED;
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab
+    SELECT journée, total_home_team_goal FROM summary
+    WHERE home_team = NEW.home_team OR away_team = NEW.home_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) INTO current_journée_var
+    FROM temp_tab;
+    SELECT AVG(total_home_team_goal) INTO average_ht
+    FROM temp_tab;
+    SELECT total_home_team_goal INTO journée1_ht
+    FROM temp_tab WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_ht = average_ht;
+    END IF;
+    SELECT total_home_team_goal INTO journée2_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_ht = average_ht;
+    END IF;
+    SELECT total_home_team_goal INTO journée3_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_ht = average_ht;
+    END IF;
+    SELECT total_home_team_goal INTO journée4_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_ht = average_ht;
+    END IF;
+    SELECT total_home_team_goal INTO journée5_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_ht = average_ht;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab WHERE (total_home_team_goal > 0);
+    SET over0_scored_ht = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab WHERE (total_home_team_goal > 1);
+    SET over1_scored_ht = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab WHERE (total_home_team_goal > 2);
+    SET over2_scored_ht = ((var_over2 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_w_scoring
+    FROM temp_tab WHERE (total_home_team_goal = 0);
+
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
+    SELECT journée, total_home_team_goal FROM summary
+    WHERE away_team = NEW.away_team OR home_team = NEW.away_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) INTO current_journée_var
+    FROM temp_tab_away;
+    SELECT AVG(total_home_team_goal) INTO average_at
+    FROM temp_tab_away;
+    SELECT total_home_team_goal INTO journée1_at
+    FROM temp_tab_away WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_at = average_at;
+    END IF;
+    SELECT total_home_team_goal INTO journée2_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_at = average_at;
+    END IF;
+    SELECT total_home_team_goal INTO journée3_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_at = average_at;
+    END IF;
+    SELECT total_home_team_goal INTO journée4_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_at = average_at;
+    END IF;
+    SELECT total_home_team_goal INTO journée5_at
+    FROM temp_tab_away WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_at = average_at;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab_away; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab_away WHERE (total_home_team_goal > 0);
+    SET over0_conceded_at = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab_away WHERE (total_home_team_goal > 1);
+    SET over1_conceded_at = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab_away WHERE (total_home_team_goal > 2);
+    SET over2_conceded_at = ((var_over2 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_clean_sheet
+    FROM temp_tab_away WHERE (total_home_team_goal = 0);
+    INSERT INTO scored_conceded_all_ds
+    VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
+        journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, over0_scored_ht, over1_scored_ht, over2_scored_ht,
+        over0_conceded_at, over1_conceded_at, over2_conceded_at, var_w_scoring, average_ht, var_clean_sheet, average_at,
+        NEW.total_home_team_goal);
+END //
+
+CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__scored_conceded_ds BEFORE INSERT ON summary FOR EACH ROW 
+BEGIN
+    DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
+    journée1_at, journée2_at, journée3_at, journée4_at, journée5_at TINYINT;
+    DECLARE var_over0, var_over1, var_over2, var_w_scoring, var_clean_sheet TINYINT UNSIGNED;
+    DECLARE over0_conceded_ht, over1_conceded_ht, over2_conceded_ht, over0_scored_at, over1_scored_at, over2_scored_at TINYINT UNSIGNED;
+    DECLARE average_ht, average_at, ONEorZERO TINYINT UNSIGNED;
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab
+    SELECT journée, total_home_team_goal FROM summary
+    WHERE home_team = NEW.home_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) INTO current_journée_var
+    FROM temp_tab;
+    SELECT AVG(total_home_team_goal) INTO average_ht
+    FROM temp_tab;
+    SELECT total_home_team_goal INTO journée1_ht
+    FROM temp_tab WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_ht = average_ht;
+    END IF;
+    SELECT total_home_team_goal INTO journée2_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_ht = average_ht;
+    END IF;
+    SELECT total_home_team_goal INTO journée3_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_ht = average_ht;
+    END IF;
+    SELECT total_home_team_goal INTO journée4_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_ht = average_ht;
+    END IF;
+    SELECT total_home_team_goal INTO journée5_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_ht = average_ht;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab WHERE (total_home_team_goal > 0);
+    SET over0_scored_ht = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab WHERE (total_home_team_goal > 1);
+    SET over1_scored_ht = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab WHERE (total_home_team_goal > 2);
+    SET over2_scored_ht = ((var_over2 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_w_scoring;
+    FROM temp_tab WHERE (total_home_team_goal = 0);
+    SET without_scoring_ht = var_w_scoring
+
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
+    SELECT journée, total_home_team_goal FROM summary
+    WHERE away_team = NEW.away_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) INTO current_journée_var
+    FROM temp_tab_away;
+    SELECT AVG(total_home_team_goal) INTO average_at
+    FROM temp_tab_away;
+    SELECT total_home_team_goal INTO journée1_at
+    FROM temp_tab_away WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_at = average_at;
+    END IF;
+    SELECT total_home_team_goal INTO journée2_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_at = average_at;
+    END IF;
+    SELECT total_home_team_goal INTO journée3_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_at = average_at;
+    END IF;
+    SELECT total_home_team_goal INTO journée4_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_at = average_at;
+    END IF;
+    SELECT total_home_team_goal INTO journée5_at
+    FROM temp_tab_away WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_at = average_at;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab_away; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab_away WHERE (total_home_team_goal > 0);
+    SET over0_conceded_at = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab_away WHERE (total_home_team_goal > 1);
+    SET over1_conceded_at = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab_away WHERE (total_home_team_goal > 2);
+    SET over2_conceded_at = ((var_over2 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_clean_sheet
+    FROM temp_tab_away WHERE (total_home_team_goal = 0);
+    SET clean_sheet_at = var_clean_sheet;
+    INSERT INTO scored_conceded_ds
+    VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
+        journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, over0_scored_ht, over1_scored_ht, over2_scored_ht,
+        over0_conceded_at, over1_conceded_at, over2_conceded_at, without_scoring_ht, average_ht, clean_sheet_at, average_at,
+        NEW.total_home_team_goal);
+END //
+
+CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__conceded_scored_all_ds BEFORE INSERT ON summary FOR EACH ROW 
+BEGIN
+    DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
+    journée1_at, journée2_at, journée3_at, journée4_at, journée5_at TINYINT;
+    DECLARE var_over0, var_over1, var_over2, var_w_scoring, var_clean_sheet TINYINT UNSIGNED;
+    DECLARE over0_conceded_ht, over1_conceded_ht, over2_conceded_ht, over0_scored_at, over1_scored_at, over2_scored_at TINYINT UNSIGNED;
+    DECLARE average_ht, average_at, ONEorZERO TINYINT UNSIGNED;
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab
+    SELECT journée, total_away_goal FROM summary
+    WHERE home_team = NEW.home_team OR away_team = NEW.home_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) into current_journée_var from temp_tab;
+    SELECT AVG(total_away_goal) INTO average_ht FROM temp_tab;
+    SELECT total_away_goal INTO journée1_ht
+    FROM temp_tab WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_ht = average_ht;
+    END IF;
+    SELECT total_away_goal INTO journée2_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_ht = average_ht;
+    END IF;
+    SELECT total_away_goal INTO journée3_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_ht = average_ht;
+    END IF;
+    SELECT total_away_goal INTO journée4_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_ht = average_ht;
+    END IF;
+    SELECT total_away_goal INTO journée5_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_ht = average_ht;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab WHERE (total_away_goal > 0);
+    SET over0_conceded_ht = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab WHERE (total_away_goal > 1);
+    SET over1_conceded_ht = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab WHERE (total_away_goal > 2);
+    SET over2_conceded_ht = ((var_over2 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_clean_sheet;
+    FROM temp_tab WHERE (total_away_goal = 0);
+    SET clean_sheet_ht = var_clean_sheet
+
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
+    SELECT journée, total_away_goal FROM summary
+    WHERE away_team = NEW.away_team OR home_team = NEW.away_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) INTO current_journée_var
+    FROM temp_tab_away;
+    SELECT AVG(total_away_goal) INTO average_at
+    FROM temp_tab_away;
+    SELECT total_away_goal INTO journée1_at
+    FROM temp_tab_away WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_at = average_at;
+    END IF;
+    SELECT total_away_goal INTO journée2_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_at = average_at;
+    END IF;
+    SELECT total_away_goal INTO journée3_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_at = average_at;
+    END IF;
+    SELECT total_away_goal INTO journée4_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_at = average_at;
+    END IF;
+    SELECT total_away_goal INTO journée5_at
+    FROM temp_tab_away WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_at = average_at;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab WHERE (total_away_goal > 0);
+    SET over0_conceded_at = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab WHERE (total_away_goal > 1);
+    SET over1_conceded_at = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab WHERE (total_away_goal > 2);
+    SET over2_conceded_at = ((var_over2 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_without_scoring
+    FROM temp_tab_away WHERE (total_away_goal = 0);
+    SET without_scoring_at = var_without_scoring;
+    INSERT INTO conceded_scored_all_ds
+    VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
+        journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, over0_conceded_ht, over1_conceded_ht, over2_conceded_ht,
+        over0_scored_at, over1_scored_at, over2_scored_at, clean_sheet_ht, average_ht, without_scoring_at, average_at,
+        NEW.total_away_goal);
+END //
+
+CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__conceded_scored_ds BEFORE INSERT ON summary FOR EACH ROW 
+BEGIN
+    DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
+    journée1_at, journée2_at, journée3_at, journée4_at, journée5_at TINYINT;
+    DECLARE var_over0, var_over1, var_over2, var_w_scoring, var_clean_sheet TINYINT UNSIGNED;
+    DECLARE over0_conceded_ht, over1_conceded_ht, over2_conceded_ht, over0_scored_at, over1_scored_at, over2_scored_at TINYINT UNSIGNED;
+    DECLARE average_ht, average_at, ONEorZERO TINYINT UNSIGNED;
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab
+    SELECT journée, total_away_goal FROM summary
+    WHERE home_team = NEW.home_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) into current_journée_var from temp_tab;
+    SELECT AVG(total_away_goal) INTO average_ht FROM temp_tab;
+    SELECT total_away_goal INTO journée1_ht
+    FROM temp_tab WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_ht = average_ht;
+    END IF;
+    SELECT total_away_goal INTO journée2_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_ht = average_ht;
+    END IF;
+    SELECT total_away_goal INTO journée3_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_ht = average_ht;
+    END IF;
+    SELECT total_away_goal INTO journée4_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_ht = average_ht;
+    END IF;
+    SELECT total_away_goal INTO journée5_ht
+    FROM temp_tab WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_ht) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_ht = average_ht;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab WHERE (total_away_goal > 0);
+    SET over0_scored_ht = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab WHERE (total_away_goal > 1);
+    SET over1_scored_ht = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab WHERE (total_away_goal > 2);
+    SET over2_scored_ht = ((var_over2 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_w_scoring;
+    FROM temp_tab WHERE (total_away_goal = 0);
+    SET clean_sheet_ht = var_clean_sheet;
+
+    CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
+    SELECT journée, total_away_goal FROM summary 
+    WHERE away_team = NEW.away_team ORDER BY date_time DESC LIMIT 5;
+    SELECT MAX(journée) INTO current_journée_var 
+    FROM temp_tab_away;
+    SELECT AVG(total_away_goal) INTO average_at
+    FROM temp_tab_away;
+    SELECT total_away_goal INTO journée1_at
+    FROM temp_tab_away WHERE journée = current_journée_var;
+    SELECT ISNULL(journée1_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée1_at = average_at;
+    END IF;
+    SELECT total_away_goal INTO journée2_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 1);
+    SELECT ISNULL(journée2_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée2_at = average_at;
+    END IF;
+    SELECT total_away_goal INTO journée3_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 2);
+    SELECT ISNULL(journée3_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée3_at = average_at;
+    END IF;
+    SELECT total_away_goal INTO journée4_at               
+    FROM temp_tab_away WHERE journée = (current_journée_var - 3);
+    SELECT ISNULL(journée4_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée4_at = average_at;
+    END IF;
+    SELECT total_away_goal INTO journée5_at
+    FROM temp_tab_away WHERE journée = (current_journée_var - 4);
+    SELECT ISNULL(journée5_at) INTO ONEorZERO;
+    IF ONEorZERO = 1 THEN
+        SET journée5_at = average_at;
+    END IF;
+    SELECT COUNT(journée) INTO var_total_journée
+    FROM temp_tab; 
+    SELECT COUNT(journée) INTO var_over0
+    FROM temp_tab WHERE (total_away_goal > 0);
+    SET over0_scored_at = ((var_over0 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over1
+    FROM temp_tab WHERE (total_away_goal > 1);
+    SET over1_scored_at = ((var_over1 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_over2
+    FROM temp_tab WHERE (total_away_goal > 2);
+    SET over2_scored_at = ((var_over2 / var_total_journée)* 100);
+    SELECT COUNT(journée) INTO var_w_scoring
+    FROM temp_tab_away WHERE (total_away_goal = 0);
+    SET without_scoring_at = var_w_scoring;
+    INSERT INTO conceded_scored_ds
+    VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
+        journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, over0_conceded_ht, over1_conceded_ht, over2_conceded_ht,
+        over0_scored_at, over1_scored_at, over2_scored_at, clean_sheet_ht, average_ht, without_scoring_at, average_at,
+        NEW.total_away_goal);
 END //

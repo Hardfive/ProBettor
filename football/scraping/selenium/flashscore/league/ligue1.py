@@ -2,59 +2,53 @@ from flashscore.scraper.spider.crawler import FixtureSpider, ResultSpider
 import datetime
 import time
 import random
+import os
+import pymysql
 
 
 class Process(object):
-    """Avoid us to run the spiders manually and always checking
-    if there are new data to collect on the web site."""
+    """Avoid to run spiders manually and always checking
+    if there are new data to collect on the web site.
+    """
 
     DATE_NOW = datetime.datetime.now()
+    PWD = os.environ.get('DB_PWD')
 
-    def __init__(self, fix_url, fix_fPath, rsl_url, rsl_fPath, nm_table,
-                 surfix):
-        self.fix_url = fix_url
-        self.fix_fPath = fix_fPath
-        self.rsl_url = rsl_url
-        self.rsl_fPath = rsl_fPath
-        self.nm_table = nm_table
-        self.surfix = surfix
+    def __init__(self, fixture_url,  result_url, lig_id, events):
+        self.fixture_url = fixture_url
+        self.result_url = result_url
+        self.lig_id = lig_id
+        self.events = events
+        self.connection = pymysql.connect(
+                            host='localhost',
+                            user='hh',
+                            passwd=Process.PWD,
+                            database='football')
 
     def pipeline(self):
         """Check if the last event of the round
             has been played to finally run the spiders"""
         start = time.perf_counter()
-        with open(self.fix_fPath, 'r') as file:
-            date_time = file.read()
-        month = date_time[10:12]
-        if month[0] == 0:
-            month = month[1]
-        month = int(month)
-        day = date_time[7:9]
-        if day[0] == 0:
-            day = day[1]
-        day = int(day)
-        hour = date_time[14:16]
-        hour = int(hour)
-        hour = hour + 3
-        if hour > 23:
-            day += 1
-            hour = 10
-        minute = date_time[17:19]
-        minute = int(minute)
-        date_time = datetime.datetime(2023, month, day, hour, minute)
+        with self.connection.cursor() as cur:
+            try:
+                request = f"SELECT MAX(`date_time`) FROM {self.lig_id}_fixture"
+                cur.execute(request)
+                date_time = cur.fetchone()
+                date_time = date_time[0]
+            except pymysql.err.ProgrammingError:
+                FixtureSpider(self.fixture_url, self.lig_id).crawl()
         try:
             if date_time <= Process.DATE_NOW:
                 try:
-                    FixtureSpider(self.fix_url, self.fix_fPath).parse_item()
+                    FixtureSpider(self.fixture_url, self.lig_id).crawl()
                     print("Sucessfully fixture scraping")
                 except Exception as ex:
                     print(ex)
                 else:
-                    time.sleep(random.randrange(5, 8))
-                    ResultSpider(self.rsl_url, self.rsl_fPath,
-                                 self.fix_fPath, self.nm_table,
-                                 self.surfix).parse_item()
-                    print("Sucessfully results scraping")
+                    time.sleep(random.randrange(3, 5))
+                    ResultSpider(self.result_url, self.lig_id,
+                                 self.events).crawl()
+                    print("Sucessfully result scraping")
             else:
                 print(f"Not ready: {(date_time-Process.DATE_NOW)} \
 before running.")
@@ -66,15 +60,9 @@ before running.")
 
 
 if __name__ == "__main__":
-    fix_url = ('https://www.flashscore.fr/football/france/ligue-1/\
+    fixture_url = ('https://www.flashscore.fr/football/france/ligue-1/\
 calendrier/')
-    fix_fPath = ("/home/hhanstein/Projects/IA/probettor/football/data/event\
-/2022_23/fixtures/ligue1.txt")
-    rsl_url = ('https://www.flashscore.fr/football/france/ligue-1/\
+    result_url = ('https://www.flashscore.fr/football/france/ligue-1/\
 resultats/')
-    rsl_fPath = ("/home/hhanstein/Projects/IA/probettor/football/data/event\
-/2022_23/results/ligue1.csv")
-    nm_table = "home_resultsL1"
-    surfix = "L1"
-    my_spider = Process(fix_url, fix_fPath, rsl_url, rsl_fPath,
-                        nm_table, surfix).pipeline()
+    lig_id = "l1"
+    my_spider = Process(fixture_url, result_url, lig_id, events=10).pipeline()
