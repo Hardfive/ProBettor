@@ -3,6 +3,8 @@ import datetime
 import time
 import random
 import os
+import sys
+
 import pymysql
 
 
@@ -29,6 +31,7 @@ class Process(object):
         """Check if the last event of the round
             has been played to finally run the spiders"""
         start = time.perf_counter()
+        print('lets do it')
         with self.connection.cursor() as cur:
             try:
                 request = f"SELECT MAX(`date_time`) FROM {self.lig_id}_fixture"
@@ -36,7 +39,10 @@ class Process(object):
                 date_time = cur.fetchone()
                 date_time = date_time[0]
             except pymysql.err.ProgrammingError:
+                print("error raised")
                 FixtureSpider(self.fixture_url, self.lig_id).crawl()
+                print("everything is okay")
+                sys.exit(0)
         try:
             if date_time <= Process.DATE_NOW:
                 try:

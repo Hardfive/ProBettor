@@ -62,7 +62,7 @@ a[@class='participant__participantName participant__overflow ']"
             self.driver.get(self.fix_url)
         except Exception:
             self.driver.quit()
-            print("Connection failed ")
+            print("Connection failed\nTry check it.")
 
     def parse(self):
         last_match = self.driver.find_element(By.XPATH,
@@ -78,7 +78,7 @@ a[@class='participant__participantName participant__overflow ']"
     async def parsing(self, url):
         self.driver.execute_script("window.open('');")
         self.driver.switch_to.window(self.driver.window_handles[1])
-        await asyncio.sleep(0)
+        # await asyncio.sleep(0)
         self.driver.get(url)
         item = {}
         item['journée'] = self.driver.find_element(By.XPATH,
@@ -109,7 +109,7 @@ a[@class='participant__participantName participant__overflow ']"
         try:
             start = time.perf_counter()
             FixtureSpider.parse(self)
-            round_to_coming = asyncio.run(FixtureSpider.item_parse(self))
+            asyncio.run(FixtureSpider.item_parse(self))
             print(time.perf_counter() - start)
         except Exception as err:
             print(err)
@@ -177,9 +177,9 @@ or contains(@title, "finition") or contains(@title, "Quel beau moment")]'
         self.wait = WebDriverWait(self.driver, 10)
         try:
             self.driver.get(self.rsl_url)
-        except Exception as err:
+        except Exception:
             self.driver.quit()
-            print(f"Connection failed\n {err}")
+            print("Connection failed\nTry check it.")
 
     def parse(self):
         ResultSpider.journée = self.driver.find_element(By.XPATH,
