@@ -155,7 +155,8 @@ or contains(@title, "finition") or contains(@title, "Quel beau moment")]'
 "Corners")]'
     YELLOW_CARD_XP = '//div[@class="stat__row"]//div[contains(text(),\
 "Cartons Jaunes")]'
-    EXCEPTED_GOAL_XP = ''
+    EXCEPTED_GOAL_XP = '//div[@class="stat__row"]//div[contains(text(),\
+"Expected Goals (xG)")]'
     EVENT_H2H_XP = '//div[@class="h2h__section section "][2]\
 //div[@class="h2h__row"]'
     DATE_H2H_XP = './/span[@class="h2h__date"]'
