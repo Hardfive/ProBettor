@@ -24,17 +24,19 @@ class Model(object):
 
     pwd = os.environ.get('DB_PWD')
 
-    def __init__(self):
+    def __init__(self, df):
         self.short_dataset = pd.DataFrame()
+        self.df = df
         self.connection = pymysql.connect(
                 host='localhost',
                 user='hh',
                 password=Model.pwd,
-                database='test_overall'
+                database='test'
                 )
 
     def model_training(self):
-        table = 'overall_dataset'
+        table = 'global_overall_ds'
+        table2 = 'global_ds'
         try:
             with self.connection.cursor() as cur:
                 sql_request = f"SELECT * FROM {table}"
@@ -42,6 +44,12 @@ class Model(object):
                 columns = cur.description
                 # data = cur.fetchall()
                 data = [{columns[index][0]: column for index, column in
+                         enumerate(value)} for value in cur.fetchall()]
+                sql_request = f"SELECT * FROM {table2}"
+                cur.execute(sql_request)
+                columns = cur.description
+                # data = cur.fetchall()
+                data2 = [{columns[index][0]: column for index, column in
                          enumerate(value)} for value in cur.fetchall()]
         except Exception as err:
             print(f"{err}")
@@ -52,7 +60,7 @@ class Model(object):
                                       bins=[min(dataset['global']), 2,
                                       max(dataset['global'])],
                                       labels=labels_name, include_lowest=True)
-            self.short_dataset = dataset[dataset['mp'] > 5]
+            self.short_dataset = dataset[dataset['mp'] > 5 and dataset['mp'] > 10]
 
             x = self.short_dataset.drop(['date_time', 'mp', 'home_team',
                                          'away_team', 'label', 'global'], axis=1)
@@ -80,4 +88,6 @@ class Model(object):
                 # print(classification_report(y_test, y_pred))
 
 
-model = Model().model_training()
+df = pd.read_csv('/home/hhanstein/Projects/IA/probettor/football/data/event\
+/2022_23/results/ligue1.csv')
+model = Model(df).fill_database()

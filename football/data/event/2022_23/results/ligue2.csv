@@ -1,4 +1,4 @@
-mp,date_time,home_team,away_team,1st_home_goal,1st_away_goal,1st_total_goal,2nd_home_goal,2nd_away_goal,2nd_total_goal,total_home_goal,total_away_goal,global
+journée,date_time,home_team,away_team,1st_home_team_goal,1st_away_team_goal,1st_total_goal,2nd_home_team_goal,2nd_away_team_goal,2nd_total_goal,total_home_team_goal,total_away_team_goal,global
 38,2023-06-02 18:45,Bordeaux,Rodez,0,1,1,0,0,0,0,1,1
 38,2023-06-02 18:45,Amiens,Laval,0,0,0,1,2,3,1,2,3
 38,2023-06-02 18:45,Grenoble,Guingamp,0,1,1,0,1,1,0,2,2

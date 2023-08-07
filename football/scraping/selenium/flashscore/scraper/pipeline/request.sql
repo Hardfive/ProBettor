@@ -523,7 +523,7 @@ BEGIN
     WHERE team = NEW.away_team; 
 END //
 
-CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__global_overall_ds BEFORE INSERT ON summary FOR EACH ROW 
+CREATE OR REPLACE TRIGGER beforeInsert__summary__global_overall_ds BEFORE INSERT ON summary FOR EACH ROW 
 BEGIN
     DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
     journée1_at, journée2_at, journée3_at, journée4_at, journée5_at, var_total_journée TINYINT;
@@ -570,13 +570,13 @@ BEGIN
     FROM temp_tab; 
     SELECT COUNT(journée) INTO var_over0
     FROM temp_tab WHERE (global > 0);
-    SET var_over0_all_ht = ((var_over0 / var_total_journée)* 100);
+    SET var_over0_all_ht = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
     FROM temp_tab WHERE (global > 1);
-    SET var_over1_all_ht = ((var_over1 / var_total_journée)* 100);
+    SET var_over1_all_ht = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
     FROM temp_tab WHERE (global > 2);
-    SET var_over2_all_ht = ((var_over2 / var_total_journée)* 100);
+    SET var_over2_all_ht = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
 
     CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
     SELECT journée, global FROM summary
@@ -619,20 +619,20 @@ BEGIN
     FROM temp_tab_away; 
     SELECT COUNT(journée) INTO var_over0
     FROM temp_tab_away WHERE (global > 0);
-    SET var_over0_all_at = ((var_over0 / var_total_journée)* 100);
+    SET var_over0_all_at = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
     FROM temp_tab_away WHERE (global > 1);
-    SET var_over1_all_at = ((var_over1 / var_total_journée)* 100);
+    SET var_over1_all_at = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
     FROM temp_tab_away WHERE (global > 2);
-    SET var_over2_all_at = ((var_over2 / var_total_journée)* 100);
+    SET var_over2_all_at = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
     INSERT INTO global_overall_ds
     VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
         journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, var_over0_all_ht, var_over1_all_ht, var_over2_all_ht,
         var_over0_all_at, var_over1_all_at, var_over2_all_at, NEW.global);
 END //
 
-CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__global_ds BEFORE INSERT ON summary FOR EACH ROW 
+CREATE OR REPLACE TRIGGER beforeInsert__summary__global_ds BEFORE INSERT ON summary FOR EACH ROW 
 BEGIN
     DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
     journée1_at, journée2_at, journée3_at, journée4_at, journée5_at, var_total_journée TINYINT;
@@ -679,13 +679,13 @@ BEGIN
     FROM temp_tab; 
     SELECT COUNT(journée) INTO var_over0
     FROM temp_tab WHERE (global > 0);
-    SET var_over0_all_ht = ((var_over0 / var_total_journée)* 100);
+    SET var_over0_all_ht = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
     FROM temp_tab WHERE (global > 1);
-    SET var_over1_all_ht = ((var_over1 / var_total_journée)* 100);
+    SET var_over1_all_ht = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
     FROM temp_tab WHERE (global > 2);
-    SET var_over2_all_ht = ((var_over2 / var_total_journée)* 100);
+    SET var_over2_all_ht = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
 
     CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
     SELECT journée, global FROM summary
@@ -728,20 +728,20 @@ BEGIN
     FROM temp_tab_away; 
     SELECT COUNT(journée) INTO var_over0
     FROM temp_tab_away WHERE (global > 0);
-    SET var_over0_all_at = ((var_over0 / var_total_journée)* 100);
+    SET var_over0_all_at = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
     FROM temp_tab_away WHERE (global > 1);
-    SET var_over1_all_at = ((var_over1 / var_total_journée)* 100);
+    SET var_over1_all_at = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
     FROM temp_tab_away WHERE (global > 2);
-    SET var_over2_all_at = ((var_over2 / var_total_journée)* 100);
+    SET var_over2_all_at = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
     INSERT INTO global_ds
     VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
         journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, var_over0_all_ht, var_over1_all_ht, var_over2_all_ht,
         var_over0_all_at, var_over1_all_at, var_over2_all_at, NEW.global);
 END //
 
-CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__scored_conceded_all_ds BEFORE INSERT ON summary FOR EACH ROW 
+CREATE OR REPLACE TRIGGER beforeInsert__summary__scored_conceded_all_ds BEFORE INSERT ON summary FOR EACH ROW 
 BEGIN
     DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
     journée1_at, journée2_at, journée3_at, journée4_at, journée5_at, var_total_journée TINYINT;
@@ -789,15 +789,17 @@ BEGIN
     FROM temp_tab; 
     SELECT COUNT(journée) INTO var_over0
     FROM temp_tab WHERE (total_home_team_goal > 0);
-    SET over0_scored_ht = ((var_over0 / var_total_journée)* 100);
+    SET over0_scored_ht = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
     FROM temp_tab WHERE (total_home_team_goal > 1);
-    SET over1_scored_ht = ((var_over1 / var_total_journée)* 100);
+    SET over1_scored_ht = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
     FROM temp_tab WHERE (total_home_team_goal > 2);
-    SET over2_scored_ht = ((var_over2 / var_total_journée)* 100);
+    SET over2_scored_ht = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_w_scoring
     FROM temp_tab WHERE (total_home_team_goal = 0);
+    SET var_w_scoring = ((var_w_scoring / NULLIF(var_total_journée, 0))* 100);
+    
 
     CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
     SELECT journée, total_home_team_goal FROM summary
@@ -840,15 +842,16 @@ BEGIN
     FROM temp_tab_away; 
     SELECT COUNT(journée) INTO var_over0
     FROM temp_tab_away WHERE (total_home_team_goal > 0);
-    SET over0_conceded_at = ((var_over0 / var_total_journée)* 100);
+    SET over0_conceded_at = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
     FROM temp_tab_away WHERE (total_home_team_goal > 1);
-    SET over1_conceded_at = ((var_over1 / var_total_journée)* 100);
+    SET over1_conceded_at = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
     FROM temp_tab_away WHERE (total_home_team_goal > 2);
-    SET over2_conceded_at = ((var_over2 / var_total_journée)* 100);
+    SET over2_conceded_at = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_clean_sheet
     FROM temp_tab_away WHERE (total_home_team_goal = 0);
+    SET var_clean_sheet = ((var_clean_sheet / NULLIF(var_total_journée, 0))*100);
     INSERT INTO scored_conceded_all_ds
     VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
         journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, over0_scored_ht, over1_scored_ht, over2_scored_ht,
@@ -856,7 +859,7 @@ BEGIN
         NEW.total_home_team_goal);
 END //
 
-CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__scored_conceded_ds BEFORE INSERT ON summary FOR EACH ROW 
+CREATE OR REPLACE TRIGGER beforeInsert__summary__scored_conceded_ds BEFORE INSERT ON summary FOR EACH ROW 
 BEGIN
     DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
     journée1_at, journée2_at, journée3_at, journée4_at, journée5_at TINYINT;
@@ -904,16 +907,16 @@ BEGIN
     FROM temp_tab; 
     SELECT COUNT(journée) INTO var_over0
     FROM temp_tab WHERE (total_home_team_goal > 0);
-    SET over0_scored_ht = ((var_over0 / var_total_journée)* 100);
+    SET over0_scored_ht = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
     FROM temp_tab WHERE (total_home_team_goal > 1);
-    SET over1_scored_ht = ((var_over1 / var_total_journée)* 100);
+    SET over1_scored_ht = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
     FROM temp_tab WHERE (total_home_team_goal > 2);
-    SET over2_scored_ht = ((var_over2 / var_total_journée)* 100);
+    SET over2_scored_ht = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_w_scoring;
     FROM temp_tab WHERE (total_home_team_goal = 0);
-    SET without_scoring_ht = var_w_scoring
+    SET var_w_scoring = ((var_w_scoring / NULLIF(var_total_journée, 0))* 100);
 
     CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
     SELECT journée, total_home_team_goal FROM summary
@@ -956,24 +959,24 @@ BEGIN
     FROM temp_tab_away; 
     SELECT COUNT(journée) INTO var_over0
     FROM temp_tab_away WHERE (total_home_team_goal > 0);
-    SET over0_conceded_at = ((var_over0 / var_total_journée)* 100);
+    SET over0_conceded_at = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
     FROM temp_tab_away WHERE (total_home_team_goal > 1);
-    SET over1_conceded_at = ((var_over1 / var_total_journée)* 100);
+    SET over1_conceded_at = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
     FROM temp_tab_away WHERE (total_home_team_goal > 2);
-    SET over2_conceded_at = ((var_over2 / var_total_journée)* 100);
+    SET over2_conceded_at = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_clean_sheet
     FROM temp_tab_away WHERE (total_home_team_goal = 0);
-    SET clean_sheet_at = var_clean_sheet;
+    SET var_clean_sheet = ((var_clean_sheet / NULLIF(var_total_journée, 0))* 100);
     INSERT INTO scored_conceded_ds
     VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
         journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, over0_scored_ht, over1_scored_ht, over2_scored_ht,
-        over0_conceded_at, over1_conceded_at, over2_conceded_at, without_scoring_ht, average_ht, clean_sheet_at, average_at,
+        over0_conceded_at, over1_conceded_at, over2_conceded_at, var_w_scoring, average_ht, var_clean_sheet, average_at,
         NEW.total_home_team_goal);
 END //
 
-CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__conceded_scored_all_ds BEFORE INSERT ON summary FOR EACH ROW 
+CREATE OR REPLACE TRIGGER beforeInsert__summary__conceded_scored_all_ds BEFORE INSERT ON summary FOR EACH ROW 
 BEGIN
     DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
     journée1_at, journée2_at, journée3_at, journée4_at, journée5_at TINYINT;
@@ -981,35 +984,35 @@ BEGIN
     DECLARE over0_conceded_ht, over1_conceded_ht, over2_conceded_ht, over0_scored_at, over1_scored_at, over2_scored_at TINYINT UNSIGNED;
     DECLARE average_ht, average_at, ONEorZERO TINYINT UNSIGNED;
     CREATE OR REPLACE TEMPORARY TABLE temp_tab
-    SELECT journée, total_away_goal FROM summary
+    SELECT journée, total_away_team_goal FROM summary
     WHERE home_team = NEW.home_team OR away_team = NEW.home_team ORDER BY date_time DESC LIMIT 5;
     SELECT MAX(journée) into current_journée_var from temp_tab;
-    SELECT AVG(total_away_goal) INTO average_ht FROM temp_tab;
-    SELECT total_away_goal INTO journée1_ht
+    SELECT AVG(total_away_team_goal) INTO average_ht FROM temp_tab;
+    SELECT total_away_team_goal INTO journée1_ht
     FROM temp_tab WHERE journée = current_journée_var;
     SELECT ISNULL(journée1_ht) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée1_ht = average_ht;
     END IF;
-    SELECT total_away_goal INTO journée2_ht
+    SELECT total_away_team_goal INTO journée2_ht
     FROM temp_tab WHERE journée = (current_journée_var - 1);
     SELECT ISNULL(journée2_ht) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée2_ht = average_ht;
     END IF;
-    SELECT total_away_goal INTO journée3_ht
+    SELECT total_away_team_goal INTO journée3_ht
     FROM temp_tab WHERE journée = (current_journée_var - 2);
     SELECT ISNULL(journée3_ht) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée3_ht = average_ht;
     END IF;
-    SELECT total_away_goal INTO journée4_ht
+    SELECT total_away_team_goal INTO journée4_ht
     FROM temp_tab WHERE journée = (current_journée_var - 3);
     SELECT ISNULL(journée4_ht) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée4_ht = average_ht;
     END IF;
-    SELECT total_away_goal INTO journée5_ht
+    SELECT total_away_team_goal INTO journée5_ht
     FROM temp_tab WHERE journée = (current_journée_var - 4);
     SELECT ISNULL(journée5_ht) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
@@ -1018,50 +1021,50 @@ BEGIN
     SELECT COUNT(journée) INTO var_total_journée
     FROM temp_tab; 
     SELECT COUNT(journée) INTO var_over0
-    FROM temp_tab WHERE (total_away_goal > 0);
-    SET over0_conceded_ht = ((var_over0 / var_total_journée)* 100);
+    FROM temp_tab WHERE (total_away_team_goal > 0);
+    SET over0_conceded_ht = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
-    FROM temp_tab WHERE (total_away_goal > 1);
-    SET over1_conceded_ht = ((var_over1 / var_total_journée)* 100);
+    FROM temp_tab WHERE (total_away_team_goal > 1);
+    SET over1_conceded_ht = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
-    FROM temp_tab WHERE (total_away_goal > 2);
-    SET over2_conceded_ht = ((var_over2 / var_total_journée)* 100);
+    FROM temp_tab WHERE (total_away_team_goal > 2);
+    SET over2_conceded_ht = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_clean_sheet;
-    FROM temp_tab WHERE (total_away_goal = 0);
-    SET clean_sheet_ht = var_clean_sheet
+    FROM temp_tab WHERE (total_away_team_goal = 0);
+    SET var_clean_sheet = ((var_clean_sheet / NULLIF(var_total_journée, 0))* 100);
 
     CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
-    SELECT journée, total_away_goal FROM summary
+    SELECT journée, total_away_team_goal FROM summary
     WHERE away_team = NEW.away_team OR home_team = NEW.away_team ORDER BY date_time DESC LIMIT 5;
     SELECT MAX(journée) INTO current_journée_var
     FROM temp_tab_away;
-    SELECT AVG(total_away_goal) INTO average_at
+    SELECT AVG(total_away_team_goal) INTO average_at
     FROM temp_tab_away;
-    SELECT total_away_goal INTO journée1_at
+    SELECT total_away_team_goal INTO journée1_at
     FROM temp_tab_away WHERE journée = current_journée_var;
     SELECT ISNULL(journée1_at) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée1_at = average_at;
     END IF;
-    SELECT total_away_goal INTO journée2_at               
+    SELECT total_away_team_goal INTO journée2_at               
     FROM temp_tab_away WHERE journée = (current_journée_var - 1);
     SELECT ISNULL(journée2_at) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée2_at = average_at;
     END IF;
-    SELECT total_away_goal INTO journée3_at               
+    SELECT total_away_team_goal INTO journée3_at               
     FROM temp_tab_away WHERE journée = (current_journée_var - 2);
     SELECT ISNULL(journée3_at) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée3_at = average_at;
     END IF;
-    SELECT total_away_goal INTO journée4_at               
+    SELECT total_away_team_goal INTO journée4_at               
     FROM temp_tab_away WHERE journée = (current_journée_var - 3);
     SELECT ISNULL(journée4_at) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée4_at = average_at;
     END IF;
-    SELECT total_away_goal INTO journée5_at
+    SELECT total_away_team_goal INTO journée5_at
     FROM temp_tab_away WHERE journée = (current_journée_var - 4);
     SELECT ISNULL(journée5_at) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
@@ -1070,25 +1073,25 @@ BEGIN
     SELECT COUNT(journée) INTO var_total_journée
     FROM temp_tab; 
     SELECT COUNT(journée) INTO var_over0
-    FROM temp_tab WHERE (total_away_goal > 0);
-    SET over0_conceded_at = ((var_over0 / var_total_journée)* 100);
+    FROM temp_tab WHERE (total_away_team_goal > 0);
+    SET over0_conceded_at = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
-    FROM temp_tab WHERE (total_away_goal > 1);
-    SET over1_conceded_at = ((var_over1 / var_total_journée)* 100);
+    FROM temp_tab WHERE (total_away_team_goal > 1);
+    SET over1_conceded_at = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
-    FROM temp_tab WHERE (total_away_goal > 2);
-    SET over2_conceded_at = ((var_over2 / var_total_journée)* 100);
-    SELECT COUNT(journée) INTO var_without_scoring
-    FROM temp_tab_away WHERE (total_away_goal = 0);
-    SET without_scoring_at = var_without_scoring;
+    FROM temp_tab WHERE (total_away_team_goal > 2);
+    SET over2_conceded_at = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
+    SELECT COUNT(journée) INTO var_w_scoring
+    FROM temp_tab_away WHERE (total_away_team_goal = 0);
+    SET var_w_scoring = ((var_w_scoring / NULLIF(var_total_journée, 0))* 100);
     INSERT INTO conceded_scored_all_ds
     VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
         journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, over0_conceded_ht, over1_conceded_ht, over2_conceded_ht,
-        over0_scored_at, over1_scored_at, over2_scored_at, clean_sheet_ht, average_ht, without_scoring_at, average_at,
+        over0_scored_at, over1_scored_at, over2_scored_at, var_clean_sheet, average_ht, var_w_scoring, average_at,
         NEW.total_away_goal);
 END //
 
-CREATE TRIGGER IF NOT EXISTS beforeInsert__summary__conceded_scored_ds BEFORE INSERT ON summary FOR EACH ROW 
+CREATE OR REPLACE TRIGGER beforeInsert__summary__conceded_scored_ds BEFORE INSERT ON summary FOR EACH ROW 
 BEGIN
     DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, journée4_ht, journée5_ht,
     journée1_at, journée2_at, journée3_at, journée4_at, journée5_at TINYINT;
@@ -1096,35 +1099,35 @@ BEGIN
     DECLARE over0_conceded_ht, over1_conceded_ht, over2_conceded_ht, over0_scored_at, over1_scored_at, over2_scored_at TINYINT UNSIGNED;
     DECLARE average_ht, average_at, ONEorZERO TINYINT UNSIGNED;
     CREATE OR REPLACE TEMPORARY TABLE temp_tab
-    SELECT journée, total_away_goal FROM summary
+    SELECT journée, total_away_team_goal FROM summary
     WHERE home_team = NEW.home_team ORDER BY date_time DESC LIMIT 5;
     SELECT MAX(journée) into current_journée_var from temp_tab;
-    SELECT AVG(total_away_goal) INTO average_ht FROM temp_tab;
-    SELECT total_away_goal INTO journée1_ht
+    SELECT AVG(total_away_team_goal) INTO average_ht FROM temp_tab;
+    SELECT total_away_team_goal INTO journée1_ht
     FROM temp_tab WHERE journée = current_journée_var;
     SELECT ISNULL(journée1_ht) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée1_ht = average_ht;
     END IF;
-    SELECT total_away_goal INTO journée2_ht
+    SELECT total_away_team_goal INTO journée2_ht
     FROM temp_tab WHERE journée = (current_journée_var - 1);
     SELECT ISNULL(journée2_ht) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée2_ht = average_ht;
     END IF;
-    SELECT total_away_goal INTO journée3_ht
+    SELECT total_away_team_goal INTO journée3_ht
     FROM temp_tab WHERE journée = (current_journée_var - 2);
     SELECT ISNULL(journée3_ht) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée3_ht = average_ht;
     END IF;
-    SELECT total_away_goal INTO journée4_ht
+    SELECT total_away_team_goal INTO journée4_ht
     FROM temp_tab WHERE journée = (current_journée_var - 3);
     SELECT ISNULL(journée4_ht) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée4_ht = average_ht;
     END IF;
-    SELECT total_away_goal INTO journée5_ht
+    SELECT total_away_team_goal INTO journée5_ht
     FROM temp_tab WHERE journée = (current_journée_var - 4);
     SELECT ISNULL(journée5_ht) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
@@ -1133,50 +1136,50 @@ BEGIN
     SELECT COUNT(journée) INTO var_total_journée
     FROM temp_tab; 
     SELECT COUNT(journée) INTO var_over0
-    FROM temp_tab WHERE (total_away_goal > 0);
-    SET over0_scored_ht = ((var_over0 / var_total_journée)* 100);
+    FROM temp_tab WHERE (total_away_team_goal > 0);
+    SET over0_scored_ht = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
-    FROM temp_tab WHERE (total_away_goal > 1);
-    SET over1_scored_ht = ((var_over1 / var_total_journée)* 100);
+    FROM temp_tab WHERE (total_away_team_goal > 1);
+    SET over1_scored_ht = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
-    FROM temp_tab WHERE (total_away_goal > 2);
-    SET over2_scored_ht = ((var_over2 / var_total_journée)* 100);
-    SELECT COUNT(journée) INTO var_w_scoring;
-    FROM temp_tab WHERE (total_away_goal = 0);
-    SET clean_sheet_ht = var_clean_sheet;
+    FROM temp_tab WHERE (total_away_team_goal > 2);
+    SET over2_scored_ht = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
+    SELECT COUNT(journée) INTO var_clean_sheet;
+    FROM temp_tab WHERE (total_away_team_goal = 0);
+    SET var_clean_sheet = ((var_clean_sheet / NULLIF(var_total_journée, 0))* 100);
 
     CREATE OR REPLACE TEMPORARY TABLE temp_tab_away
-    SELECT journée, total_away_goal FROM summary 
+    SELECT journée, total_away_team_goal FROM summary 
     WHERE away_team = NEW.away_team ORDER BY date_time DESC LIMIT 5;
     SELECT MAX(journée) INTO current_journée_var 
     FROM temp_tab_away;
-    SELECT AVG(total_away_goal) INTO average_at
+    SELECT AVG(total_away_team_goal) INTO average_at
     FROM temp_tab_away;
-    SELECT total_away_goal INTO journée1_at
+    SELECT total_away_team_goal INTO journée1_at
     FROM temp_tab_away WHERE journée = current_journée_var;
     SELECT ISNULL(journée1_at) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée1_at = average_at;
     END IF;
-    SELECT total_away_goal INTO journée2_at               
+    SELECT total_away_team_goal INTO journée2_at               
     FROM temp_tab_away WHERE journée = (current_journée_var - 1);
     SELECT ISNULL(journée2_at) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée2_at = average_at;
     END IF;
-    SELECT total_away_goal INTO journée3_at               
+    SELECT total_away_team_goal INTO journée3_at               
     FROM temp_tab_away WHERE journée = (current_journée_var - 2);
     SELECT ISNULL(journée3_at) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée3_at = average_at;
     END IF;
-    SELECT total_away_goal INTO journée4_at               
+    SELECT total_away_team_goal INTO journée4_at               
     FROM temp_tab_away WHERE journée = (current_journée_var - 3);
     SELECT ISNULL(journée4_at) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
         SET journée4_at = average_at;
     END IF;
-    SELECT total_away_goal INTO journée5_at
+    SELECT total_away_team_goal INTO journée5_at
     FROM temp_tab_away WHERE journée = (current_journée_var - 4);
     SELECT ISNULL(journée5_at) INTO ONEorZERO;
     IF ONEorZERO = 1 THEN
@@ -1185,20 +1188,20 @@ BEGIN
     SELECT COUNT(journée) INTO var_total_journée
     FROM temp_tab; 
     SELECT COUNT(journée) INTO var_over0
-    FROM temp_tab WHERE (total_away_goal > 0);
-    SET over0_scored_at = ((var_over0 / var_total_journée)* 100);
+    FROM temp_tab WHERE (total_away_team_goal > 0);
+    SET over0_scored_at = ((var_over0 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over1
-    FROM temp_tab WHERE (total_away_goal > 1);
-    SET over1_scored_at = ((var_over1 / var_total_journée)* 100);
+    FROM temp_tab WHERE (total_away_team_goal > 1);
+    SET over1_scored_at = ((var_over1 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_over2
-    FROM temp_tab WHERE (total_away_goal > 2);
-    SET over2_scored_at = ((var_over2 / var_total_journée)* 100);
+    FROM temp_tab WHERE (total_away_team_goal > 2);
+    SET over2_scored_at = ((var_over2 / NULLIF(var_total_journée, 0))* 100);
     SELECT COUNT(journée) INTO var_w_scoring
-    FROM temp_tab_away WHERE (total_away_goal = 0);
-    SET without_scoring_at = var_w_scoring;
+    FROM temp_tab_away WHERE (total_away_team_goal = 0);
+    SET var_w_scoring = ((var_w_scoring / NULLIF(var_total_journée, 0))* 100);
     INSERT INTO conceded_scored_ds
     VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht,
         journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, over0_conceded_ht, over1_conceded_ht, over2_conceded_ht,
-        over0_scored_at, over1_scored_at, over2_scored_at, clean_sheet_ht, average_ht, without_scoring_at, average_at,
+        over0_scored_at, over1_scored_at, over2_scored_at, var_clean_sheet, average_ht, var_w_scoring, average_at,
         NEW.total_away_goal);
 END //

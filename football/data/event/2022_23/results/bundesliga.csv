@@ -1,4 +1,4 @@
-mp,date_time,home_team,away_team,1st_home_goal,1st_away_goal,1st_total_goal,2nd_home_goal,2nd_away_goal,2nd_total_goal,total_home_goal,total_away_goal,global
+journée,date_time,home_team,away_team,1st_home_team_goal,1st_away_team_goal,1st_total_goal,2nd_home_team_goal,2nd_away_team_goal,2nd_total_goal,total_home_team_goal,total_away_team_goal,global
 34,2023-05-27 13:30,B. Monchengladbach,Augsburg,2,0,2,0,0,0,2,0,2
 34,2023-05-27 13:30,RB Leipzig,Schalke,2,1,3,2,1,3,4,2,6
 34,2023-05-27 13:30,Wolfsburg,Hertha Berlin,1,0,1,0,2,2,1,2,3

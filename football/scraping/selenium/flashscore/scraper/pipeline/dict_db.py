@@ -289,7 +289,7 @@ class Description(object):
         TRIGGERS = []
         # L'insertion des équipes dans homeGlobal_stats,
         # déclenche l'insertion des équipes dans les autres tables.
-        afterInsert__overall_standing__team = f"CREATE TRIGGER IF NOT EXISTS \
+        afterInsert__overall_standing__team = f"CREATE OR REPLACE TRIGGER \
 afterInsert__overall_standing__team_{self.lig_id} AFTER INSERT ON \
 {self.lig_id}_overall_standing FOR EACH ROW\n\
 BEGIN\n\t\
@@ -301,8 +301,8 @@ END"
         TRIGGERS.append(afterInsert__overall_standing__team)
         # after insert on home_results
         # away_results is update automatically
-        afterInsert__summary__result_standing = f"CREATE TRIGGER IF NOT EXISTS\
- afterInsert__summary__result_standing_{self.lig_id} AFTER INSERT ON \
+        afterInsert__summary__result_standing = f"CREATE OR REPLACE TRIGGER \
+afterInsert__summary__result_standing_{self.lig_id} AFTER INSERT ON \
 {self.lig_id}_summary FOR EACH ROW\n\
 BEGIN\n\t\
 DECLARE var_overall_home_team_points, var_overall_away_team_points, \
@@ -538,8 +538,8 @@ END"
         TRIGGERS.append(afterInsert__summary__result_standing)
         # déclenche un série d'operations pour remplir les tables statistiques
         # apres l'insertion des résultats a domicile
-        beforeInsert__summary__global_overall_ds = f"CREATE TRIGGER \
-IF NOT EXISTS beforeInsert__summary__global_overall_ds_{self.lig_id} \
+        beforeInsert__summary__global_overall_ds = f"CREATE OR REPLACE TRIGGER \
+beforeInsert__summary__global_overall_ds_{self.lig_id} \
 BEFORE INSERT ON {self.lig_id}_summary FOR EACH ROW\nBEGIN\n\t\
 DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, \
 journée4_ht, journée5_ht, journée1_at, journée2_at, journée3_at, \
@@ -658,7 +658,7 @@ END"
         TRIGGERS.append(beforeInsert__summary__global_overall_ds)
         # déclenche un série d'operations pour remplir les tables statistiques
         # apres l'insertion des résultats a l'exterieur
-        beforeInsert__summary__global_ds = f"CREATE TRIGGER IF NOT EXISTS \
+        beforeInsert__summary__global_ds = f"CREATE OR REPLACE TRIGGER \
 beforeInsert__summary__global_ds_{self.lig_id} BEFORE INSERT ON \
 {self.lig_id}_summary FOR EACH ROW\nBEGIN\n\t\
 DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, \
@@ -710,13 +710,13 @@ SELECT COUNT(journée) INTO var_total_journée\n\t\
 FROM temp_tab; \n\t\
 SELECT COUNT(journée) INTO var_over0\n\t\
 FROM temp_tab WHERE (global > 0);\n\t\
-SET var_over0_all_ht = ((var_over0 / var_total_journée)* 100);\n\t\
+SET var_over0_all_ht = ((var_over0 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over1\n\t\
 FROM temp_tab WHERE (global > 1);\n\t\
-SET var_over1_all_ht = ((var_over1 / var_total_journée)* 100);\n\t\
+SET var_over1_all_ht = ((var_over1 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over2\n\t\
 FROM temp_tab WHERE (global > 2);\n\t\
-SET var_over2_all_ht = ((var_over2 / var_total_journée)* 100);\n\t\
+SET var_over2_all_ht = ((var_over2 / NULLIF(var_total_journée, 0))* 100);\n\t\
 \
 CREATE OR REPLACE TEMPORARY TABLE temp_tab_away\n\t\
 SELECT journée, global FROM {self.lig_id}_summary\n\t\
@@ -760,13 +760,13 @@ SELECT COUNT(journée) INTO var_total_journée\n\t\
 FROM temp_tab_away; \n\t\
 SELECT COUNT(journée) INTO var_over0\n\t\
 FROM temp_tab_away WHERE (global > 0);\n\t\
-SET var_over0_all_at = ((var_over0 / var_total_journée)* 100);\n\t\
+SET var_over0_all_at = ((var_over0 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over1\n\t\
 FROM temp_tab_away WHERE (global > 1);\n\t\
-SET var_over1_all_at = ((var_over1 / var_total_journée)* 100);\n\t\
+SET var_over1_all_at = ((var_over1 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over2\n\t\
 FROM temp_tab_away WHERE (global > 2);\n\t\
-SET var_over2_all_at = ((var_over2 / var_total_journée)* 100);\n\t\
+SET var_over2_all_at = ((var_over2 / NULLIF(var_total_journée, 0))* 100);\n\t\
 INSERT INTO {self.lig_id}_global_overall_ds\n\t\
 VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, \
 journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht, \
@@ -777,8 +777,8 @@ NEW.global);\n\
 END"
         TRIGGERS.append(beforeInsert__summary__global_ds)
         # comment on what do this following trigger
-        beforeInsert__sumary__scored_conceded_all_ds = f"CREATE TRIGGER \
-IF NOT EXISTS beforeInsert__summary__scored_conceded_all_ds_{self.lig_id} \
+        beforeInsert__sumary__scored_conceded_all_ds = f"CREATE OR REPLACE TRIGGER \
+beforeInsert__summary__scored_conceded_all_ds_{self.lig_id} \
 BEFORE INSERT ON {self.lig_id}_summary FOR EACH ROW\nBEGIN\n\t\
 DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, \
 journée4_ht, journée5_ht, journée1_at, journée2_at, journée3_at, \
@@ -787,7 +787,7 @@ DECLARE var_over0_scored_ht, var_over1_scored_ht, var_over2_scored_ht, \
 var_over0_conceded_at, var_over1_conceded_at, var_over2_conceded_at \
 TINYINT UNSIGNED;\n\t\
 DECLARE var_over0, var_over1, var_over2, average_ht, average_at, ONEorZERO, \
-var_w_scoring, var_clean_sheet TINYINT UNSIGNED;\n\t\
+var_w_scoring, var_clean_sheet, without_scoring, clean_sheet TINYINT UNSIGNED;\n\t\
 CREATE OR REPLACE TEMPORARY TABLE temp_tab\n\t\
 SELECT journée, total_home_team_goal FROM {self.lig_id}_summary\n\t\
 WHERE home_team = NEW.home_team OR away_team = NEW.home_team \
@@ -830,15 +830,16 @@ SELECT COUNT(journée) INTO var_total_journée\n\t\
 FROM temp_tab; \n\t\
 SELECT COUNT(journée) INTO var_over0\n\t\
 FROM temp_tab WHERE (total_home_team_goal > 0);\n\t\
-SET var_over0_scored_ht = ((var_over0 / var_total_journée)* 100);\n\t\
+SET var_over0_scored_ht = ((var_over0 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over1\n\t\
 FROM temp_tab WHERE (total_home_team_goal > 1);\n\t\
-SET var_over1_scored_ht = ((var_over1 / var_total_journée)* 100);\n\t\
+SET var_over1_scored_ht = ((var_over1 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over2\n\t\
 FROM temp_tab WHERE (total_home_team_goal > 2);\n\t\
-SET var_over2_scored_ht = ((var_over2 / var_total_journée)* 100);\n\t\
+SET var_over2_scored_ht = ((var_over2 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_w_scoring\n\t\
 FROM temp_tab WHERE (total_home_team_goal = 0);\n\t\
+SET without_scoring = ((var_w_scoring / NULLIF(var_total_journée, 0))* 100);\n\t\
 \
 CREATE OR REPLACE TEMPORARY TABLE temp_tab_away\n\t\
 SELECT journée, total_home_team_goal FROM {self.lig_id}_summary\n\t\
@@ -882,28 +883,29 @@ SELECT COUNT(journée) INTO var_total_journée\n\t\
 FROM temp_tab_away; \n\t\
 SELECT COUNT(journée) INTO var_over0\n\t\
 FROM temp_tab_away WHERE (total_home_team_goal > 0);\n\t\
-SET var_over0_conceded_at = ((var_over0 / var_total_journée)* 100);\n\t\
+SET var_over0_conceded_at = ((var_over0 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over1\n\t\
 FROM temp_tab_away WHERE (total_home_team_goal > 1);\n\t\
-SET var_over1_conceded_at = ((var_over1 / var_total_journée)* 100);\n\t\
+SET var_over1_conceded_at = ((var_over1 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over2\n\t\
 FROM temp_tab_away WHERE (total_home_team_goal > 2);\n\t\
-SET var_over2_conceded_at = ((var_over2 / var_total_journée)* 100);\n\t\
+SET var_over2_conceded_at = ((var_over2 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_clean_sheet\n\t\
 FROM temp_tab_away WHERE (total_home_team_goal = 0);\n\t\
+SET clean_sheet = ((var_clean_sheet / NULLIF(var_total_journée, 0))* 100);\n\t\
 INSERT INTO {self.lig_id}_scored_conceded_all_ds\n\t\
 VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, \
 journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht, \
 journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, \
 var_over0_scored_ht, var_over1_scored_ht, var_over2_scored_ht, \
 var_over0_conceded_at, var_over1_conceded_at, var_over2_conceded_at,\
-var_w_scoring, average_ht, var_clean_sheet, average_at, \
+without_scoring, average_ht, clean_sheet, average_at, \
 NEW.total_home_team_goal);\n\
 END"
         TRIGGERS.append(beforeInsert__sumary__scored_conceded_all_ds)
         # comment
-        beforeInsert__sumary__scored_conceded_ds = f"CREATE TRIGGER \
-IF NOT EXISTS beforeInsert__summary__scored_conceded_ds_{self.lig_id} \
+        beforeInsert__sumary__scored_conceded_ds = f"CREATE OR REPLACE TRIGGER \
+beforeInsert__summary__scored_conceded_ds_{self.lig_id} \
 BEFORE INSERT ON {self.lig_id}_summary FOR EACH ROW\nBEGIN\n\t\
 DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, \
 journée4_ht, journée5_ht, journée1_at, journée2_at, journée3_at, \
@@ -912,7 +914,7 @@ DECLARE var_over0_scored_ht, var_over1_scored_ht, var_over2_scored_ht, \
 var_over0_conceded_at, var_over1_conceded_at, var_over2_conceded_at \
 TINYINT UNSIGNED;\n\t\
 DECLARE var_over0, var_over1, var_over2, average_ht, average_at, ONEorZERO \
-, var_w_scoring, var_clean_sheet TINYINT UNSIGNED;\n\t\
+, var_w_scoring, var_clean_sheet, without_scoring, clean_sheet TINYINT UNSIGNED;\n\t\
 CREATE OR REPLACE TEMPORARY TABLE temp_tab\n\t\
 SELECT journée, total_home_team_goal FROM {self.lig_id}_summary\n\t\
 WHERE home_team = NEW.home_team \
@@ -955,15 +957,16 @@ SELECT COUNT(journée) INTO var_total_journée\n\t\
 FROM temp_tab; \n\t\
 SELECT COUNT(journée) INTO var_over0\n\t\
 FROM temp_tab WHERE (total_home_team_goal > 0);\n\t\
-SET var_over0_scored_ht = ((var_over0 / var_total_journée)* 100);\n\t\
+SET var_over0_scored_ht = ((var_over0 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over1\n\t\
 FROM temp_tab WHERE (total_home_team_goal > 1);\n\t\
-SET var_over1_scored_ht = ((var_over1 / var_total_journée)* 100);\n\t\
+SET var_over1_scored_ht = ((var_over1 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over2\n\t\
 FROM temp_tab WHERE (total_home_team_goal > 2);\n\t\
-SET var_over2_scored_ht = ((var_over2 / var_total_journée)* 100);\n\t\
+SET var_over2_scored_ht = ((var_over2 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_w_scoring\n\t\
 FROM temp_tab WHERE (total_home_team_goal = 0);\n\t\
+SET without_scoring = ((var_w_scoring / NULLIF(var_total_journée, 0))* 100);\n\t\
 \
 CREATE OR REPLACE TEMPORARY TABLE temp_tab_away\n\t\
 SELECT journée, total_home_team_goal FROM {self.lig_id}_summary\n\t\
@@ -1007,28 +1010,29 @@ SELECT COUNT(journée) INTO var_total_journée\n\t\
 FROM temp_tab_away; \n\t\
 SELECT COUNT(journée) INTO var_over0\n\t\
 FROM temp_tab_away WHERE (total_home_team_goal > 0);\n\t\
-SET var_over0_conceded_at = ((var_over0 / var_total_journée)* 100);\n\t\
+SET var_over0_conceded_at = ((var_over0 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over1\n\t\
 FROM temp_tab_away WHERE (total_home_team_goal > 1);\n\t\
-SET var_over1_conceded_at = ((var_over1 / var_total_journée)* 100);\n\t\
+SET var_over1_conceded_at = ((var_over1 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over2\n\t\
 FROM temp_tab_away WHERE (total_home_team_goal > 2);\n\t\
-SET var_over2_conceded_at = ((var_over2 / var_total_journée)* 100);\n\t\
+SET var_over2_conceded_at = ((var_over2 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_clean_sheet\n\t\
 FROM temp_tab_away WHERE (total_home_team_goal = 0);\n\t\
+SET clean_sheet = ((var_over2 / NULLIF(var_total_journée, 0))* 100);\n\t\
 INSERT INTO {self.lig_id}_scored_conceded_ds\n\t\
 VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, \
 journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht, \
 journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, \
 var_over0_scored_ht, var_over1_scored_ht, var_over2_scored_ht, \
 var_over0_conceded_at, var_over1_conceded_at, var_over2_conceded_at,\
-var_w_scoring, average_ht, var_clean_sheet, average_at, \
+without_scoring, average_ht, clean_sheet, average_at, \
 NEW.total_home_team_goal);\n\
 END"
         TRIGGERS.append(beforeInsert__sumary__scored_conceded_ds)
         # comment on the trigger above
-        beforeInsert__sumary__conceded_scored_all_ds = f"CREATE TRIGGER \
-IF NOT EXISTS beforeInsert__summary__conceded_scored_all_ds_{self.lig_id} \
+        beforeInsert__sumary__conceded_scored_all_ds = f"CREATE OR REPLACE TRIGGER \
+beforeInsert__summary__conceded_scored_all_ds_{self.lig_id} \
 BEFORE INSERT ON {self.lig_id}_summary FOR EACH ROW\nBEGIN\n\t\
 DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, \
 journée4_ht, journée5_ht, journée1_at, journée2_at, journée3_at, \
@@ -1037,7 +1041,7 @@ DECLARE var_over0_scored_ht, var_over1_scored_ht, var_over2_scored_ht, \
 var_over0_conceded_at, var_over1_conceded_at, var_over2_conceded_at \
 TINYINT UNSIGNED;\n\t\
 DECLARE var_over0, var_over1, var_over2, average_ht, average_at, ONEorZERO, \
-var_w_scoring, var_clean_sheet TINYINT UNSIGNED;\n\t\
+var_w_scoring, var_clean_sheet, without_scoring, clean_sheet TINYINT UNSIGNED;\n\t\
 CREATE OR REPLACE TEMPORARY TABLE temp_tab\n\t\
 SELECT journée, total_away_team_goal FROM {self.lig_id}_summary\n\t\
 WHERE home_team = NEW.home_team OR away_team = NEW.home_team \
@@ -1080,15 +1084,16 @@ SELECT COUNT(journée) INTO var_total_journée\n\t\
 FROM temp_tab; \n\t\
 SELECT COUNT(journée) INTO var_over0\n\t\
 FROM temp_tab WHERE (total_away_team_goal > 0);\n\t\
-SET var_over0_scored_ht = ((var_over0 / var_total_journée)* 100);\n\t\
+SET var_over0_scored_ht = ((var_over0 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over1\n\t\
 FROM temp_tab WHERE (total_away_team_goal > 1);\n\t\
-SET var_over1_scored_ht = ((var_over1 / var_total_journée)* 100);\n\t\
+SET var_over1_scored_ht = ((var_over1 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over2\n\t\
 FROM temp_tab WHERE (total_away_team_goal > 2);\n\t\
-SET var_over2_scored_ht = ((var_over2 / var_total_journée)* 100);\n\t\
+SET var_over2_scored_ht = ((var_over2 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_clean_sheet\n\t\
 FROM temp_tab WHERE (total_away_team_goal = 0);\n\t\
+SET clean_sheet = ((var_clean_sheet / NULLIF(var_total_journée, 0))* 100);\n\t\
 \
 CREATE OR REPLACE TEMPORARY TABLE temp_tab_away\n\t\
 SELECT journée, total_away_team_goal FROM {self.lig_id}_summary\n\t\
@@ -1132,28 +1137,29 @@ SELECT COUNT(journée) INTO var_total_journée\n\t\
 FROM temp_tab_away; \n\t\
 SELECT COUNT(journée) INTO var_over0\n\t\
 FROM temp_tab_away WHERE (total_away_team_goal > 0);\n\t\
-SET var_over0_conceded_at = ((var_over0 / var_total_journée)* 100);\n\t\
+SET var_over0_conceded_at = ((var_over0 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over1\n\t\
 FROM temp_tab_away WHERE (total_away_team_goal > 1);\n\t\
-SET var_over1_conceded_at = ((var_over1 / var_total_journée)* 100);\n\t\
+SET var_over1_conceded_at = ((var_over1 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over2\n\t\
 FROM temp_tab_away WHERE (total_away_team_goal > 2);\n\t\
-SET var_over2_conceded_at = ((var_over2 / var_total_journée)* 100);\n\t\
+SET var_over2_conceded_at = ((var_over2 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_w_scoring\n\t\
 FROM temp_tab_away WHERE (total_away_team_goal = 0);\n\t\
+SET without_scoring = ((var_w_scoring / NULLIF(var_total_journée, 0))* 100);\n\t\
 INSERT INTO {self.lig_id}_conceded_scored_all_ds\n\t\
 VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, \
 journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht, \
 journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, \
 var_over0_conceded_ht, var_over1_conceded_ht, var_over2_conceded_ht, \
 var_over0_scored_at, var_over1_scored_at, var_over2_scored_at,\
-var_w_scoring, average_ht, var_clean_sheet, average_at, \
+clean_sheet, average_ht, without_scoring, average_at, \
 NEW.total_away_team_goal);\n\
 END"
         TRIGGERS.append(beforeInsert__sumary__conceded_scored_all_ds)
         # comment
-        beforeInsert__sumary__conceded_scored_ds = f"CREATE TRIGGER \
-IF NOT EXISTS beforeInsert__summary__conceded_scored_ds_{self.lig_id} \
+        beforeInsert__sumary__conceded_scored_ds = f"CREATE OR REPLACE TRIGGER \
+beforeInsert__summary__conceded_scored_ds_{self.lig_id} \
 BEFORE INSERT ON {self.lig_id}_summary FOR EACH ROW\nBEGIN\n\t\
 DECLARE current_journée_var, journée1_ht, journée2_ht, journée3_ht, \
 journée4_ht, journée5_ht, journée1_at, journée2_at, journée3_at, \
@@ -1162,7 +1168,7 @@ DECLARE var_over0_scored_ht, var_over1_scored_ht, var_over2_scored_ht, \
 var_over0_conceded_at, var_over1_conceded_at, var_over2_conceded_at \
 TINYINT UNSIGNED;\n\t\
 DECLARE var_over0, var_over1, var_over2, average_ht, average_at, ONEorZERO, \
-var_w_scoring, var_clean_sheet TINYINT UNSIGNED;\n\t\
+var_w_scoring, var_clean_sheet, without_scoring, clean_sheet TINYINT UNSIGNED;\n\t\
 CREATE OR REPLACE TEMPORARY TABLE temp_tab\n\t\
 SELECT journée, total_away_team_goal FROM {self.lig_id}_summary\n\t\
 WHERE home_team = NEW.home_team \
@@ -1205,15 +1211,16 @@ SELECT COUNT(journée) INTO var_total_journée\n\t\
 FROM temp_tab; \n\t\
 SELECT COUNT(journée) INTO var_over0\n\t\
 FROM temp_tab WHERE (total_away_team_goal > 0);\n\t\
-SET var_over0_scored_ht = ((var_over0 / var_total_journée)* 100);\n\t\
+SET var_over0_scored_ht = ((var_over0 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over1\n\t\
 FROM temp_tab WHERE (total_away_team_goal > 1);\n\t\
-SET var_over1_scored_ht = ((var_over1 / var_total_journée)* 100);\n\t\
+SET var_over1_scored_ht = ((var_over1 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over2\n\t\
 FROM temp_tab WHERE (total_away_team_goal > 2);\n\t\
-SET var_over2_scored_ht = ((var_over2 / var_total_journée)* 100);\n\t\
+SET var_over2_scored_ht = ((var_over2 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_clean_sheet\n\t\
 FROM temp_tab WHERE (total_away_team_goal = 0);\n\t\
+SET clean_sheet = ((var_clean_sheet / NULLIF(var_total_journée, 0))* 100);\n\t\
 \
 CREATE OR REPLACE TEMPORARY TABLE temp_tab_away\n\t\
 SELECT journée, total_away_team_goal FROM {self.lig_id}_summary\n\t\
@@ -1257,22 +1264,23 @@ SELECT COUNT(journée) INTO var_total_journée\n\t\
 FROM temp_tab_away; \n\t\
 SELECT COUNT(journée) INTO var_over0\n\t\
 FROM temp_tab_away WHERE (total_away_team_goal > 0);\n\t\
-SET var_over0_conceded_at = ((var_over0 / var_total_journée)* 100);\n\t\
+SET var_over0_conceded_at = ((var_over0 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over1\n\t\
 FROM temp_tab_away WHERE (total_away_team_goal > 1);\n\t\
-SET var_over1_conceded_at = ((var_over1 / var_total_journée)* 100);\n\t\
+SET var_over1_conceded_at = ((var_over1 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_over2\n\t\
 FROM temp_tab_away WHERE (total_away_team_goal > 2);\n\t\
-SET var_over2_conceded_at = ((var_over2 / var_total_journée)* 100);\n\t\
+SET var_over2_conceded_at = ((var_over2 / NULLIF(var_total_journée, 0))* 100);\n\t\
 SELECT COUNT(journée) INTO var_w_scoring\n\t\
 FROM temp_tab_away WHERE (total_away_team_goal = 0);\n\t\
+SET without_scoring = ((var_w_scoring / NULLIF(var_total_journée, 0))* 100);\n\t\
 INSERT INTO {self.lig_id}_conceded_scored_ds\n\t\
 VALUES (NEW.journée, NEW.date_time, NEW.home_team, NEW.away_team, \
 journée5_ht, journée4_ht, journée3_ht, journée2_ht, journée1_ht, \
 journée5_at, journée4_at, journée3_at, journée2_at, journée1_at, \
 var_over0_conceded_ht, var_over1_conceded_ht, var_over2_conceded_ht, \
 var_over0_scored_at, var_over1_scored_at, var_over2_scored_at,\
-var_w_scoring, average_ht, var_clean_sheet, average_at, \
+clean_sheet, average_ht, without_scoring, average_at, \
 NEW.total_away_team_goal);\n\
 END"
         TRIGGERS.append(beforeInsert__sumary__conceded_scored_ds)
