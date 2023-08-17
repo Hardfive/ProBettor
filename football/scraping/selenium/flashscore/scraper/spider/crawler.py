@@ -33,8 +33,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 
-round_to_coming = ''
-
 
 class FixtureSpider(Preprocessing):
 
@@ -96,7 +94,6 @@ a[@class='participant__participantName participant__overflow ']"
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
         super().fixture_processing(fixture=item)
-        return item['journée']
 
     async def item_parse(self):
         tasks = []
@@ -110,7 +107,7 @@ a[@class='participant__participantName participant__overflow ']"
             start = time.perf_counter()
             FixtureSpider.parse(self)
             asyncio.run(FixtureSpider.item_parse(self))
-            print(time.perf_counter() - start)
+            print("Sucessfuly fixture scraping\n{time.perf_counter() - start}")
         except Exception as err:
             print(err)
         finally:
@@ -121,11 +118,9 @@ class ResultSpider(Preprocessing):
     summary_page = []
     stats_page = []
     h2h_page = []
-    journée = ''
 
     LOG_FILE = ('/home/hhanstein/Projects/IA/probettor/football/scraping\
 /selenium/flashscore/league/crawler.log')
-    STRF_DATE_NOW = datetime.datetime.now().strftime("%c")
 
     MP_XP = '//div[@class="event__round event__round--static"]'
     EVENT_XP = '//div[contains(@class, "event__match event__match--static \
@@ -140,13 +135,9 @@ a[@class="participant__participantName participant__overflow "]'
 "]/div[2])[1]'
     SCORE_XP = '//div[@class="detailScore__wrapper"]'
     HOME_GOAL_XP = '//div[@class="smv__participantRow smv__homeParticipant"]\
-//div[contains(@title, "C''est le but") or contains(@title, "But !") or \
-contains(@title, "du but") or contains(@title, "au but")\
-or contains(@title, "finition") or contains(@title, "Quel beau moment")]'
+//div[@class="smv__incidentHomeScore"]'
     AWAY_GOAL_XP = '//div[@class="smv__participantRow smv__awayParticipant"]\
-//div[contains(@title, "C''est le but") or contains(@title, "But !") or \
-contains(@title, "du but") or contains(@title, "au but")\
-or contains(@title, "finition") or contains(@title, "Quel beau moment")]'
+//div[@class="smv__incidentAwayScore"]'
     SHOOT_XP = '//div[@class="stat__row"]//div[contains(text(),\
 "Tirs au but")]'
     ACCURATE_SHOOT_XP = '//div[@class="stat__row"]//div[contains(text(),\
@@ -166,18 +157,18 @@ or contains(@title, "finition") or contains(@title, "Quel beau moment")]'
     preceding = './preceding::div[1]'
     following = './following::div[1]'
 
-    def __init__(self, rsl_url, lig_id, events):
+    def __init__(self, result_url, lig_id, events):
         super().__init__(lig_id)
-        self.rsl_url = rsl_url
+        self.result_url = result_url
         self.lig_id = lig_id
         self.events = events
         self.options = webdriver.FirefoxOptions()
         self.options.headless = True
         self.driver = webdriver.Firefox(options=self.options)
-        self.driver.implicitly_wait(20)
-        self.wait = WebDriverWait(self.driver, 10)
+        self.driver.implicitly_wait(10)
+        # self.wait = WebDriverWait(self.driver, 10)
         try:
-            self.driver.get(self.rsl_url)
+            self.driver.get(self.result_url)
         except Exception:
             self.driver.quit()
             print("Connection failed\nTry check it.")
@@ -224,45 +215,61 @@ or contains(@title, "finition") or contains(@title, "Quel beau moment")]'
         results_items['total_away_team_goal\
 '] = self.driver.find_element(By.XPATH,
                               ResultSpider.SCORE_XP).text[-1:]
+        results_df.append(results_items)
+        self.driver.close()
+        self.driver.switch_to.window(self.driver.window_handles[0])
+        super().summary_processing(results_df)
+
+    async def goal(self, url):
+        """
+        This function is not perfect, it retrieve some irrelevant data
+        It have to be improve before using it to scrape.
+        check structure and xpath.
+        """
+        goals_df = []
+        self.driver.execute_script("window.open('');")
+        self.driver.switch_to.window(self.driver.window_handles[1])
+        await asyncio.sleep(0)
+        self.driver.get(url)
+        goals_items = {}
+        goals_items['journée\
+'] = self.driver.find_element(By.XPATH, ResultSpider.ROUND_XP).text[-2:]
+        goals_items['home_team\
+'] = self.driver.find_element(By.XPATH, ResultSpider.HOME_XP).text
+        goals_items['away_team\
+'] = self.driver.find_element(By.XPATH, ResultSpider.AWAY_XP).text
         home_goals = self.driver.find_elements(By.XPATH,
                                                ResultSpider.
                                                HOME_GOAL_XP)
         for goal in home_goals:
             player = goal.find_element(By.XPATH,
-                                       './following::div[2]').text
+                                       './following::div[1]').text
             time_goal = goal.find_element(By.XPATH, './preceding::\
-div[1]').text[:-1]
-            my_list = [results_items['journée'],
+div[@class="smv__timeBox"][1]').text[:-1]
+            if "+" in time_goal:
+                time_goal = time_goal[:2]
+            my_list = [goals_items['journée'],
                        player, time_goal,
-                       results_items['home_team'],
-                       results_items['away_team']]
+                       goals_items['home_team'],
+                       goals_items['away_team']]
             goals_df.append(my_list)
         away_goals = self.driver.find_elements(By.XPATH,
                                                ResultSpider.
                                                AWAY_GOAL_XP)
         for goal in away_goals:
             player = goal.find_element(By.XPATH,
-                                       './following::div[1]').text
+                                       './following::a[1]').text
             time_goal = goal.find_element(By.XPATH, './preceding::\
-div[2]').text[:-1]
-            my_list = [results_items['journée'],
+div[@class="smv__timeBox"][1]').text[:-1]
+            if "+" in time_goal:
+                time_goal = time_goal[:2]
+            my_list = [goals_items['journée'],
                        player, time_goal,
-                       results_items['away_team'],
-                       results_items['home_team']]
+                       goals_items['away_team'],
+                       goals_items['home_team']]
             goals_df.append(my_list)
-        results_df.append(results_items)
-        # ID = self.driver.current_url[32:40]
-        self.driver.close()
-        self.driver.switch_to.window(self.driver.window_handles[0])
         super().goal_processing(goals_df)
-        super().summary_processing(results_df)
 
-    async def parse_summary(self):
-        tasks = []
-        for url in ResultSpider.summary_page:
-            task = asyncio.create_task(ResultSpider.summary(self, url))
-            tasks.append(task)
-        await asyncio.gather(*tasks)
 
     async def stats(self, url):
         stats_df = []
@@ -273,8 +280,6 @@ div[2]').text[:-1]
         stat_items = {}
         stat_items['journée\
 '] = self.driver.find_element(By.XPATH, ResultSpider.ROUND_XP).text[-2:]
-        stat_items['date_time\
-'] = self.driver.find_element(By.XPATH, ResultSpider.TIME_XP).text
         stat_items['home_team\
 '] = self.driver.find_element(By.XPATH, ResultSpider.HOME_XP).text
         stat_items['away_team\
@@ -313,12 +318,12 @@ div[2]').text[:-1]
                                                       ResultSpider.
                                                       YELLOW_CARD_XP)
         for i in stat_yellow_cards:
-            stat_items['home_team_yellow_c'] = i.find_element(By.XPATH,
-                                                              ResultSpider.
-                                                              preceding).text
-            stat_items['away_team_yellow_c'] = i.find_element(By.XPATH,
-                                                              ResultSpider.
-                                                              following).text
+            stat_items['home_team_yellow_card'] = i.find_element(By.XPATH,
+                                                                 ResultSpider.
+                                                                 preceding).text
+            stat_items['away_team_yellow_card'] = i.find_element(By.XPATH,
+                                                                 ResultSpider.
+                                                                 following).text
         expected_goal = self.driver.find_elements(By.XPATH,
                                                   ResultSpider.
                                                   EXCEPTED_GOAL_XP)
@@ -334,13 +339,6 @@ div[2]').text[:-1]
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
         super().stat_processing(stats_df)
-
-    async def parse_stats(self):
-        tasks = []
-        for url in ResultSpider.stats_page:
-            task = asyncio.create_task(ResultSpider.stats(self, url))
-            tasks.append(task)
-        await asyncio.gather(*tasks)
 
     async def h2h(self, url):
         self.driver.execute_script("window.open('');")
@@ -376,26 +374,48 @@ div[2]').text[:-1]
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
 
+    async def parse_summary(self):
+        tasks = []
+        for url in ResultSpider.summary_page:
+            task = asyncio.create_task(ResultSpider.summary(self, url))
+            tasks.append(task)
+        await asyncio.gather(*tasks, return_exceptions=True)
+
+    async def parse_goal(self):
+        tasks = []
+        for url in ResultSpider.summary_page:
+            task = asyncio.create_task(ResultSpider.goal(self, url))
+            tasks.append(task)
+        await asyncio.gather(*tasks, return_exceptions=True)
+
+    async def parse_stats(self):
+        tasks = []
+        for url in ResultSpider.stats_page:
+            task = asyncio.create_task(ResultSpider.stats(self, url))
+            tasks.append(task)
+        await asyncio.gather(*tasks, return_exceptions=True)
+
     async def parse_h2h(self):
         tasks = []
         for url in ResultSpider.h2h_page:
             task = asyncio.create_task(ResultSpider.h2h(self, url))
             tasks.append(task)
-        await asyncio.gather(*tasks)
+        await asyncio.gather(*tasks, return_exceptions=True)
 
     def crawl(self):
         try:
+            date_now = datetime.datetime.now()
             start = time.perf_counter()
             ResultSpider.parse(self)
             asyncio.run(ResultSpider.parse_summary(self))
+            asyncio.run(ResultSpider.parse_goal(self))
             asyncio.run(ResultSpider.parse_stats(self))
             asyncio.run(ResultSpider.parse_h2h(self))
-            print(time.perf_counter() - start)
+            print(f"Sucessfuly results scraping\n{time.perf_counter() - start}")
             status = f"{self.lig_id}: {ResultSpider.journée}, \
-seconds elapsed={time.perf_counter() - start}.\n\
-Next journée = {round_to_coming}"
+seconds elapsed={time.perf_counter() - start}"
             with open(ResultSpider.LOG_FILE, "a") as log:
-                log.write(f"\n{ResultSpider.STRF_DATE_NOW}.\n\t{status}")
+                log.write(f"\n{date_now}.\n\t{status}")
         except Exception as err:
             print(err)
         finally:
@@ -403,12 +423,12 @@ Next journée = {round_to_coming}"
 
 
 if __name__ == "__main__":
-    fxt_url = ('https://www.flashscore.com/football/spain/laliga/\
-fixtures/')
-    rsl_url = ('https://www.flashscore.com/football/spain/\
-laliga-2022-2023/results/')
-    lig_id = 'liga'
+    fixture_url = ('https://www.flashscore.fr/football/turquie/super-lig/\
+calendrier/')
+    result_url = ('https://www.flashscore.fr/football/turquie/super-lig/\
+resultats/')
+    lig_id = "Sl"
 
-    fixSpider = FixtureSpider(fxt_url, lig_id).crawl()
+    fixSpider = FixtureSpider(fixture_url, lig_id).crawl()
     time.sleep(random.randrange(3, 5))
-    rslSpider = ResultSpider(rsl_url, lig_id, events=10).crawl()
+    rslSpider = ResultSpider(result_url, lig_id, events=9).crawl()

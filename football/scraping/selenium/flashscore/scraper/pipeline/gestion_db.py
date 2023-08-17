@@ -21,7 +21,7 @@ class Admin(Description):
             database='football')
 
     def create_table(self, tables):
-        """Create tables, views and triggers describe in Description class
+        """Create tables describe in Description class
          when it does not exists yet."""
         with self.connection.cursor() as cur:
             for table in tables:
@@ -32,10 +32,8 @@ class Admin(Description):
                     type_col = descr[1]
                     if type_col == 'tiU':
                         type_col = 'TINYINT UNSIGNED NOT NULL DEFAULT 0, '
-                    elif type_col == 'tiU Key':
-                        type_col = 'TINYINT UNSIGNED NOT NULL DEFAULT 0 KEY, '
                     elif type_col == 'De':
-                        type_col = 'DECIMAL(2,1) NOT NULL DEFAULT 0, '
+                        type_col = 'DECIMAL(3,2) NOT NULL DEFAULT 0, '
                     elif type_col == 'dT':
                         type_col = 'DATETIME NOT NULL, '
                     elif type_col == 'Da':
@@ -56,39 +54,12 @@ CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s ON DELETE CASCADE ON UPDATE CASCADE
                         keys = descr[3].split()
                         req = req + "PRIMARY KEY (%s, %s, %s), \
 " % (keys[0], keys[1], keys[2])
-                    if 'index' in descr[:]:
-                        keys = descr[3].split()
-                        req = req + "INDEX %s (%s, %s), \
-" % (keys[0]+"_"+keys[1], keys[0], keys[1])
                 req = req[:-2] + ")"
                 # print(f"{req}\n")
                 cur.execute(req)
             self.connection.commit()
 
-    def create_views(self, views):
-        with self.connection.cursor() as cur:
-            for view in views:
-                req = f"CREATE VIEW IF NOT EXISTS {view[:2]}{self.lig_id}_\
-{view[2:]} AS SELECT ROW_NUMBER() OVER (ORDER BY average DESC) AS ranking, "
-                for descr in views[view]:
-                    col_name = descr
-                    req = req + "%s, " % col_name
-                req = req[:-2] + " FROM %s" % self.lig_id+"_"+view[2:]
-                # print(f"{req}\n")
-                cur.execute(req)
-            self.connection.commit()
-
-    def create_triggers(self):
-        with self.connection.cursor() as cur:
-            triggers = super().write_trigger()
-            for trigger in triggers:
-                # print(trigger)
-                cur.execute(trigger)
-            # self.connection.commit()
-
 
 if __name__ == "__main__":
-    test = Admin('liga')
-    # test.create_table(Description.TABLES)
-    # test.create_views(Description.VIEWS)
-    # test.create_triggers()
+    test = Admin('l2')
+    test.create_table(Description.TABLES)

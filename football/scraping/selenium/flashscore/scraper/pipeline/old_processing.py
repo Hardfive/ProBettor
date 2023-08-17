@@ -22,7 +22,7 @@ class Preprocessing(Admin):
                             host='localhost',
                             user='hh',
                             passwd=Preprocessing.PWD,
-                            database='test_foot')
+                            database='football')
 
     def processing(self, df):
         """Use existing columns to create new features

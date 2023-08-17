@@ -3,6 +3,7 @@ import time
 import os
 import subprocess
 
+cur_dir = os.getcwd()
 path = "/home/hhanstein/Projects/IA/probettor/football/scraping/selenium/\
 flashscore/league/"
 os.chdir(path)
@@ -16,11 +17,10 @@ else:
         if file.endswith('.py') and file != "__init__.py":
             try:
                 print(f"Runing {file}")
-                process = subprocess.run(["python", file],
-                                         capture_output=True,
-                                         text=True, check=True)
-                print(f"{file}, {process.stdout}")
+                subprocess.call("python %s" % file, 
+                                shell=True)
                 time.sleep(3)
-            except BaseException:
-                print(f"{file}, {process.stderr}")
-    subprocess.call('rm geckodriver.log', shell=True)
+            except BaseException as err:
+                print(err)
+    os.chdir(cur_dir)
+    subprocess.call('rm -r geckodriver.log', shell=True)
