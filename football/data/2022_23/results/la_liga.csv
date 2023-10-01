@@ -1,0 +1,271 @@
+journée,date_time,home_team,away_team,1st_home_team_goal,1st_away_team_goal,1st_total_goal,2nd_home_team_goal,2nd_away_team_goal,2nd_total_goal,total_home_team_goal,total_away_team_goal,global
+27,2023-04-03 19:00,Valencia,Rayo Vallecano,0,1,1,1,0,1,1,1,2
+27,2023-04-02 19:00,Atl. Madrid,Betis,0,0,0,1,0,1,1,0,1
+27,2023-04-02 16:30,Villarreal,Real Sociedad,0,0,0,2,0,2,2,0,2
+27,2023-04-02 14:15,Real Madrid,Valladolid,4,0,4,2,0,2,6,0,6
+27,2023-04-02 12:00,Celta Vigo,Almeria,2,2,4,0,0,0,2,2,4
+27,2023-04-01 19:00,Elche,Barcelona,0,1,1,0,3,3,0,4,4
+27,2023-04-01 16:30,Cadiz CF,Sevilla,0,0,0,0,2,2,0,2,2
+27,2023-04-01 14:15,Ath Bilbao,Getafe,0,0,0,0,0,0,0,0,0
+27,2023-04-01 12:00,Girona,Espanyol,0,0,0,2,1,3,2,1,3
+27,2023-03-31 19:00,Mallorca,Osasuna,0,0,0,0,0,0,0,0,0
+26,2023-03-19 20:00,Barcelona,Real Madrid,1,1,2,1,0,1,2,1,3
+26,2023-03-19 17:30,Getafe,Sevilla,0,0,0,2,0,2,2,0,2
+26,2023-03-19 15:15,Osasuna,Villarreal,0,1,1,0,2,2,0,3,3
+26,2023-03-19 15:15,Real Sociedad,Elche,0,0,0,2,0,2,2,0,2
+26,2023-03-19 13:00,Betis,Mallorca,0,0,0,1,0,1,1,0,1
+26,2023-03-18 20:00,Atl. Madrid,Valencia,1,0,1,2,0,2,3,0,3
+26,2023-03-18 17:30,Espanyol,Celta Vigo,0,2,2,1,1,2,1,3,4
+26,2023-03-18 15:15,Rayo Vallecano,Girona,2,1,3,0,1,1,2,2,4
+26,2023-03-18 13:00,Almeria,Cadiz CF,0,0,0,1,1,2,1,1,2
+26,2023-03-17 20:00,Valladolid,Ath Bilbao,0,1,1,1,2,3,1,3,4
+25,2023-03-13 20:00,Girona,Atl. Madrid,0,0,0,0,1,1,0,1,1
+25,2023-03-12 20:00,Ath Bilbao,Barcelona,0,1,1,0,0,0,0,1,1
+25,2023-03-12 17:30,Villarreal,Betis,0,1,1,1,0,1,1,1,2
+25,2023-03-12 15:15,Sevilla,Almeria,1,1,2,1,0,1,2,1,3
+25,2023-03-12 13:00,Mallorca,Real Sociedad,0,1,1,1,0,1,1,1,2
+25,2023-03-11 20:00,Valencia,Osasuna,0,0,0,1,0,1,1,0,1
+25,2023-03-11 17:30,Celta Vigo,Rayo Vallecano,0,0,0,3,0,3,3,0,3
+25,2023-03-11 15:15,Elche,Valladolid,0,1,1,1,0,1,1,1,2
+25,2023-03-11 13:00,Real Madrid,Espanyol,2,1,3,1,0,1,3,1,4
+25,2023-03-10 20:00,Cadiz CF,Getafe,1,0,1,1,2,3,2,2,4
+24,2023-03-06 20:00,Osasuna,Celta Vigo,0,0,0,0,0,0,0,0,0
+24,2023-03-05 20:00,Betis,Real Madrid,0,0,0,0,0,0,0,0,0
+24,2023-03-05 17:30,Rayo Vallecano,Ath Bilbao,0,0,0,0,0,0,0,0,0
+24,2023-03-05 15:15,Barcelona,Valencia,1,0,1,0,0,0,1,0,1
+24,2023-03-05 13:00,Valladolid,Espanyol,1,0,1,1,1,2,2,1,3
+24,2023-03-04 20:00,Atl. Madrid,Sevilla,2,1,3,4,0,4,6,1,7
+24,2023-03-04 17:30,Mallorca,Elche,0,0,0,0,1,1,0,1,1
+24,2023-03-04 15:15,Almeria,Villarreal,0,0,0,0,2,2,0,2,2
+24,2023-03-04 13:00,Getafe,Girona,3,0,3,0,2,2,3,2,5
+24,2023-03-03 20:00,Real Sociedad,Cadiz CF,0,0,0,0,0,0,0,0,0
+23,2023-02-27 20:00,Villarreal,Getafe,1,1,2,1,0,1,2,1,3
+23,2023-02-26 20:00,Sevilla,Osasuna,0,1,1,2,2,4,2,3,5
+23,2023-02-26 17:30,Almeria,Barcelona,1,0,1,0,0,0,1,0,1
+23,2023-02-26 15:15,Celta Vigo,Valladolid,2,0,2,1,0,1,3,0,3
+23,2023-02-26 13:00,Ath Bilbao,Girona,1,3,4,1,0,1,2,3,5
+23,2023-02-25 20:00,Valencia,Real Sociedad,1,0,1,0,0,0,1,0,1
+23,2023-02-25 17:30,Real Madrid,Atl. Madrid,0,0,0,1,1,2,1,1,2
+23,2023-02-25 15:15,Cadiz CF,Rayo Vallecano,0,0,0,1,0,1,1,0,1
+23,2023-02-25 13:00,Espanyol,Mallorca,1,1,2,1,0,1,2,1,3
+23,2023-02-24 20:00,Elche,Betis,2,0,2,0,3,3,2,3,5
+22,2023-02-20 20:00,Getafe,Valencia,0,0,0,1,0,1,1,0,1
+22,2023-02-19 20:00,Barcelona,Cadiz CF,2,0,2,0,0,0,2,0,2
+22,2023-02-19 17:30,Atl. Madrid,Ath Bilbao,0,0,0,1,0,1,1,0,1
+22,2023-02-19 15:15,Rayo Vallecano,Sevilla,0,1,1,1,0,1,1,1,2
+22,2023-02-19 13:00,Elche,Espanyol,0,0,0,0,1,1,0,1,1
+22,2023-02-18 20:00,Osasuna,Real Madrid,0,0,0,0,2,2,0,2,2
+22,2023-02-18 17:30,Mallorca,Villarreal,2,1,3,2,1,3,4,2,6
+22,2023-02-18 15:15,Betis,Valladolid,2,1,3,0,0,0,2,1,3
+22,2023-02-18 13:00,Real Sociedad,Celta Vigo,1,0,1,0,1,1,1,1,2
+22,2023-02-17 20:00,Girona,Almeria,4,0,4,2,2,4,6,2,8
+21,2023-02-15 20:00,Real Madrid,Elche,3,0,3,1,0,1,4,0,4
+21,2023-02-13 20:00,Espanyol,Real Sociedad,0,1,1,2,2,4,2,3,5
+21,2023-02-12 20:00,Villarreal,Barcelona,0,1,1,0,0,0,0,1,1
+21,2023-02-12 17:30,Valladolid,Osasuna,0,0,0,0,0,0,0,0,0
+21,2023-02-12 15:15,Celta Vigo,Atl. Madrid,0,0,0,0,1,1,0,1,1
+21,2023-02-12 13:00,Getafe,Rayo Vallecano,0,1,1,1,0,1,1,1,2
+21,2023-02-11 20:00,Valencia,Ath Bilbao,1,1,2,0,1,1,1,2,3
+21,2023-02-11 17:30,Sevilla,Mallorca,2,0,2,0,0,0,2,0,2
+21,2023-02-11 15:15,Almeria,Betis,1,2,3,1,1,2,2,3,5
+21,2023-02-10 20:00,Cadiz CF,Girona,2,0,2,0,0,0,2,0,2
+20,2023-02-06 20:00,Rayo Vallecano,Almeria,0,0,0,2,0,2,2,0,2
+20,2023-02-05 20:00,Barcelona,Sevilla,0,0,0,3,0,3,3,0,3
+20,2023-02-05 17:30,Real Sociedad,Valladolid,0,0,0,0,1,1,0,1,1
+20,2023-02-05 15:15,Girona,Valencia,0,0,0,1,0,1,1,0,1
+20,2023-02-05 13:00,Mallorca,Real Madrid,1,0,1,0,0,0,1,0,1
+20,2023-02-04 20:00,Betis,Celta Vigo,2,2,4,1,2,3,3,4,7
+20,2023-02-04 17:30,Atl. Madrid,Getafe,0,0,0,1,1,2,1,1,2
+20,2023-02-04 15:15,Elche,Villarreal,2,1,3,1,0,1,3,1,4
+20,2023-02-04 13:00,Espanyol,Osasuna,0,1,1,1,0,1,1,1,2
+20,2023-02-03 20:00,Ath Bilbao,Cadiz CF,3,1,4,1,0,1,4,1,5
+17,2023-02-02 20:00,Real Madrid,Valencia,0,0,0,2,0,2,2,0,2
+17,2023-02-01 20:00,Betis,Barcelona,0,0,0,1,2,3,1,2,3
+19,2023-01-30 20:00,Villarreal,Rayo Vallecano,0,0,0,0,1,1,0,1,1
+19,2023-01-29 20:00,Real Madrid,Real Sociedad,0,0,0,0,0,0,0,0,0
+19,2023-01-29 17:30,Celta Vigo,Ath Bilbao,0,0,0,1,0,1,1,0,1
+19,2023-01-29 15:15,Osasuna,Atl. Madrid,0,0,0,0,1,1,0,1,1
+19,2023-01-29 13:00,Valladolid,Valencia,0,0,0,1,0,1,1,0,1
+19,2023-01-28 20:00,Getafe,Betis,0,0,0,0,1,1,0,1,1
+19,2023-01-28 17:30,Sevilla,Elche,3,0,3,0,0,0,3,0,3
+19,2023-01-28 15:15,Girona,Barcelona,0,0,0,0,1,1,0,1,1
+19,2023-01-28 13:00,Cadiz CF,Mallorca,2,0,2,0,0,0,2,0,2
+19,2023-01-27 20:00,Almeria,Espanyol,1,0,1,2,1,3,3,1,4
+18,2023-01-23 20:00,Valencia,Almeria,0,0,0,2,2,4,2,2,4
+18,2023-01-22 20:00,Ath Bilbao,Real Madrid,0,1,1,0,1,1,0,2,2
+18,2023-01-22 17:30,Barcelona,Getafe,1,0,1,0,0,0,1,0,1
+18,2023-01-22 15:15,Elche,Osasuna,0,1,1,1,0,1,1,1,2
+18,2023-01-22 13:00,Villarreal,Girona,0,0,0,1,0,1,1,0,1
+18,2023-01-21 20:00,Sevilla,Cadiz CF,0,0,0,1,0,1,1,0,1
+18,2023-01-21 17:30,Atl. Madrid,Valladolid,3,0,3,0,0,0,3,0,3
+18,2023-01-21 15:15,Espanyol,Betis,1,0,1,0,0,0,1,0,1
+18,2023-01-21 13:00,Rayo Vallecano,Real Sociedad,0,2,2,0,0,0,0,2,2
+18,2023-01-20 20:00,Mallorca,Celta Vigo,0,0,0,1,0,1,1,0,1
+17,2023-01-16 20:00,Cadiz CF,Elche,1,0,1,0,1,1,1,1,2
+17,2023-01-15 15:15,Almeria,Atl. Madrid,1,1,2,0,0,0,1,1,2
+17,2023-01-15 13:00,Getafe,Espanyol,1,1,2,0,1,1,1,2,3
+17,2023-01-14 20:00,Real Sociedad,Ath Bilbao,2,1,3,1,0,1,3,1,4
+17,2023-01-14 17:30,Osasuna,Mallorca,0,0,0,1,0,1,1,0,1
+17,2023-01-14 15:15,Girona,Sevilla,0,1,1,2,0,2,2,1,3
+17,2023-01-14 13:00,Valladolid,Rayo Vallecano,0,0,0,0,1,1,0,1,1
+17,2023-01-13 20:00,Celta Vigo,Villarreal,0,1,1,1,0,1,1,1,2
+16,2023-01-09 20:00,Ath Bilbao,Osasuna,0,0,0,0,0,0,0,0,0
+16,2023-01-08 20:00,Atl. Madrid,Barcelona,0,1,1,0,0,0,0,1,1
+16,2023-01-08 17:30,Sevilla,Getafe,1,0,1,1,1,2,2,1,3
+16,2023-01-08 15:15,Rayo Vallecano,Betis,1,2,3,0,0,0,1,2,3
+16,2023-01-08 13:00,Almeria,Real Sociedad,0,0,0,0,2,2,0,2,2
+16,2023-01-07 20:00,Espanyol,Girona,0,1,1,2,1,3,2,2,4
+16,2023-01-07 17:30,Mallorca,Valladolid,0,0,0,1,0,1,1,0,1
+16,2023-01-07 15:15,Villarreal,Real Madrid,0,0,0,2,1,3,2,1,3
+16,2023-01-06 20:00,Valencia,Cadiz CF,0,1,1,0,0,0,0,1,1
+16,2023-01-06 17:30,Elche,Celta Vigo,0,1,1,0,0,0,0,1,1
+15,2022-12-31 15:15,Real Sociedad,Osasuna,1,0,1,1,0,1,2,0,2
+15,2022-12-31 15:15,Villarreal,Valencia,1,1,2,1,0,1,2,1,3
+15,2022-12-31 13:00,Barcelona,Espanyol,1,0,1,0,1,1,1,1,2
+15,2022-12-30 20:30,Valladolid,Real Madrid,0,0,0,0,2,2,0,2,2
+15,2022-12-30 18:15,Cadiz CF,Almeria,0,1,1,1,0,1,1,1,2
+15,2022-12-30 18:15,Celta Vigo,Sevilla,1,0,1,0,1,1,1,1,2
+15,2022-12-30 16:00,Getafe,Mallorca,0,0,0,2,0,2,2,0,2
+15,2022-12-29 20:30,Atl. Madrid,Elche,0,0,0,2,0,2,2,0,2
+15,2022-12-29 18:15,Betis,Ath Bilbao,0,0,0,0,0,0,0,0,0
+15,2022-12-29 16:00,Girona,Rayo Vallecano,1,1,2,1,1,2,2,2,4
+14,2022-11-10 20:30,Real Madrid,Cadiz CF,1,0,1,1,1,2,2,1,3
+14,2022-11-10 19:00,Valencia,Betis,0,0,0,3,0,3,3,0,3
+14,2022-11-10 18:00,Rayo Vallecano,Celta Vigo,0,0,0,0,0,0,0,0,0
+14,2022-11-09 20:30,Mallorca,Atl. Madrid,1,0,1,0,0,0,1,0,1
+14,2022-11-09 19:00,Espanyol,Villarreal,0,0,0,0,1,1,0,1,1
+14,2022-11-09 18:00,Sevilla,Real Sociedad,1,2,3,0,0,0,1,2,3
+14,2022-11-09 18:00,Almeria,Getafe,1,0,1,0,0,0,1,0,1
+14,2022-11-08 20:30,Osasuna,Barcelona,1,0,1,0,2,2,1,2,3
+14,2022-11-08 19:00,Ath Bilbao,Valladolid,1,0,1,2,0,2,3,0,3
+14,2022-11-08 18:00,Elche,Girona,1,1,2,0,1,1,1,2,3
+13,2022-11-07 20:00,Rayo Vallecano,Real Madrid,2,2,4,1,0,1,3,2,5
+13,2022-11-06 20:00,Betis,Sevilla,1,0,1,0,1,1,1,1,2
+13,2022-11-06 17:30,Villarreal,Mallorca,0,1,1,0,1,1,0,2,2
+13,2022-11-06 15:15,Real Sociedad,Valencia,1,1,2,0,0,0,1,1,2
+13,2022-11-06 13:00,Atl. Madrid,Espanyol,0,0,0,1,1,2,1,1,2
+13,2022-11-05 20:00,Barcelona,Almeria,0,0,0,2,0,2,2,0,2
+13,2022-11-05 17:30,Celta Vigo,Osasuna,1,2,3,0,0,0,1,2,3
+13,2022-11-05 15:15,Valladolid,Elche,1,0,1,1,1,2,2,1,3
+13,2022-11-05 13:00,Getafe,Cadiz CF,0,0,0,0,0,0,0,0,0
+13,2022-11-04 20:00,Girona,Ath Bilbao,0,0,0,2,1,3,2,1,3
+12,2022-10-31 20:00,Elche,Getafe,0,0,0,0,1,1,0,1,1
+12,2022-10-30 20:00,Real Sociedad,Betis,0,0,0,0,2,2,0,2,2
+12,2022-10-30 17:30,Ath Bilbao,Villarreal,0,0,0,1,0,1,1,0,1
+12,2022-10-30 15:15,Real Madrid,Girona,0,0,0,1,1,2,1,1,2
+12,2022-10-30 13:00,Osasuna,Valladolid,2,0,2,0,0,0,2,0,2
+12,2022-10-29 19:00,Valencia,Barcelona,0,0,0,0,1,1,0,1,1
+12,2022-10-29 16:30,Sevilla,Rayo Vallecano,0,0,0,0,1,1,0,1,1
+12,2022-10-29 14:15,Cadiz CF,Atl. Madrid,1,0,1,2,2,4,3,2,5
+12,2022-10-29 12:00,Almeria,Celta Vigo,0,1,1,3,0,3,3,1,4
+12,2022-10-28 19:00,Mallorca,Espanyol,0,0,0,1,1,2,1,1,2
+11,2022-10-24 19:00,Celta Vigo,Getafe,0,1,1,1,0,1,1,1,2
+11,2022-10-23 19:00,Barcelona,Ath Bilbao,3,0,3,1,0,1,4,0,4
+11,2022-10-23 16:30,Girona,Osasuna,1,1,2,0,0,0,1,1,2
+11,2022-10-23 16:30,Villarreal,Almeria,0,1,1,2,0,2,2,1,3
+11,2022-10-23 14:15,Betis,Atl. Madrid,0,0,0,1,2,3,1,2,3
+11,2022-10-23 12:00,Espanyol,Elche,1,1,2,1,1,2,2,2,4
+11,2022-10-22 19:00,Real Madrid,Sevilla,1,0,1,2,1,3,3,1,4
+11,2022-10-22 16:30,Valencia,Mallorca,0,0,0,1,2,3,1,2,3
+11,2022-10-22 14:15,Valladolid,Real Sociedad,1,0,1,0,0,0,1,0,1
+11,2022-10-22 12:00,Rayo Vallecano,Cadiz CF,2,0,2,3,1,4,5,1,6
+10,2022-10-20 19:00,Barcelona,Villarreal,3,0,3,0,0,0,3,0,3
+10,2022-10-20 18:00,Osasuna,Espanyol,0,0,0,1,0,1,1,0,1
+10,2022-10-20 17:00,Almeria,Girona,3,0,3,0,2,2,3,2,5
+10,2022-10-19 19:00,Elche,Real Madrid,0,1,1,0,2,2,0,3,3
+10,2022-10-19 18:00,Real Sociedad,Mallorca,1,0,1,0,0,0,1,0,1
+10,2022-10-19 17:00,Cadiz CF,Betis,0,0,0,0,0,0,0,0,0
+10,2022-10-19 17:00,Valladolid,Celta Vigo,1,1,2,3,0,3,4,1,5
+10,2022-10-18 19:00,Atl. Madrid,Rayo Vallecano,1,0,1,0,1,1,1,1,2
+10,2022-10-18 18:00,Getafe,Ath Bilbao,1,1,2,1,1,2,2,2,4
+10,2022-10-18 17:00,Sevilla,Valencia,0,1,1,1,0,1,1,1,2
+9,2022-10-17 19:00,Villarreal,Osasuna,1,0,1,1,0,1,2,0,2
+9,2022-10-16 19:00,Betis,Almeria,1,0,1,2,1,3,3,1,4
+9,2022-10-16 16:30,Espanyol,Valladolid,0,0,0,1,0,1,1,0,1
+9,2022-10-16 14:15,Real Madrid,Barcelona,2,0,2,1,1,2,3,1,4
+9,2022-10-16 12:00,Celta Vigo,Real Sociedad,1,1,2,0,1,1,1,2,3
+9,2022-10-15 19:00,Ath Bilbao,Atl. Madrid,0,0,0,0,1,1,0,1,1
+9,2022-10-15 16:30,Mallorca,Sevilla,0,0,0,0,1,1,0,1,1
+9,2022-10-15 14:15,Valencia,Elche,2,1,3,0,1,1,2,2,4
+9,2022-10-15 12:00,Girona,Cadiz CF,0,0,0,1,1,2,1,1,2
+9,2022-10-14 19:00,Rayo Vallecano,Getafe,0,0,0,0,0,0,0,0,0
+8,2022-10-10 19:00,Elche,Mallorca,1,0,1,0,1,1,1,1,2
+8,2022-10-09 19:00,Barcelona,Celta Vigo,1,0,1,0,0,0,1,0,1
+8,2022-10-09 16:30,Real Sociedad,Villarreal,1,0,1,0,0,0,1,0,1
+8,2022-10-09 14:15,Cadiz CF,Espanyol,1,0,1,1,2,3,2,2,4
+8,2022-10-09 12:00,Valladolid,Betis,0,0,0,0,0,0,0,0,0
+8,2022-10-08 19:00,Getafe,Real Madrid,0,1,1,0,0,0,0,1,1
+8,2022-10-08 16:30,Sevilla,Ath Bilbao,1,0,1,0,1,1,1,1,2
+8,2022-10-08 14:15,Atl. Madrid,Girona,1,0,1,1,1,2,2,1,3
+8,2022-10-08 12:00,Almeria,Rayo Vallecano,3,0,3,0,1,1,3,1,4
+8,2022-10-07 19:00,Osasuna,Valencia,0,1,1,1,1,2,1,2,3
+7,2022-10-03 19:00,Rayo Vallecano,Elche,1,1,2,1,0,1,2,1,3
+7,2022-10-02 19:00,Real Madrid,Osasuna,1,0,1,0,1,1,1,1,2
+7,2022-10-02 16:30,Girona,Real Sociedad,2,2,4,1,3,4,3,5,8
+7,2022-10-02 14:15,Celta Vigo,Betis,1,0,1,0,0,0,1,0,1
+7,2022-10-02 12:00,Espanyol,Valencia,0,0,0,2,2,4,2,2,4
+7,2022-10-01 19:00,Mallorca,Barcelona,0,1,1,0,0,0,0,1,1
+7,2022-10-01 16:30,Sevilla,Atl. Madrid,0,1,1,0,1,1,0,2,2
+7,2022-10-01 14:15,Getafe,Valladolid,2,2,4,0,1,1,2,3,5
+7,2022-10-01 12:00,Cadiz CF,Villarreal,0,0,0,0,0,0,0,0,0
+7,2022-09-30 19:00,Ath Bilbao,Almeria,2,0,2,2,0,2,4,0,4
+6,2022-09-18 19:00,Atl. Madrid,Real Madrid,0,2,2,1,0,1,1,2,3
+6,2022-09-18 16:30,Betis,Girona,1,1,2,1,0,1,2,1,3
+6,2022-09-18 16:30,Real Sociedad,Espanyol,2,1,3,0,0,0,2,1,3
+6,2022-09-18 14:15,Villarreal,Sevilla,0,1,1,1,0,1,1,1,2
+6,2022-09-18 12:00,Osasuna,Getafe,0,1,1,0,1,1,0,2,2
+6,2022-09-17 19:00,Ath Bilbao,Rayo Vallecano,3,1,4,0,1,1,3,2,5
+6,2022-09-17 16:30,Valencia,Celta Vigo,1,0,1,2,0,2,3,0,3
+6,2022-09-17 14:15,Barcelona,Elche,2,0,2,1,0,1,3,0,3
+6,2022-09-17 12:00,Mallorca,Almeria,1,0,1,0,0,0,1,0,1
+6,2022-09-16 19:00,Valladolid,Cadiz CF,0,0,0,0,1,1,0,1,1
+5,2022-09-12 19:00,Almeria,Osasuna,0,1,1,0,0,0,0,1,1
+5,2022-09-11 19:00,Betis,Villarreal,0,0,0,1,0,1,1,0,1
+5,2022-09-11 16:30,Getafe,Real Sociedad,1,0,1,1,1,2,2,1,3
+5,2022-09-11 14:15,Elche,Ath Bilbao,0,4,4,1,0,1,1,4,5
+5,2022-09-11 12:00,Real Madrid,Mallorca,1,1,2,3,0,3,4,1,5
+5,2022-09-10 19:00,Atl. Madrid,Celta Vigo,1,0,1,3,1,4,4,1,5
+5,2022-09-10 16:30,Cadiz CF,Barcelona,0,0,0,0,4,4,0,4,4
+5,2022-09-10 14:15,Espanyol,Sevilla,1,3,4,1,0,1,2,3,5
+5,2022-09-10 12:00,Rayo Vallecano,Valencia,1,0,1,1,1,2,2,1,3
+5,2022-09-09 19:00,Girona,Valladolid,1,1,2,1,0,1,2,1,3
+4,2022-09-05 19:00,Valladolid,Almeria,0,0,0,1,0,1,1,0,1
+4,2022-09-04 19:00,Valencia,Getafe,3,0,3,2,1,3,5,1,6
+4,2022-09-04 16:30,Villarreal,Elche,2,0,2,2,0,2,4,0,4
+4,2022-09-04 14:15,Ath Bilbao,Espanyol,0,0,0,0,1,1,0,1,1
+4,2022-09-04 12:00,Osasuna,Rayo Vallecano,0,0,0,2,1,3,2,1,3
+4,2022-09-03 19:00,Sevilla,Barcelona,0,2,2,0,1,1,0,3,3
+4,2022-09-03 16:30,Real Sociedad,Atl. Madrid,0,1,1,1,0,1,1,1,2
+4,2022-09-03 14:15,Real Madrid,Betis,1,1,2,1,0,1,2,1,3
+4,2022-09-03 12:00,Mallorca,Girona,0,0,0,1,1,2,1,1,2
+4,2022-09-02 12:00,Celta Vigo,Cadiz CF,0,0,0,3,0,3,3,0,3
+3,2022-08-29 20:00,Valencia,Atl. Madrid,0,0,0,0,1,1,0,1,1
+3,2022-08-29 18:00,Cadiz CF,Ath Bilbao,0,1,1,0,3,3,0,4,4
+3,2022-08-28 20:00,Espanyol,Real Madrid,1,1,2,0,2,2,1,3,4
+3,2022-08-28 17:30,Barcelona,Valladolid,2,0,2,2,0,2,4,0,4
+3,2022-08-28 15:30,Getafe,Villarreal,0,0,0,0,0,0,0,0,0
+3,2022-08-27 20:00,Almeria,Sevilla,1,1,2,1,0,1,2,1,3
+3,2022-08-27 17:30,Rayo Vallecano,Mallorca,0,1,1,0,1,1,0,2,2
+3,2022-08-27 15:30,Elche,Real Sociedad,0,1,1,0,0,0,0,1,1
+3,2022-08-26 20:00,Betis,Osasuna,1,0,1,0,0,0,1,0,1
+3,2022-08-26 18:00,Girona,Celta Vigo,0,0,0,0,1,1,0,1,1
+2,2022-08-22 20:00,Girona,Getafe,1,0,1,2,1,3,3,1,4
+2,2022-08-22 18:00,Elche,Almeria,1,1,2,0,0,0,1,1,2
+2,2022-08-21 20:00,Real Sociedad,Barcelona,1,1,2,0,3,3,1,4,5
+2,2022-08-21 17:30,Atl. Madrid,Villarreal,0,0,0,0,2,2,0,2,2
+2,2022-08-21 15:30,Ath Bilbao,Valencia,1,0,1,0,0,0,1,0,1
+2,2022-08-20 20:00,Celta Vigo,Real Madrid,1,2,3,0,2,2,1,4,5
+2,2022-08-20 17:30,Mallorca,Betis,0,1,1,1,1,2,1,2,3
+2,2022-08-20 15:30,Osasuna,Cadiz CF,1,0,1,1,0,1,2,0,2
+2,2022-08-19 20:00,Sevilla,Valladolid,0,0,0,1,1,2,1,1,2
+2,2022-08-19 18:00,Espanyol,Rayo Vallecano,0,1,1,0,1,1,0,2,2
+1,2022-08-15 19:30,Betis,Elche,2,0,2,1,0,1,3,0,3
+1,2022-08-15 17:30,Getafe,Atl. Madrid,0,1,1,0,2,2,0,3,3
+1,2022-08-15 15:30,Ath Bilbao,Mallorca,0,0,0,0,0,0,0,0,0
+1,2022-08-14 20:00,Almeria,Real Madrid,1,0,1,0,2,2,1,2,3
+1,2022-08-14 17:30,Valencia,Girona,1,0,1,0,0,0,1,0,1
+1,2022-08-14 15:30,Cadiz CF,Real Sociedad,0,1,1,0,0,0,0,1,1
+1,2022-08-13 19:00,Barcelona,Rayo Vallecano,0,0,0,0,0,0,0,0,0
+1,2022-08-13 17:00,Valladolid,Villarreal,0,0,0,0,3,3,0,3,3
+1,2022-08-13 15:00,Celta Vigo,Espanyol,1,0,1,1,2,3,2,2,4
+1,2022-08-12 19:00,Osasuna,Sevilla,1,1,2,1,0,1,2,1,3

@@ -2,6 +2,5 @@
 *.log
 # ignore pycache module
 __pycache__
-# ignore jupyter notebook file
+# ignore hiden jupyter notebook file
 .ipynb*
-*.ipynb
