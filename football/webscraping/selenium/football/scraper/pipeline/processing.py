@@ -31,6 +31,7 @@ class Preprocessing(Admin):
             try:
                 cols = "`,`".join([str(i) for i in df.
                                   columns.tolist()])
+                self.connection.ping(reconnect=True)
                 for i, row in df.iterrows():
                     insert_df = (f"INSERT IGNORE INTO {self.lig_id}_fixture\
                 (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
@@ -77,6 +78,7 @@ away_team_goal']
         with self.connection.cursor() as cur:
             cols = "`,`".join([str(i) for i in df.
                               columns.tolist()])
+            self.connection.ping(reconnect=True)
             for i, row in df.iterrows():
                 insert_df = (f"INSERT IGNORE INTO {self.lig_id}_summary\
             (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
@@ -92,6 +94,7 @@ away_team_goal']
         with self.connection.cursor() as cur:
             cols = "`,`".join([str(i) for i in df.
                               columns.tolist()])
+            self.connection.ping(reconnect=True)
             for i, row in df.iterrows():
                 insert_df = (f"INSERT IGNORE INTO {self.lig_id}_scorer\
             (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
@@ -107,6 +110,7 @@ away_team_goal']
         with self.connection.cursor() as cur:
             cols = "`,`".join([str(i) for i in df.
                               columns.tolist()])
+            self.connection.ping(reconnect=True)
             for i, row in df.iterrows():
                 insert_df = (f"INSERT IGNORE INTO {self.lig_id}_stats\
             (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
@@ -123,6 +127,7 @@ away_team_goal']
         with self.connection.cursor() as cur:
             cols = "`,`".join([str(i) for i in df.
                               columns.tolist()])
+            self.connection.ping(reconnect=True)
             for i, row in df.iterrows():
                 request = (f"INSERT IGNORE INTO {self.lig_id}_h2h\
             (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")

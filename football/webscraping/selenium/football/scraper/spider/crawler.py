@@ -4,7 +4,6 @@ but on different pages.
 Both of two spiders do call processing methods to clean the data
 and communicate with database.
 
-Author: Hans Houphouet
 """
 from scraper.pipeline.processing import Preprocessing
 from pathlib import Path
@@ -427,12 +426,12 @@ seconds elapsed={round(time.perf_counter() - start, 2)}"
 
 
 if __name__ == "__main__":
-    fixture_url = ('https://www.flashscore.fr/football/france/ligue-1/\
+    fixture_url = ('https://www.flashscore.fr/football/france/ligue-2/\
 calendrier/')
-    result_url = ('https://www.flashscore.fr/football/france/ligue-1/\
+    result_url = ('https://www.flashscore.fr/football/france/ligue-2/\
 resultats/')
-    lig_id = "l1"
+    lig_id = "l2"
 
-    fixSpider = FixtureSpider(fixture_url, lig_id).crawl()
-    time.sleep(random.randrange(3, 5))
-    rslSpider = ResultSpider(result_url, lig_id, events=10).crawl()
+    # fixSpider = FixtureSpider(fixture_url, lig_id).crawl()
+    # time.sleep(random.randrange(3, 5))
+    rslSpider = ResultSpider(result_url, lig_id, events=54).crawl()
