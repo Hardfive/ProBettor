@@ -15,6 +15,8 @@ The following is a set of guidelines for contributing to ProBettor, these are mo
   * [Reporting Bugs](#reporting-bugs)
   * [Suggesting Enhancements](#suggesting-enhancements)
 
+[TODO](#todo)
+
 ## Code of Conduct
 
 This project and everyone participating in it is governed by the [Probettor Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [hhdur5132@gmail.com](mailto:hhdur5132@gmail.com).
@@ -40,6 +42,7 @@ Probettor aims to be a comprehensive tool to educate players in the best possibl
 
 The ultimate goal is to push each contributor's models into production and make them accessible to users.\
 Contributors with web development skills will be able to take care of the aesthetic aspects of this process.
+
 
 ## How Can I Contribute?
 
@@ -73,3 +76,14 @@ This section guides you through submitting an enhancement suggestion for Probett
 * **Provide a step-by-step description of the suggested enhancement** in as many details as possible.
 * **Describe the current behavior** and **explain which behavior you expected to see instead** and why.
 * **Explain why this enhancement would be useful** to most ProBettor users.
+
+### TODO
+
+---
+
+- [x] Build a simple webscraper to collect data.
+- [ ] Explore the data and make a machine learning model based on it.
+- [ ] Interprete the results and orient the data collection process if needed, in order to have the data required to improve the model accuracy
+- [ ] Optimize webscraping and other module (make unitest and more crawler..)
+- [ ] Migrate the project (database) to the cloud (Open Stack)
+- [ ] Build a website for the project.
