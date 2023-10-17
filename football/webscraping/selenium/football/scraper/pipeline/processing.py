@@ -8,7 +8,7 @@ import pymysql
 
 
 class Preprocessing(Admin):
-    """Manipulate and clean the data before storage"""
+    """Clean the data before storage"""
 
     def __init__(self, lig_id):
         super().__init__(lig_id)
@@ -20,7 +20,7 @@ class Preprocessing(Admin):
                             database='football')
 
     def fixture_processing(self, fixture):
-        """Create a dataframe of the data collected
+        """Create a dataframe of data collected
         set the date format and store it into the db. 
         """
         df = pd.DataFrame([fixture], columns=['journée', 'date_time',
@@ -31,7 +31,6 @@ class Preprocessing(Admin):
             try:
                 cols = "`,`".join([str(i) for i in df.
                                   columns.tolist()])
-                self.connection.ping(reconnect=True)
                 for i, row in df.iterrows():
                     insert_df = (f"INSERT IGNORE INTO {self.lig_id}_fixture\
                 (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
@@ -50,31 +49,16 @@ class Preprocessing(Admin):
                 self.connection.commit()
 
     def summary_processing(self, summary):
-        """Create new feature
-        store the dataframe into the db.
-        """
+        """"""
         df = pd.DataFrame(summary)
         numeric_col = ['journée', 'total_home_team_goal',
-                       'total_away_team_goal', '1st_home_team_goal',
-                       '1st_away_team_goal']
+                       'total_away_team_goal']
         for col in df.columns:
             if col in numeric_col:
                 df[col] = df[col].astype(int)
         df['date_time'] = pd.to_datetime(df['date_time'],
                                          format='%d.%m.%Y %H:%M')
-        df['2nd_home_team_goal'] = df['total_home_team_goal']-df['1st_\
-home_team_goal']
-        df['2nd_away_team_goal'] = df['total_away_team_goal']-df['1st_\
-away_team_goal']
-        df['1st_total_goal'] = df['1st_home_team_goal']+df['1st_\
-away_team_goal']
-        df['2nd_total_goal'] = df['2nd_home_team_goal']+df['2nd_\
-away_team_goal']
         df['global'] = df['total_home_team_goal']+df['total_away_team_goal']
-        df = df[['journée', 'date_time', 'home_team', 'away_team',
-                 '1st_home_team_goal', '1st_away_team_goal', '1st_total_goal',
-             '2nd_home_team_goal', '2nd_away_team_goal', '2nd_total_goal',
-             'total_home_team_goal', 'total_away_team_goal', 'global']]
         with self.connection.cursor() as cur:
             cols = "`,`".join([str(i) for i in df.
                               columns.tolist()])
@@ -134,3 +118,23 @@ away_team_goal']
                 cur.execute(request, tuple(row))
             self.connection.commit()
             # self.connection.close()
+            
+    def summary_to_csv(self, summary):
+        """Convert date_time column in appropriate format
+        store the data into a csv format.
+        """
+        df = pd.DataFrame(summary)
+        numeric_col = ['journée', 'total_home_team_goal',
+                       'total_away_team_goal']
+        for col in df.columns:
+            if col in numeric_col:
+                df[col] = df[col].astype(int)
+        df['date_time'] = pd.to_datetime(df['date_time'],
+                                         format='%d.%m.%Y %H:%M')
+        df['global'] = df['total_home_team_goal']+df['total_away_team_goal']
+        old_csv = pd.read_csv(self.rsl_fPath)
+        new_csv = pd.concat([df, old_csv], axis=0)
+        new_csv.drop_duplicates(subset=["date_time", "home_team", "away_team"],
+                                keep="last", inplace=True)
+        new_csv.sort_values(by='date_time', ascending=False, inplace=True)
+        new_csv.to_csv(self.rsl_fPath, index=False)
