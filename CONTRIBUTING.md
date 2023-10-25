@@ -85,6 +85,6 @@ This section guides you through submitting an enhancement suggestion for Probett
 - [ ] Explore the data and make a machine learning model based on it.
 - [ ] Interprete the results and orient the data collection process if needed, in order to have the data required to improve the model accuracy
 - [ ] Optimize webscraping and other module (make unitest and more crawler..)
-- [ ] Design ProBettor logo
+- [x] Design ProBettor logo
 - [ ] Migrate the project (database) to the cloud (Open Stack)
 - [ ] Build a website for the project.
