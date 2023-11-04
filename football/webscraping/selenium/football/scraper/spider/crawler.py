@@ -1,6 +1,7 @@
 """Spider module
 This module contains two spider class, made to crawl the same web site
-but on different pages.
+but on different pages, the particularity of the module is that it use
+asynchronous methods for retrive data.
 Both of two spiders do call processing methods to clean the data
 and communicate with database.
 
@@ -12,6 +13,7 @@ import datetime
 import asyncio
 import time
 import random
+import pandas as pd
 
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
@@ -22,9 +24,8 @@ import configparser
 
 
 class FixtureSpider(Preprocessing):
-    """That spider scrape the fixture data
-    retrieve information about matchs to comming
-    in the next round."""
+    """That spider scrape retrieve information
+      about matchs to comming in the next round."""
 
     summary_page = []
     config = configparser.RawConfigParser()
@@ -52,22 +53,22 @@ class FixtureSpider(Preprocessing):
             self.driver.quit()
             print("Connection failed\nTry check it.")
 
-    def parse(self):
+    def get_id(self):
+        """the main purpose of this script for now
+        is to allow us to get information about the last match like
+        when it has to be played and if it's time to collect all the results 
+        data, because of that IDs of others matchs are ignored during the scraping."""
+        # all_matchs = self.driver.find_elements(By.XPATH,
+        #                                        FixtureSpider.ALL_EVENT_XP)
+        # for event in all_matchs[:self.events]:
+        #    FixtureSpider.summary_page.append(f"https://www.flashscore.fr/match\
+#/{event.get_attribute('id')[4:]}/#/resume-du-match")
         last_match = self.driver.find_element(By.XPATH,
                                               FixtureSpider.LAST_EVENT_XP)
-        # the main purpose of this script for now
-        # is to allow us to get information about the last match like
-        # when it has to be played and if it's time to collect all the results 
-        # data, because of that the others IDs are ignored during the scraping.
-        """all_matchs = self.driver.find_elements(By.XPATH,
-                                                 FixtureSpider.ALL_EVENT_XP)
-        for event in all_matchs[:self.events]:
-            FixtureSpider.summary_page.append(f"https://www.flashscore.fr/match\
-/{event.get_attribute('id')[4:]}/#/resume-du-match")"""
         FixtureSpider.summary_page.append(f"https://www.flashscore.fr/match\
 /{last_match.get_attribute('id')[4:]}/#/resume-du-match")
 
-    async def parsing(self, url):
+    async def get_item(self, url):
         self.driver.execute_script("window.open('');")
         self.driver.switch_to.window(self.driver.window_handles[1])
         # await asyncio.sleep(0)  # uncomment this line to activate asyncio 
@@ -88,20 +89,22 @@ class FixtureSpider(Preprocessing):
                                                       AWAY_TEAM_XP).text
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
-        super().fixture_processing(fixture=items)
+        return items
 
-    async def item_parse(self):
+    async def item_parsing(self):
         tasks = []
         for url in FixtureSpider.summary_page:
-            task = asyncio.create_task(FixtureSpider.parsing(self, url))
+            task = asyncio.create_task(FixtureSpider.get_item(self, url))
             tasks.append(task)
-        await asyncio.gather(*tasks, return_exceptions=True)
+        data_collected = await asyncio.gather(*tasks)
+        super().fixture_preprocessing(fixture=data_collected)
+        return len(FixtureSpider.summary_page)
 
     def crawl(self):
         try:
             start = time.perf_counter()
-            FixtureSpider.parse(self)
-            asyncio.run(FixtureSpider.item_parse(self))
+            FixtureSpider.get_id(self)
+            asyncio.run(FixtureSpider.item_parsing(self))
             print(f"Sucessfuly fixture scraping\n\
 {round(time.perf_counter() - start, 2)}")
         except Exception as err:
@@ -114,9 +117,9 @@ class ResultSpider(Preprocessing):
     """ResultSpider is the more complexe of two spider classes
     it navigate on several pages to collect matchs details information
     contains several methods, which call other methods from
-    an another module."""
+    preprocessing module."""
 
-    journée = ''
+    list_item_h2h = []
     summary_page = []
     stats_page = []
     h2h_page = []
@@ -168,7 +171,8 @@ class ResultSpider(Preprocessing):
             self.driver.quit()
             print("Connection failed\nTry check it.")
 
-    def parse(self):
+    def get_match_id(self):
+        """"""
         ResultSpider.journée = self.driver.find_element(By.XPATH,
                                                         ResultSpider.
                                                         MP_XP).text
@@ -181,9 +185,9 @@ class ResultSpider(Preprocessing):
 /{event.get_attribute('id')[4:]}/#/resume-du-match/statistiques-du-match/0")
             ResultSpider.h2h_page.append(f"https://www.flashscore.fr/match\
 /{event.get_attribute('id')[4:]}/#/tete-a-tete/home")
-        print("%s IDs scraped" % len(ResultSpider.summary_page))
+        return len(ResultSpider.summary_page)
 
-    async def summary(self, url):
+    async def get_summary(self, url):
         list_items = []
         self.driver.execute_script("window.open('');")
         self.driver.switch_to.window(self.driver.window_handles[1])
@@ -215,9 +219,9 @@ class ResultSpider(Preprocessing):
         print("%s vs %s" % (items['home_team'], items['away_team']))
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
-        super().summary_processing(summary=list_items)
+        return list_items
 
-    async def goal(self, url):
+    async def get_goals(self, url):
         list_items = []
         self.driver.execute_script("window.open('');")
         await asyncio.sleep(0)
@@ -268,9 +272,9 @@ div[@class="smv__timeBox"][1]').text[:-1]
         print("%s row(s) scraped" % len(list_items))
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
-        super().goal_processing(goal=list_items)
+        return list_items
 
-    async def stats(self, url):
+    async def get_stats(self, url):
         list_items = []
         self.driver.execute_script("window.open('');")
         await asyncio.sleep(0)
@@ -338,14 +342,15 @@ div[@class="smv__timeBox"][1]').text[:-1]
         print("%s item(s) scraped / 13" % len(items.values()))
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
-        super().stat_processing(stats=list_items)
+        return list_items
 
-    async def h2h(self, url):
+    async def get_h2h(self, url):
         self.driver.execute_script("window.open('');")
         await asyncio.sleep(0)
         self.driver.switch_to.window(self.driver.window_handles[1])
         self.driver.get(url)
         print("H2H SCRAPING (ID=%s) started" % self.driver.current_url[32:40]) 
+        ResultSpider.list_item_h2h = []
         items = {}
         events_match = self.driver.find_elements(By.XPATH,
                                                      ResultSpider.
@@ -371,52 +376,65 @@ div[@class="smv__timeBox"][1]').text[:-1]
             for score in scores:
                 items['home_team_goal'] = score.text[0]
                 items['away_team_goal'] = score.text[-1:]
-            super().h2h_processing(h2h=items)
+            ResultSpider.list_item_h2h.append(items)
         print("%s row(s) scraped" % len(event))
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
+        return ResultSpider.list_item_h2h
 
     async def parse_summary(self):
         tasks = []
         for url in ResultSpider.summary_page:
-            task = asyncio.create_task(ResultSpider.summary(self, url))
+            task = asyncio.create_task(ResultSpider.get_summary(self, url))
             tasks.append(task)
-        await asyncio.gather(*tasks, return_exceptions=True)
+        data_collected = await asyncio.gather(*tasks)
+        super().summary_preprocessing(summary=data_collected)
+        return len(ResultSpider.summary_page)
 
     async def parse_goal(self):
         tasks = []
         for url in ResultSpider.summary_page:
-            task = asyncio.create_task(ResultSpider.goal(self, url))
+            task = asyncio.create_task(ResultSpider.get_goals(self, url))
             tasks.append(task)
-        await asyncio.gather(*tasks, return_exceptions=True)
+        data_collected = await asyncio.gather(*tasks)
+        super().goal_preprocessing(goal=data_collected)
+        return len(ResultSpider.summary_page)
 
     async def parse_stats(self):
+        """This script is not valable for now
+        because the xpath changed and it's difficult
+        to adapt them.
+        """
         tasks = []
         for url in ResultSpider.stats_page:
-            task = asyncio.create_task(ResultSpider.stats(self, url))
+            task = asyncio.create_task(ResultSpider.get_stats(self, url))
             tasks.append(task)
-        await asyncio.gather(*tasks, return_exceptions=True)
+        data_collected = await asyncio.gather(*tasks, return_exceptions=True)
+        super().stat_preprocessing(stats=data_collected)
+        return len(ResultSpider.stats_page)
 
     async def parse_h2h(self):
         tasks = []
         for url in ResultSpider.h2h_page:
-            task = asyncio.create_task(ResultSpider.h2h(self, url))
+            task = asyncio.create_task(ResultSpider.get_h2h(self, url))
             tasks.append(task)
-        await asyncio.gather(*tasks, return_exceptions=True)
+        data_collected = await asyncio.gather(*tasks)
+        super().h2h_preprocessing(h2h=data_collected)
+        return len(ResultSpider.h2h_page)
 
     def crawl(self):
         try:
             date_now = datetime.datetime.now()
             start = time.perf_counter()
-            ResultSpider.parse(self)
-            asyncio.run(ResultSpider.parse_summary(self))
+            ResultSpider.get_match_id(self)
+            summary_row_scraped = asyncio.run(ResultSpider.parse_summary(self))
             asyncio.run(ResultSpider.parse_goal(self))
-            asyncio.run(ResultSpider.parse_stats(self))
+            # asyncio.run(ResultSpider.parse_stats(self))
             asyncio.run(ResultSpider.parse_h2h(self))
             print(f"Sucessfuly results scraping\n\
 {round(time.perf_counter() - start, 2)} seconds elapsed.")
-            status = f"{self.lig_id}: {ResultSpider.journée}, \
-seconds elapsed={round(time.perf_counter() - start, 2)}"
+            status = f"{self.lig_id}: , Journée {ResultSpider.journée}, \
+matchs={summary_row_scraped}, seconds elapsed={round(time.perf_counter() - start, 2)}"
             with open(ResultSpider.LOG_FILE, "a") as log:
                 log.write(f"\n{date_now}.\n\t{status}")
         except Exception as err:
@@ -426,12 +444,10 @@ seconds elapsed={round(time.perf_counter() - start, 2)}"
 
 
 if __name__ == "__main__":
-    fixture_url = ('https://www.flashscore.fr/football/france/ligue-2/\
-calendrier/')
-    result_url = ('https://www.flashscore.fr/football/france/ligue-2/\
-resultats/')
+    fixture_url = ('https://www.flashscore.fr/football/france/ligue-2/calendrier/')
+    result_url = ('https://www.flashscore.fr/football/france/ligue-2/resultats/')
     lig_id = "l2"
 
     # fixSpider = FixtureSpider(fixture_url, lig_id).crawl()
     # time.sleep(random.randrange(3, 5))
-    rslSpider = ResultSpider(result_url, lig_id, events=54).crawl()
+    rslSpider = ResultSpider(result_url, lig_id, events=4).crawl()

@@ -1,4 +1,8 @@
-"""Spiders module."""
+"""This module is a simple and fast scraper, 
+that it does not open a new window for each element,
+but it's less robust because some data might be irreliable.
+For now, it's not maintained."""
+
 from scraper.pipeline.processing import Preprocessing
 import datetime
 import random
@@ -13,8 +17,7 @@ import pandas as pd
 
 
 class FixtureSpider(object):
-    """Crawl on flashscore web site to collect
-       the last next match from fixture"""
+    """collect the last next match"""
 
     fix_xp = '//div[@class="event__match event__match--static event__match\
 --scheduled event__match--last event__match--twoLine"] [1]'
@@ -46,22 +49,20 @@ class FixtureSpider(object):
             EC.visibility_of_element_located((By.XPATH,
                                               FixtureSpider.mp_xp))).text
         try:
-            # A web page can either load in English or in French
-            if len(match_play) == 7 or len(match_play) == 8:
-                # in the former the text inside the selector is ROUND
-                # exple = ROUND 7 or 10
-                match_play = match_play[6:]
-            else:
-                # in the latter the text is JOURNÉE
-                # exple = JOURNÉE 13
-                match_play = match_play[8:]  # Note we only take the number
+            # exple : match_play = JOURNÉE 13
+            match_play = match_play[8:]  # Note we only take the number
             item = {}
             item['mp'] = match_play
             item['date_time'] = event_match.find_element(By.XPATH,
                                                          FixtureSpider.
                                                          time_xp).text
+            item['home_team'] = event_match.find_element().text
+            item['away_team'] = event_match.find_element().text
+
             mp = item.get('mp')
             date_time = item.get("date_time")
+            home_team = item.get("home_team")
+            away_team = item.get("away_team")
         except Exception as err:
             print(f"{type(err)}, {err}")
         else:
@@ -124,15 +125,8 @@ event__part--1"]'
                 EC.visibility_of_element_located((By.XPATH,
                                                   ResultSpider.mp_xp))).text
         try:
-            # A web page can either load in English or in French
-            if len(match_play) == 7 or len(match_play) == 8:
-                match_play = match_play[6:]
-                # in the former the text inside the selector is ROUND
-                # exple = ROUND 7 or 10
-            else:
-                match_play = match_play[8:]
-                # in the latter the text is JOURNÉE
-                # exple = JOURNÉE 13
+            # exple: match_play = JOURNÉE 13
+            match_play = match_play[8:]
             for event in event_match[:10]:
                 item = {}
                 item['mp'] = match_play
@@ -170,7 +164,8 @@ event__part--1"]'
         else:
             results = pd.DataFrame(ResultSpider.DATAFRAME)
             print(results)
-            super().summary_to_csv(results)
+            super().summary_preprocessing(data=results, methode='csv', 
+                                          file_path=rsl_fPath)
             with open(self.fix_fPath, "r") as f:
                 next = f.read()
             end = time.perf_counter()

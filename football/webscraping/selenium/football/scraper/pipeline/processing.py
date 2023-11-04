@@ -1,6 +1,7 @@
 """Preprocessing module"""
 from gestion_db import Admin
 from dict_db import Description
+from pathlib import Path
 import os
 
 import pandas as pd
@@ -19,10 +20,7 @@ class Preprocessing(Admin):
                             passwd=os.environ.get('DB_PWD'),
                             database='football')
 
-    def fixture_processing(self, fixture):
-        """Create a dataframe of data collected
-        set the date format and store it into the db. 
-        """
+    def fixture_preprocessing(self, fixture):
         df = pd.DataFrame([fixture], columns=['journée', 'date_time',
                                               'home_team', 'away_team'])
         df['date_time'] = pd.to_datetime(df['date_time'],
@@ -48,48 +46,66 @@ class Preprocessing(Admin):
                     cur.execute(insert_df, tuple(row))
                 self.connection.commit()
 
-    def summary_processing(self, summary):
-        """"""
-        df = pd.DataFrame(summary)
-        numeric_col = ['journée', 'total_home_team_goal',
-                       'total_away_team_goal']
+    def summary_preprocessing(self, data, methode='database',
+                              file_path=None):
+        """Make some preprocess on the data and store them like
+        the methode choose, in the database or csv file.
+
+
+        Args:
+            data (list): list contains team and scores ...
+            methode (str, optional): the methode to use to store the data.
+            Defaults to 'database'.
+            file_path (_type_, optional): Defaults to None.
+        """
+        df = [pd.DataFrame(sublist) for sublist in data]
+        df = pd.concat(df, ignore_index=True)
+        numeric_col = ['total_home_team_goal', 'total_away_team_goal']
         for col in df.columns:
             if col in numeric_col:
                 df[col] = df[col].astype(int)
+        df['global'] = df['total_home_team_goal']+df['total_away_team_goal']
         df['date_time'] = pd.to_datetime(df['date_time'],
                                          format='%d.%m.%Y %H:%M')
-        df['global'] = df['total_home_team_goal']+df['total_away_team_goal']
-        with self.connection.cursor() as cur:
-            cols = "`,`".join([str(i) for i in df.
-                              columns.tolist()])
+        if methode == 'database':
             self.connection.ping(reconnect=True)
-            for i, row in df.iterrows():
-                insert_df = (f"INSERT IGNORE INTO {self.lig_id}_summary\
-            (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
-                cur.execute(insert_df, tuple(row))
-            self.connection.commit()
+            with self.connection.cursor() as cur:
+                cols = "`,`".join([str(i) for i in df.
+                                  columns.tolist()])
+                for i, row in df.iterrows():
+                    insert_df = (f"INSERT IGNORE INTO {self.lig_id}_summary\
+                (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
+                    cur.execute(insert_df, tuple(row))
+                self.connection.commit()
+        elif methode == 'csv':
+            if file_path != None:
+                try:
+                    old_csv = pd.read_csv(self.file_path)
+                    new_csv = pd.concat([df, old_csv], axis=0)
+                    new_csv.drop_duplicates(subset=["date_time", "home_team", "away_team"],
+                                            keep="last", inplace=True)
+                    new_csv.sort_values(by='date_time', ascending=False, inplace=True)
+                    new_csv.to_csv(self.file_path, index=False)
+                except Exception as err:
+                    print(f'{type(err)}')
 
-    def goal_processing(self, goal):
-        """Store incidents score.
-        """
-        df = pd.DataFrame(goal,
-                          columns=['journée', 'player', 'time_goal',
-                                   'team', 'opponent'])
+    def goal_preprocessing(self, goal):
+        df = [pd.DataFrame(sublist) for sublist in goal]
+        df = pd.concat(df, ignore_index=True)
+        df.columns = ['journée', 'player', 'time_goal', 'team', 'opponent']
+        self.connection.ping(reconnect=True)
         with self.connection.cursor() as cur:
             cols = "`,`".join([str(i) for i in df.
                               columns.tolist()])
-            self.connection.ping(reconnect=True)
             for i, row in df.iterrows():
                 insert_df = (f"INSERT IGNORE INTO {self.lig_id}_scorer\
             (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
                 cur.execute(insert_df, tuple(row))
             self.connection.commit()
 
-    def stat_processing(self, stats):
-        """
-        Store match statistics.
-        """
-        df = pd.DataFrame(stats)
+    def stat_preprocessing(self, stats):
+        df = [pd.DataFrame(sublist) for sublist in stats]
+        df = pd.concat(df, ignore_index=True)
         df.fillna(0, inplace=True)
         with self.connection.cursor() as cur:
             cols = "`,`".join([str(i) for i in df.
@@ -101,40 +117,23 @@ class Preprocessing(Admin):
                 cur.execute(insert_df, tuple(row))
             self.connection.commit()
 
-    def h2h_processing(self, h2h):
-        """
-        Store head to head data.
-        """
-        df = pd.DataFrame([h2h], columns=['date', 'home_team',
-                          'away_team', 'home_team_goal', 'away_team_goal'])
+    def h2h_preprocessing(self, h2h):
+        print(h2h)
+        df = [pd.DataFrame(sublist) for sublist in [h2h]]
+        df = pd.concat(df, ignore_index=True)
+        df.columns = ['date', 'home_team',
+                      'away_team', 'home_team_goal', 'away_team_goal']
         df['date'] = pd.to_datetime(df['date'], format='%d.%m.%y')
+        self.connection.ping(reconnect=True)
         with self.connection.cursor() as cur:
             cols = "`,`".join([str(i) for i in df.
                               columns.tolist()])
-            self.connection.ping(reconnect=True)
             for i, row in df.iterrows():
                 request = (f"INSERT IGNORE INTO {self.lig_id}_h2h\
             (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
                 cur.execute(request, tuple(row))
             self.connection.commit()
-            # self.connection.close()
             
-    def summary_to_csv(self, summary):
-        """Convert date_time column in appropriate format
-        store the data into a csv format.
-        """
-        df = pd.DataFrame(summary)
-        numeric_col = ['journée', 'total_home_team_goal',
-                       'total_away_team_goal']
-        for col in df.columns:
-            if col in numeric_col:
-                df[col] = df[col].astype(int)
-        df['date_time'] = pd.to_datetime(df['date_time'],
-                                         format='%d.%m.%Y %H:%M')
-        df['global'] = df['total_home_team_goal']+df['total_away_team_goal']
-        old_csv = pd.read_csv(self.rsl_fPath)
-        new_csv = pd.concat([df, old_csv], axis=0)
-        new_csv.drop_duplicates(subset=["date_time", "home_team", "away_team"],
-                                keep="last", inplace=True)
-        new_csv.sort_values(by='date_time', ascending=False, inplace=True)
-        new_csv.to_csv(self.rsl_fPath, index=False)
+
+if __name__ == "__main__":
+    pass
