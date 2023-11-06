@@ -1,6 +1,6 @@
 class Description(object):
     """Description of football database
-    All of numeric columns have a default zero value
+    All of numeric columns have default value = 0
     All columns are NOT NULL type.
     index[0] means the name of columns, index[1] represent column type
     Other definition :
@@ -21,10 +21,6 @@ class Description(object):
                           ('away_team', 30),
                           ('1st_home_team_goal', 'tiU'),
                           ('1st_away_team_goal', 'tiU'),
-                          ('1st_total_goal', 'tiU'),
-                          ('2nd_home_team_goal', 'tiU'),
-                          ('2nd_away_team_goal', 'tiU'),
-                          ('2nd_total_goal', 'tiU'),
                           ('total_home_team_goal', 'tiU'),
                           ('total_away_team_goal', 'tiU'),
                           ('global', 'tiU')],

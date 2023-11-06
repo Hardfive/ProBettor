@@ -2,6 +2,7 @@ from pathlib import Path
 import urllib.request
 import time
 import os
+import random
 import subprocess
 
 league_path = Path(__file__).parent / 'league'
@@ -18,7 +19,7 @@ else:
                 print(f"Runing {file}")
                 subprocess.call("python %s" % file, 
                                 shell=True)
-                time.sleep(3)
+                time.sleep(random.randrange(3, 5))
             except BaseException as err:
                 print(err)
     os.chdir(Path.cwd())

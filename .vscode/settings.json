@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./football/webscraping/selenium/football/scraper/pipeline"
+    ]
+}

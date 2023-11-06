@@ -1,9 +1,10 @@
 """This module is a simple and fast scraper, 
-that it does not open a new window for each element,
+cause it does not open a new window for each element,
 but it's less robust because some data might be irreliable.
+At start of this project, it was the first script that i created to collect data into csv file
 For now, it's not maintained."""
 
-from scraper.pipeline.processing import Preprocessing
+from preprocessing import Preprocessing
 import datetime
 import random
 import time
@@ -17,7 +18,6 @@ import pandas as pd
 
 
 class FixtureSpider(object):
-    """collect the last next match"""
 
     fix_xp = '//div[@class="event__match event__match--static event__match\
 --scheduled event__match--last event__match--twoLine"] [1]'
@@ -40,7 +40,7 @@ class FixtureSpider(object):
 
     def parse_item(self):
         """collect round, date and time
-           Save in a file inside fix_fPath
+           Save into fix_fPath
         """
         event_match = self.wait.until(
                 EC.visibility_of_element_located((By.XPATH,
@@ -56,13 +56,8 @@ class FixtureSpider(object):
             item['date_time'] = event_match.find_element(By.XPATH,
                                                          FixtureSpider.
                                                          time_xp).text
-            item['home_team'] = event_match.find_element().text
-            item['away_team'] = event_match.find_element().text
-
             mp = item.get('mp')
             date_time = item.get("date_time")
-            home_team = item.get("home_team")
-            away_team = item.get("away_team")
         except Exception as err:
             print(f"{type(err)}, {err}")
         else:
@@ -163,17 +158,8 @@ event__part--1"]'
             print(f"{type(err)}, {err}")
         else:
             results = pd.DataFrame(ResultSpider.DATAFRAME)
-            print(results)
             super().summary_preprocessing(data=results, methode='csv', 
                                           file_path=rsl_fPath)
-            with open(self.fix_fPath, "r") as f:
-                next = f.read()
-            end = time.perf_counter()
-            time_elpased = (end - start)
-            status = f"{self.surfix}: rows={results.shape[0]}, \
-MP={match_play}, seconds elapsed={time_elpased}. coming: {next}."
-            with open(ResultSpider.LOG_FILE, "a") as lg:
-                lg.write(f"\n{ResultSpider.STRF_DATE_NOW}. {status}")
         finally:
             self.driver.quit()
 

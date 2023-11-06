@@ -1,7 +1,6 @@
 """Preprocessing module"""
 from gestion_db import Admin
 from dict_db import Description
-from pathlib import Path
 import os
 
 import pandas as pd
@@ -21,7 +20,7 @@ class Preprocessing(Admin):
                             database='football')
 
     def fixture_preprocessing(self, fixture):
-        df = pd.DataFrame([fixture], columns=['journée', 'date_time',
+        df = pd.DataFrame(fixture, columns=['journée', 'date_time',
                                               'home_team', 'away_team'])
         df['date_time'] = pd.to_datetime(df['date_time'],
                                          format='%d.%m.%Y %H:%M')
@@ -118,11 +117,9 @@ class Preprocessing(Admin):
             self.connection.commit()
 
     def h2h_preprocessing(self, h2h):
-        print(h2h)
-        df = [pd.DataFrame(sublist) for sublist in [h2h]]
-        df = pd.concat(df, ignore_index=True)
-        df.columns = ['date', 'home_team',
-                      'away_team', 'home_team_goal', 'away_team_goal']
+        data = [item for sublist in h2h for item in sublist]
+        df = pd.DataFrame(data, columns=['date', 'home_team',
+                      'away_team', 'home_team_goal', 'away_team_goal'])
         df['date'] = pd.to_datetime(df['date'], format='%d.%m.%y')
         self.connection.ping(reconnect=True)
         with self.connection.cursor() as cur:
@@ -133,7 +130,3 @@ class Preprocessing(Admin):
             (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
                 cur.execute(request, tuple(row))
             self.connection.commit()
-            
-
-if __name__ == "__main__":
-    pass
