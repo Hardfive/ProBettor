@@ -57,7 +57,7 @@ class Preprocessing(Admin):
             Defaults to 'database'.
             file_path (_type_, optional): Defaults to None.
         """
-        df = [pd.DataFrame(sublist) for sublist in data]
+        df = [pd.DataFrame([sublist]) for sublist in data]
         df = pd.concat(df, ignore_index=True)
         numeric_col = ['total_home_team_goal', 'total_away_team_goal']
         for col in df.columns:
@@ -89,7 +89,7 @@ class Preprocessing(Admin):
                     print(f'{type(err)}')
 
     def goal_preprocessing(self, goal):
-        df = [pd.DataFrame(sublist) for sublist in goal]
+        df = [pd.DataFrame([sublist]) for sublist in goal]
         df = pd.concat(df, ignore_index=True)
         df.columns = ['journée', 'player', 'time_goal', 'team', 'opponent']
         self.connection.ping(reconnect=True)
@@ -102,24 +102,9 @@ class Preprocessing(Admin):
                 cur.execute(insert_df, tuple(row))
             self.connection.commit()
 
-    def stat_preprocessing(self, stats):
-        df = [pd.DataFrame(sublist) for sublist in stats]
-        df = pd.concat(df, ignore_index=True)
-        df.fillna(0, inplace=True)
-        with self.connection.cursor() as cur:
-            cols = "`,`".join([str(i) for i in df.
-                              columns.tolist()])
-            self.connection.ping(reconnect=True)
-            for i, row in df.iterrows():
-                insert_df = (f"INSERT IGNORE INTO {self.lig_id}_stats\
-            (`" + cols + "`) VALUES (" + " %s, " * (len(row) - 1) + " %s)")
-                cur.execute(insert_df, tuple(row))
-            self.connection.commit()
-
     def h2h_preprocessing(self, h2h):
-        data = [item for sublist in h2h for item in sublist]
-        df = pd.DataFrame(data, columns=['date', 'home_team',
-                      'away_team', 'home_team_goal', 'away_team_goal'])
+        df = pd.DataFrame(h2h, columns=
+                          ['date', 'home_team', 'away_team', 'home_team_goal', 'away_team_goal'])
         df['date'] = pd.to_datetime(df['date'], format='%d.%m.%y')
         self.connection.ping(reconnect=True)
         with self.connection.cursor() as cur:

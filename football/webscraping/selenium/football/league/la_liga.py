@@ -1,4 +1,4 @@
-from ligue1 import Process
+from football.league.ligue1 import Process
 
 fixture_url = ('https://www.flashscore.fr/football/espagne/laliga/calendrier/')
 result_url = ('https://www.flashscore.fr/football/espagne/laliga/resultats/')

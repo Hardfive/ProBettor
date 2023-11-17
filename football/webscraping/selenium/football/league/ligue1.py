@@ -6,6 +6,7 @@ import time
 import random
 import os
 import sys
+import traceback
 
 import pymysql
 
@@ -50,13 +51,14 @@ class Process(Admin):
                                               date_now.minute):
                 FixtureSpider(self.fixture_url, self.lig_id).crawl()
                 time.sleep(random.randrange(3, 5))
-                ResultSpider(self.result_url, self.lig_id,
-                             self.events).crawl()
+                result = ResultSpider(self.result_url, self.lig_id,
+                             self.events)
+                result.crawl()
             else:
                 print(f"Not ready: {(date_time-date_now)} \
 before running.")
-        except TypeError as error:
-            print(f"Unexpected {error=} , {type(error)=}")
+        except TypeError:
+            print(traceback.print_exc())
         finally:
             end = time.perf_counter()
             print(f"time={(end-start)} seconds elapsed.")
