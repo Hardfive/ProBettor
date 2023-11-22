@@ -22,5 +22,5 @@ else:
                 time.sleep(random.randrange(3, 5))
             except BaseException as err:
                 print(err)
-    os.chdir(Path.cwd())
+    os.chdir(Path(__file__).parent)
     subprocess.call("python db_dump.py", shell=True)
