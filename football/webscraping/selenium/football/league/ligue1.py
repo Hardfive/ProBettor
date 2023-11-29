@@ -18,11 +18,12 @@ class Process(Admin):
 
     PWD = os.environ.get('DB_PWD')
 
-    def __init__(self, fixture_url,  result_url, lig_id, events):
+    def __init__(self, fixture_url,  result_url, lig_id, events, start=0):
         self.fixture_url = fixture_url
         self.result_url = result_url
         self.lig_id = lig_id
         self.events = events
+        self.start = start
         self.connection = pymysql.connect(
                             host='localhost',
                             user='hh',
@@ -52,7 +53,7 @@ class Process(Admin):
                 FixtureSpider(self.fixture_url, self.lig_id).crawl()
                 time.sleep(random.randrange(3, 5))
                 result = ResultSpider(self.result_url, self.lig_id,
-                             self.events)
+                             self.events, self.start)
                 result.crawl()
             else:
                 print(f"Not ready: {(date_time-date_now)} \
@@ -70,4 +71,5 @@ calendrier/')
     result_url = ('https://www.flashscore.fr/football/france/ligue-1/\
 resultats/')
     lig_id = "l1"
+
     my_spider = Process(fixture_url, result_url, lig_id, events=10).pipeline()

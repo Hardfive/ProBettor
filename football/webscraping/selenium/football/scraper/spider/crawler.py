@@ -145,11 +145,12 @@ class ResultSpider(Preprocessing):
     preceding = config.get('ResultSpiderXpath', 'preceding')
     following = config.get('ResultSpiderXpath', 'following')
 
-    def __init__(self, result_url, lig_id, events):
+    def __init__(self, result_url, lig_id, events, start=0):
         super().__init__(lig_id)
         self.result_url = result_url
         self.lig_id = lig_id
         self.events = events
+        self.start = start
         self.options = webdriver.FirefoxOptions()
         self.options.headless = True
         self.driver = webdriver.Firefox(options=self.options)
@@ -167,7 +168,7 @@ class ResultSpider(Preprocessing):
                                                         MP_XP).text
         event_match = self.driver.find_elements(By.XPATH,
                                                 ResultSpider.EVENT_XP)
-        for event in event_match[:self.events]:
+        for event in event_match[self.start:self.events]:
             ResultSpider.summary_page.append(f"https://www.flashscore.fr/match\
 /{event.get_attribute('id')[4:]}/#/resume-du-match/resume-du-match")
             ResultSpider.stats_page.append(f"https://www.flashscore.fr/match\
@@ -316,10 +317,10 @@ div[@class="smv__timeBox"][1]').text[:-1]
 
 
 if __name__ == "__main__":
-    fixture_url = ('https://www.flashscore.fr/football/allemagne/bundesliga\
+    fixture_url = ('https://www.flashscore.fr/football/pays-bas/eredivisie\
 /calendrier/')
-    result_url = ('https://www.flashscore.fr/football/allemagne/bundesliga\
+    result_url = ('https://www.flashscore.fr/football/pays-bas/eredivisie\
 /resultats/')
-    lig_id = 'bdliga'
+    lig_id = 'erdvs'
 
-    rslSpider = ResultSpider(result_url, lig_id, events=9).crawl()
+    # rslSpider = ResultSpider(result_url, lig_id, events=98, start=74).crawl()
