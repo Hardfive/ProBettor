@@ -295,7 +295,7 @@ div[@class="smv__timeBox"][1]').text[:-1]
                     items['home_team_goal'] = score.text[0]
                     items['away_team_goal'] = score.text[-1:]
                 list_item_h2h.append(items)
-            print("%s row(s) scraped" % len(events_match))
+            print("%s row(s) scraped" % len(list_item_h2h))
             self.driver.close()
             self.driver.switch_to.window(self.driver.window_handles[0])
         super().h2h_preprocessing(h2h=list_item_h2h)
@@ -322,4 +322,4 @@ if __name__ == "__main__":
 /resultats/')
     lig_id = 'bdliga'
 
-    # rslSpider = ResultSpider(result_url, lig_id, events=3).crawl()
+    rslSpider = ResultSpider(result_url, lig_id, events=9).crawl()
