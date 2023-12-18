@@ -35,9 +35,10 @@ class FixtureSpider(Preprocessing):
     HOME_TEAM_XP = config.get('FixtureSpiderXpath', 'home_team_xp')
     AWAY_TEAM_XP = config.get('FixtureSpiderXpath', 'away_team_xp')
 
-    def __init__(self, fixture_url, lig_id):
+    def __init__(self, fixture_url, lig_id, events):
         super().__init__(lig_id)
         self.fix_url = fixture_url
+        self.events = events
         self.options = webdriver.FirefoxOptions()
         self.options.headless = True
         self.driver = webdriver.Firefox(options=self.options)
@@ -50,60 +51,51 @@ class FixtureSpider(Preprocessing):
             print("Connection failed\nTry check it.")
 
     def get_id(self):
-        """the main purpose of this script for now
-        is to allow us to get information about the last match like
-        when it has to be played and if it's time to collect all the data,
-        because of that, IDs of others matchs are ignored during the scraping."""
-        # all_matchs = self.driver.find_elements(By.XPATH,
-        #                                        FixtureSpider.ALL_EVENT_XP)
-        # for event in all_matchs[:self.events]:
-        #    FixtureSpider.summary_page.append(f"https://www.flashscore.fr/match\
-#/{event.get_attribute('id')[4:]}/#/resume-du-match")
+        all_matchs = self.driver.find_elements(By.XPATH,
+                                               FixtureSpider.ALL_EVENT_XP)
+        for event in all_matchs[:self.events]:
+            FixtureSpider.summary_page.append(f"https://www.flashscore.fr/match\
+/{event.get_attribute('id')[4:]}/#/resume-du-match")
         last_match = self.driver.find_element(By.XPATH,
                                               FixtureSpider.LAST_EVENT_XP)
         FixtureSpider.summary_page.append(f"https://www.flashscore.fr/match\
 /{last_match.get_attribute('id')[4:]}/#/resume-du-match")
+        return FixtureSpider.summary_page
 
-    async def get_item(self, url):
-        self.driver.execute_script("window.open('');")
-        self.driver.switch_to.window(self.driver.window_handles[1])
-        # await asyncio.sleep(0)  # uncomment this line to activate asyncio 
-        self.driver.get(url)
-        print("fixture scraping (ID=%s) started." % self.driver.current_url[32:40]) 
-        items = {}
-        items['journée'] = self.driver.find_element(By.XPATH,
-                                                    FixtureSpider.
-                                                    ROUND_XP).text[-2:]
-        items['date_time'] = self.driver.find_element(By.XPATH,
-                                                      FixtureSpider.
-                                                      TIME_XP).text
-        items['home_team'] = self.driver.find_element(By.XPATH,
-                                                      FixtureSpider.
-                                                      HOME_TEAM_XP).text
-        items['away_team'] = self.driver.find_element(By.XPATH,
-                                                      FixtureSpider.
-                                                      AWAY_TEAM_XP).text
-        self.driver.close()
-        self.driver.switch_to.window(self.driver.window_handles[0])
-        return items
-
-    async def item_parsing(self):
-        tasks = []
-        for url in FixtureSpider.summary_page:
-            task = asyncio.create_task(FixtureSpider.get_item(self, url))
-            tasks.append(task)
-        data_collected = await asyncio.gather(*tasks)
-        super().fixture_preprocessing(fixture=data_collected)
+    def get_item(self):
+        list_items = []
+        pages = self.get_id()
+        for url in pages:
+            self.driver.execute_script("window.open('');")
+            self.driver.switch_to.window(self.driver.window_handles[1])
+            self.driver.get(url)
+            print("FIXTURE SCRAPING (ID=%s)" % self.driver.current_url[32:40]) 
+            items = {}
+            items['journée'] = self.driver.find_element(By.XPATH,
+                                                        FixtureSpider.
+                                                        ROUND_XP).text[-2:]
+            items['date_time'] = self.driver.find_element(By.XPATH,
+                                                          FixtureSpider.
+                                                          TIME_XP).text
+            items['home_team'] = self.driver.find_element(By.XPATH,
+                                                          FixtureSpider.
+                                                          HOME_TEAM_XP).text
+            items['away_team'] = self.driver.find_element(By.XPATH,
+                                                          FixtureSpider.
+                                                          AWAY_TEAM_XP).text
+            list_items.append(items)
+            self.driver.close()
+            self.driver.switch_to.window(self.driver.window_handles[0])
+        super().fixture_preprocessing(fixture=list_items)
 
     def crawl(self):
         try:
             start = time.perf_counter()
-            FixtureSpider.get_id(self)
-            asyncio.run(FixtureSpider.item_parsing(self))
+            FixtureSpider.get_item(self)
             print(f"Sucessfuly fixture scraping\n\
 {round(time.perf_counter() - start, 2)}")
         except Exception as err:
-            print(err)
+            print(traceback.print_exc())
         finally:
             self.driver.close()
 
@@ -317,10 +309,9 @@ div[@class="smv__timeBox"][1]').text[:-1]
 
 
 if __name__ == "__main__":
-    fixture_url = ('https://www.flashscore.fr/football/pays-bas/eredivisie\
-/calendrier/')
-    result_url = ('https://www.flashscore.fr/football/pays-bas/eredivisie\
-/resultats/')
-    lig_id = 'erdvs'
+    fixture_url = ('https://www.flashscore.fr/football/france/ligue-2/calendrier/')
+    result_url = ('https://www.flashscore.fr/football/france/ligue-2/resultats/')
+    lig_id = 'l2'
 
+    # fxtSpider = FixtureSpider(fixture_url, lig_id, events=10).crawl()
     # rslSpider = ResultSpider(result_url, lig_id, events=98, start=74).crawl()
