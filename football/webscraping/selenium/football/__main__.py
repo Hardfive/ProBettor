@@ -16,7 +16,7 @@ else:
         f = os.path.join(league_path, file)
         if file.endswith('.py') and file != "__init__.py":
             try:
-                print(f"Runing {file}")
+                print(f"\nRuning {file}")
                 subprocess.call("python %s" % file, 
                                 shell=True)
                 time.sleep(random.randrange(3, 5))

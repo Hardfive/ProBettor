@@ -43,7 +43,7 @@ class Process(Admin):
             except pymysql.err.ProgrammingError:
                 # create tables if them does not exists yet
                 super().create_table(Description.TABLES)
-                FixtureSpider(self.fixture_url, self.lig_id).crawl()
+                FixtureSpider(self.fixture_url, self.lig_id, self.events).crawl()
                 sys.exit(0)
         try:
             date_now = datetime.datetime.now()

@@ -53,7 +53,7 @@ class FixtureSpider(Preprocessing):
     def get_id(self):
         all_matchs = self.driver.find_elements(By.XPATH,
                                                FixtureSpider.ALL_EVENT_XP)
-        for event in all_matchs[:self.events]:
+        for event in all_matchs[:(self.events-1)]: # because the last match aren't part of it. 
             FixtureSpider.summary_page.append(f"https://www.flashscore.fr/match\
 /{event.get_attribute('id')[4:]}/#/resume-du-match")
         last_match = self.driver.find_element(By.XPATH,
@@ -83,6 +83,7 @@ class FixtureSpider(Preprocessing):
             items['away_team'] = self.driver.find_element(By.XPATH,
                                                           FixtureSpider.
                                                           AWAY_TEAM_XP).text
+            print("%s: %s vs %s" % (items['journée'] ,items['home_team'], items['away_team']))
             list_items.append(items)
             self.driver.close()
             self.driver.switch_to.window(self.driver.window_handles[0])
@@ -197,7 +198,7 @@ class ResultSpider(Preprocessing):
 '] = self.driver.find_element(By.XPATH,
                                   ResultSpider.SCORE_XP).text[-1:]
             list_items.append(items)
-            print("%s vs %s" % (items['home_team'], items['away_team']))
+            print("%s: %s vs %s" % (items['journée'] ,items['home_team'], items['away_team']))
             self.driver.close()
             self.driver.switch_to.window(self.driver.window_handles[0])
         super().summary_preprocessing(data=list_items)
