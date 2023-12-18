@@ -50,7 +50,7 @@ class Process(Admin):
             if date_time <= datetime.datetime(date_now.year, date_now.month,
                                               date_now.day, date_now.hour-3,
                                               date_now.minute):
-                FixtureSpider(self.fixture_url, self.lig_id).crawl()
+                FixtureSpider(self.fixture_url, self.lig_id, self.events).crawl()
                 time.sleep(random.randrange(3, 5))
                 result = ResultSpider(self.result_url, self.lig_id,
                              self.events, self.start)
