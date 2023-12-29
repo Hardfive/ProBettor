@@ -36,7 +36,8 @@ class Process(Admin):
         start = time.perf_counter()
         with self.connection.cursor() as cur:
             try:
-                request = f"SELECT MAX(`date_time`) FROM {self.lig_id}_fixture"
+                request = f"SELECT MAX(`date_time`) FROM {self.lig_id}_fixture \
+WHERE `journée`= (SELECT MAX(journée+1) FROM {self.lig_id}_summary)"
                 cur.execute(request)
                 date_time = cur.fetchone()
                 date_time = date_time[0]

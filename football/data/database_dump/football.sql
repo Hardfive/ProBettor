@@ -318,6 +318,40 @@ INSERT INTO `l1_scorer` VALUES (1,'Adams A.',58,'Montpellier','Le Havre'),(1,'Ad
 UNLOCK TABLES;
 
 --
+-- Table structure for table `l1_stats`
+--
+
+DROP TABLE IF EXISTS `l1_stats`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `l1_stats` (
+  `journée` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team` varchar(30) NOT NULL,
+  `away_team` varchar(30) NOT NULL,
+  `home_team_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_acc_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_acc_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_corner` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_corner` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_yellow_card` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_yellow_card` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_exg` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_exg` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`journée`,`home_team`,`away_team`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `l1_stats`
+--
+
+LOCK TABLES `l1_stats` WRITE;
+/*!40000 ALTER TABLE `l1_stats` DISABLE KEYS */;
+/*!40000 ALTER TABLE `l1_stats` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `l1_summary`
 --
 
@@ -426,6 +460,40 @@ LOCK TABLES `l2_scorer` WRITE;
 /*!40000 ALTER TABLE `l2_scorer` DISABLE KEYS */;
 INSERT INTO `l2_scorer` VALUES (1,'Abdi A.',62,'Caen','Paris FC'),(1,'Bamba',90,'Grenoble','Saint-Étienne'),(1,'Bosetti A.',45,'Annecy','Guingamp'),(1,'Buatu J.',22,'Valenciennes','Auxerre'),(1,'Camara O.',18,'Auxerre','Valenciennes'),(1,'Camara O.',61,'Auxerre','Valenciennes'),(1,'Dong K.',17,'Troyes','Dunkerque'),(1,'El Ouazzani A.',72,'Guingamp','Annecy'),(1,'Ghrieb R.',23,'Dunkerque','Troyes'),(1,'Ghrieb R.',73,'Dunkerque','Troyes'),(1,'Hein G.',70,'Auxerre','Valenciennes'),(1,'Hein G.',79,'Auxerre','Valenciennes'),(1,'Ilic L.',13,'Troyes','Dunkerque'),(1,'Mendy A.',45,'Caen','Paris FC'),(1,'Merghem M.',90,'Guingamp','Annecy'),(1,'Picard H.',54,'Guingamp','Annecy'),(1,'Rajot L.',6,'Rodez','AC Ajaccio'),(1,'Sagna A.',74,'Guingamp','Annecy'),(1,'Sanna S.',66,'Laval','Angers'),(1,'Touho M.',90,'Amiens','Quevilly-Rouen'),(1,'Touzghar Y.',4,'AC Ajaccio','Rodez'),(1,'Touzghar Y.',45,'AC Ajaccio','Rodez'),(3,'Abdi A.',90,'Caen','Concarneau'),(3,'Balde Y.',81,'Laval','Rodez'),(3,'Beusnard S.',37,'Pau FC','Paris FC'),(3,'Boutaib K.',63,'Pau FC','Paris FC'),(3,'Caddy W.',59,'Annecy','Dunkerque'),(3,'Diony L.',45,'Angers','Auxerre'),(3,'Drame I.',44,'Bastia','Amiens'),(3,'Gelin J.',48,'Amiens','Bastia'),(3,'Hein G.',75,'Auxerre','Angers'),(3,'Larose A.',55,'Annecy','Dunkerque'),(3,'Mafouta L.',36,'Amiens','Bastia'),(3,'Mendy A.',54,'Caen','Concarneau'),(3,'Nadje G.',62,'Angers','Auxerre'),(3,'Perrin G.',17,'Auxerre','Angers'),(3,'Pierret B.',54,'Quevilly-Rouen','Saint-Étienne'),(3,'Sissoko I.',29,'Saint-Étienne','Quevilly-Rouen'),(3,'Sissoko I.',45,'Saint-Étienne','Quevilly-Rouen'),(3,'Testud K.',90,'Annecy','Dunkerque'),(4,'Abdelli H.',90,'Angers','Dunkerque'),(4,'Avinel C.',36,'Caen','AC Ajaccio'),(4,'Boutoutaou A.',6,'Valenciennes','Rodez'),(4,'Caddy W.',26,'Annecy','Saint-Étienne'),(4,'Chambost D.',48,'Saint-Étienne','Annecy'),(4,'Conte F.',70,'Bastia','Troyes'),(4,'Conte F.',80,'Bastia','Troyes'),(4,'de Preville N.',9,'Troyes','Bastia'),(4,'Diaby-Fadiga L.',42,'Paris FC','Concarneau'),(4,'Gomis D.',38,'Guingamp','Pau FC'),(4,'Hamel P.',75,'Paris FC','Concarneau'),(4,'Hamel P.',84,'Paris FC','Concarneau'),(4,'Mendy A.',36,'Caen','AC Ajaccio'),(4,'Mendy A.',45,'Caen','AC Ajaccio'),(4,'Mendy A.',63,'Caen','AC Ajaccio'),(4,'Sagna A.',50,'Guingamp','Pau FC'),(4,'Santelli B.',47,'Bastia','Troyes'),(4,'Sidibe K.',17,'Guingamp','Pau FC'),(4,'Sivis M.',89,'Guingamp','Pau FC'),(4,'Vipotnik Z.',47,'Bordeaux','Amiens'),(4,'Weissbeck G.',56,'Bordeaux','Amiens'),(4,'Zoukrou B.',29,'Troyes','Bastia'),(5,'Abdi A.',77,'Caen','Laval'),(5,'Assoumou J.',77,'Troyes','Quevilly-Rouen'),(5,'Aye F.',36,'Auxerre','Bordeaux'),(5,'Aye F.',59,'Auxerre','Bordeaux'),(5,'Bahoya J.',90,'Angers','Paris FC'),(5,'Bayala C.',65,'AC Ajaccio','Dunkerque'),(5,'Boissier R.',52,'Dunkerque','AC Ajaccio'),(5,'Caddy W.',28,'Annecy','Concarneau'),(5,'Chavalerin X.',57,'Troyes','Quevilly-Rouen'),(5,'Danger B.',90,'Rodez','Pau FC'),(5,'Diaz P.',26,'Bordeaux','Auxerre'),(5,'Diony L.',33,'Angers','Paris FC'),(5,'El Ouazzani A.',40,'Guingamp','Amiens'),(5,'Elis A.',83,'Bordeaux','Auxerre'),(5,'Gnanduillet A.',19,'Dunkerque','AC Ajaccio'),(5,'Haag G.',63,'Rodez','Pau FC'),(5,'Hein G.',56,'Auxerre','Bordeaux'),(5,'Jubal',33,'Auxerre','Bordeaux'),(5,'Kakuta G.',81,'Amiens','Guingamp'),(5,'Leautey A.',42,'Amiens','Guingamp'),(5,'Loric S.',29,'Quevilly-Rouen','Troyes'),(5,'Mafouta L.',77,'Amiens','Guingamp'),(5,'Mafouta L.',90,'Amiens','Guingamp'),(5,'Merdji Y.',66,'Concarneau','Annecy'),(5,'Sylla M.',29,'Pau FC','Rodez'),(5,'Sylla M.',45,'Pau FC','Rodez'),(5,'Tchokounte M.',90,'Laval','Caen'),(5,'Toure B.',50,'AC Ajaccio','Dunkerque'),(5,'Vargas T.',90,'Laval','Caen'),(5,'Yade P.',4,'Quevilly-Rouen','Troyes'),(6,'Ba P. I.',35,'Concarneau','QRM'),(6,'Baudry M.',55,'Laval','Bastia'),(6,'Chadli N.',28,'Concarneau','QRM'),(6,'Corredor K.',46,'Rodez','Angers'),(6,'Diony L.',2,'Angers','Rodez'),(6,'Drame I.',52,'Laval','Bastia'),(6,'El Ouazzani A.',4,'Guingamp','AC Ajaccio'),(6,'El Ouazzani A.',32,'Guingamp','AC Ajaccio'),(6,'Elis A.',37,'Bordeaux','Valenciennes'),(6,'Georgen A.',90,'QRM','Concarneau'),(6,'Gory A.',62,'Paris FC','Amiens'),(6,'Guillaume B.',78,'Guingamp','AC Ajaccio'),(6,'Hein G.',13,'Auxerre','Pau FC'),(6,'Hountondji A.',86,'Rodez','Angers'),(6,'Kruse D.',63,'Valenciennes','Bordeaux'),(6,'Lukembila J.',14,'Paris FC','Amiens'),(6,'Mendy A.',90,'Caen','Saint-Étienne'),(6,'Merdji Y.',45,'Concarneau','QRM'),(6,'Onaiwu A.',84,'Auxerre','Pau FC'),(6,'Pitu A.',88,'Bordeaux','Valenciennes'),(6,'Rajot L.',88,'Rodez','Angers'),(6,'Roye J.',27,'Laval','Bastia'),(6,'Ruiz J.',22,'Pau FC','Auxerre'),(6,'Sissoko I.',88,'Saint-Étienne','Caen'),(6,'Soumano S.',83,'QRM','Concarneau'),(6,'Sylla M.',58,'Pau FC','Auxerre'),(6,'Taibi W.',49,'Rodez','Angers'),(6,'Tardieu F.',30,'Saint-Étienne','Caen'),(6,'Toure M.',43,'Paris FC','Amiens'),(7,'Assoumou J.',75,'Troyes','Auxerre'),(7,'Bahoya J.',90,'Angers','Bastia'),(7,'Bammou Y.',67,'AC Ajaccio','Paris FC'),(7,'Benet J.',14,'Grenoble','QRM'),(7,'Bilingi Y.',55,'Dunkerque','Rodez'),(7,'Caddy W.',45,'Annecy','Pau FC'),(7,'Capelle P.',29,'Angers','Bastia'),(7,'Davitashvili Z.',34,'Bordeaux','Caen'),(7,'Diarra M.',54,'Grenoble','QRM'),(7,'Diaw E.',62,'Laval','Guingamp'),(7,'Guillaume B.',50,'Guingamp','Laval'),(7,'Hamel P.',58,'Paris FC','AC Ajaccio'),(7,'Hountondji A.',67,'Rodez','Dunkerque'),(7,'Jabol-Folcarelli T.',56,'AC Ajaccio','Paris FC'),(7,'Larose A.',44,'Annecy','Pau FC'),(7,'Mendy A.',15,'Caen','Bordeaux'),(7,'Mouanga K.',59,'Annecy','Pau FC'),(7,'Ndiaye A.',21,'Auxerre','Troyes'),(7,'Owusu E.',90,'Auxerre','Troyes'),(7,'Sissoko I.',73,'Saint-Étienne','Concarneau'),(7,'Tchokounte M.',89,'Laval','Guingamp'),(7,'Thiam D.',16,'Rodez','Dunkerque'),(7,'Yade P.',45,'QRM','Grenoble'),(8,'Abdi A.',19,'Caen','Grenoble'),(8,'Aye F.',29,'Auxerre','Annecy'),(8,'Ba P. M.',46,'Grenoble','Caen'),(8,'Ba P. M.',49,'Grenoble','Caen'),(8,'Bassouamina M.',54,'Pau FC','Bastia'),(8,'Buades L.',78,'Rodez','Troyes'),(8,'Cafaro M.',86,'Saint-Étienne','Dunkerque'),(8,'Chavalerin X.',90,'Troyes','Rodez'),(8,'Conte F.',62,'Bastia','Pau FC'),(8,'Corredor K.',52,'Rodez','Troyes'),(8,'Diaw E.',56,'Laval','Paris FC'),(8,'Diony L.',38,'Angers','QRM'),(8,'Etuin M.',31,'Concarneau','Valenciennes'),(8,'Mouanga K.',21,'Auxerre','Annecy'),(8,'Njoh Y.',82,'Pau FC','Bastia'),(8,'Perrin G.',85,'Auxerre','Annecy'),(8,'Raveloson R.',87,'Auxerre','Annecy'),(8,'Saivet H.',26,'Pau FC','Bastia'),(8,'Saivet H.',79,'Pau FC','Bastia'),(8,'Sissoko I.',83,'Saint-Étienne','Dunkerque'),(9,'Bammou Y.',59,'AC Ajaccio','Bastia'),(9,'Barreto M.',89,'AC Ajaccio','Bastia'),(9,'Corredor K.',90,'Rodez','Auxerre'),(9,'Diony L.',77,'Angers','Concarneau'),(9,'El Melali F.',90,'Angers','Concarneau'),(9,'Gory A.',62,'Paris FC','Annecy'),(9,'Hein G.',33,'Auxerre','Rodez'),(9,'Lukembila J.',51,'Paris FC','Annecy'),(9,'Moueffek A.',90,'Saint-Étienne','Troyes'),(9,'Ntamack S.',46,'Annecy','Paris FC'),(9,'Pajot V.',18,'Annecy','Paris FC'),(9,'Perrin G.',72,'Auxerre','Rodez'),(9,'Postolachi V.',15,'Grenoble','Bordeaux'),(9,'Raveloson R.',90,'Auxerre','Rodez'),(9,'Sagna A.',77,'Guingamp','Caen'),(9,'Saivet H.',21,'Pau FC','Amiens'),(9,'Soumano S.',50,'QRM','Dunkerque'),(9,'Tchokounte M.',79,'Laval','Valenciennes'),(9,'Touray S.',90,'Grenoble','Bordeaux'),(10,'Abdelli H.',45,'Angers','Amiens'),(10,'Anziani J.',23,'Dunkerque','Concarneau'),(10,'Arconte T.',13,'Rodez','Caen'),(10,'Arconte T.',71,'Rodez','Caen'),(10,'Arconte T.',76,'Rodez','Caen'),(10,'Assoumou J.',12,'Troyes','Valenciennes'),(10,'Ba P. I.',63,'Concarneau','Dunkerque'),(10,'Ba P. I.',90,'Concarneau','Dunkerque'),(10,'Ba-Sy A.',66,'Dunkerque','Concarneau'),(10,'Bassouamina M.',9,'Pau FC','QRM'),(10,'Bassouamina M.',67,'Pau FC','QRM'),(10,'Benet J.',23,'Grenoble','Guingamp'),(10,'Boutoutaou A.',90,'Valenciennes','Troyes'),(10,'Carroll A.',14,'Amiens','Angers'),(10,'Chadli N.',8,'Concarneau','Dunkerque'),(10,'Chadli N.',78,'Concarneau','Dunkerque'),(10,'Conte F.',70,'Bastia','Annecy'),(10,'Delaurier-Chaubet L.',85,'QRM','Pau FC'),(10,'El Melali F.',22,'Angers','Amiens'),(10,'Ferhat Z.',71,'Angers','Amiens'),(10,'Hunou A.',90,'Angers','Amiens'),(10,'Le Bihan M.',45,'Caen','Rodez'),(10,'Lienard D.',59,'Bastia','Annecy'),(10,'Mendy A.',45,'Caen','Rodez'),(10,'Merghem M.',45,'Guingamp','Grenoble'),(10,'Onaiwu A.',70,'Auxerre','Paris FC'),(10,'Orelien A.',41,'Dunkerque','Concarneau'),(10,'Pajot V.',89,'Annecy','Bastia'),(10,'Rajot L.',4,'Rodez','Caen'),(10,'Sagna A.',2,'Guingamp','Grenoble'),(10,'Sinayoko L.',22,'Auxerre','Paris FC'),(10,'Sivis M.',72,'Grenoble','Guingamp'),(10,'Soumano S.',38,'QRM','Pau FC'),(10,'Tchokounte M.',33,'Laval','Bordeaux'),(10,'Thomas R.',42,'Caen','Rodez'),(10,'Younoussa W.',90,'Rodez','Caen'),(11,'Abdi A.',6,'Auxerre','Caen'),(11,'Alakouch S.',64,'Paris FC','Dunkerque'),(11,'Aye F.',52,'Caen','Auxerre'),(11,'Ba P. M.',33,'Grenoble','Valenciennes'),(11,'Bahoya J.',60,'Angers','Bordeaux'),(11,'Boutoutaou A.',13,'Valenciennes','Grenoble'),(11,'Carroll A.',39,'Amiens','Annecy'),(11,'Conte F.',3,'Bastia','Rodez'),(11,'Delaurier-Chaubet L.',90,'QRM','Guingamp'),(11,'Depres C.',67,'Rodez','Bastia'),(11,'Diaby-Fadiga L.',10,'Paris FC','Dunkerque'),(11,'El Ouazzani A.',16,'Guingamp','QRM'),(11,'Fortes S.',80,'Guingamp','QRM'),(11,'Gnanduillet A.',72,'Dunkerque','Paris FC'),(11,'Hamel P.',77,'Paris FC','Dunkerque'),(11,'Joseph L.',24,'Grenoble','Valenciennes'),(11,'Lilepo M.',78,'Valenciennes','Grenoble'),(11,'Lopy J.',33,'Angers','Bordeaux'),(11,'Mangani T.',63,'AC Ajaccio','Pau FC'),(11,'Ntamack S.',7,'Annecy','Amiens'),(11,'Sbai A.',90,'Grenoble','Valenciennes'),(11,'Sissoko I.',13,'Saint-Étienne','Laval'),(11,'Soumano S.',14,'QRM','Guingamp'),(11,'Touzghar Y.',52,'AC Ajaccio','Pau FC'),(11,'Woudenberg L.',58,'Valenciennes','Grenoble'),(12,'Abdi A.',90,'Caen','Valenciennes'),(12,'Arconte T.',33,'Rodez','Bordeaux'),(12,'Ba P. I.',76,'Concarneau','AC Ajaccio'),(12,'Ba P. I.',84,'Concarneau','AC Ajaccio'),(12,'Ba P. M.',9,'Grenoble','Pau FC'),(12,'Ba P. M.',59,'Grenoble','Pau FC'),(12,'Bammou Y.',68,'AC Ajaccio','Concarneau'),(12,'Barbet Y.',13,'Bordeaux','Rodez'),(12,'Bassouamina M.',23,'Pau FC','Grenoble'),(12,'Boissier R.',90,'Dunkerque','Auxerre'),(12,'Boli C.',90,'Pau FC','Grenoble'),(12,'Boutaib K.',82,'Pau FC','Grenoble'),(12,'Hamache I.',29,'Valenciennes','Caen'),(12,'Hamel P.',60,'Paris FC','Troyes'),(12,'Hountondji A.',79,'Rodez','Bordeaux'),(12,'Ilic L.',72,'Troyes','Paris FC'),(12,'Jean G.',17,'Annecy','QRM'),(12,'Kebbal I.',86,'Paris FC','Troyes'),(12,'Larose A.',49,'Annecy','QRM'),(12,'Le Bihan M.',87,'Caen','Valenciennes'),(12,'Lilepo M.',8,'Valenciennes','Caen'),(12,'Petrot L.',59,'Saint-Étienne','Angers'),(12,'Said R.',56,'Troyes','Paris FC'),(12,'Sissoko I.',51,'Saint-Étienne','Angers'),(12,'Soumano S.',23,'QRM','Annecy'),(12,'Weissbeck G.',18,'Bordeaux','Rodez'),(13,'Assoumou J.',64,'Troyes','Caen'),(13,'Bobichon A.',8,'Laval','Annecy'),(13,'Bohnert F.',18,'Bastia','Bordeaux'),(13,'Buatu J.',29,'Angers','Valenciennes'),(13,'Coulibaly K.',22,'QRM','Rodez'),(13,'Delaurier-Chaubet L.',40,'QRM','Rodez'),(13,'El Melali F.',14,'Angers','Valenciennes'),(13,'El Ouazzani A.',80,'Guingamp','Auxerre'),(13,'Gory A.',72,'Paris FC','Saint-Étienne'),(13,'Hountondji A.',27,'Rodez','QRM'),(13,'Ilic L.',17,'Troyes','Caen'),(13,'Jabol-Folcarelli T.',3,'AC Ajaccio','Grenoble'),(13,'Jacob V.',52,'AC Ajaccio','Grenoble'),(13,'Kakuta G.',7,'Amiens','Dunkerque'),(13,'Livolant J.',78,'Bordeaux','Bastia'),(13,'Marchetti V.',26,'AC Ajaccio','Grenoble'),(13,'Mendy A.',61,'Caen','Troyes'),(13,'Mouanga K.',77,'Laval','Annecy'),(13,'Ntamack S.',27,'Annecy','Laval'),(13,'Pellenard T.',51,'Guingamp','Auxerre'),(13,'Perrin G.',72,'Auxerre','Guingamp'),(13,'Roye J.',56,'Laval','Annecy'),(13,'Santelli B.',9,'Bastia','Bordeaux'),(13,'Santelli B.',68,'Bastia','Bordeaux'),(13,'Soumano S.',71,'QRM','Rodez'),(14,'Abdelli H.',58,'Angers','Pau FC'),(14,'Bahoya J.',88,'Angers','Pau FC'),(14,'Bardeli E.',88,'Dunkerque','Valenciennes'),(14,'Bassouamina M.',2,'Pau FC','Angers'),(14,'Bentayg M.',80,'Saint-Étienne','Auxerre'),(14,'Boutaib K.',30,'Pau FC','Angers'),(14,'Boutaib K.',90,'Pau FC','Angers'),(14,'Cafaro M.',31,'Saint-Étienne','Auxerre'),(14,'Coulibaly K.',58,'QRM','Caen'),(14,'Delaurier-Chaubet L.',20,'QRM','Caen'),(14,'Diaz P.',15,'Bordeaux','Annecy'),(14,'Diony L.',20,'Angers','Pau FC'),(14,'Gbelle G.',22,'QRM','Caen'),(14,'Joseph L.',36,'Grenoble','Amiens'),(14,'Kebbal I.',45,'Paris FC','Bastia'),(14,'Kyeremeh G.',12,'Caen','QRM'),(14,'Le Bihan M.',90,'Caen','QRM'),(14,'Lebeau T.',90,'Concarneau','Laval'),(14,'Lopy J.',47,'Angers','Pau FC'),(14,'Mafouta L.',26,'Amiens','Grenoble'),(14,'Mendy A.',43,'Caen','QRM'),(14,'Mouazan B.',21,'Concarneau','Laval'),(14,'Ntamack S.',30,'Annecy','Bordeaux'),(14,'Onaiwu A.',3,'Auxerre','Saint-Étienne'),(14,'Onaiwu A.',36,'Auxerre','Saint-Étienne'),(14,'Onaiwu A.',66,'Auxerre','Saint-Étienne'),(14,'Ouaneh P.',53,'Concarneau','Laval'),(14,'Perrin G.',21,'Auxerre','Saint-Étienne'),(14,'Postolachi V.',88,'Grenoble','Amiens'),(14,'Sinayoko L.',82,'Auxerre','Saint-Étienne'),(14,'Sylla M.',62,'Pau FC','Angers'),(14,'Touzghar Y.',22,'AC Ajaccio','Troyes'),(14,'Vipotnik Z.',45,'Bordeaux','Annecy'),(14,'Vipotnik Z.',58,'Bordeaux','Annecy'),(15,'Charbonnier G.',9,'Saint-Étienne','Pau FC'),(15,'D\'Almeida S.',78,'Pau FC','Saint-Étienne'),(15,'Saivet H.',75,'Pau FC','Saint-Étienne'),(16,'Baghdadi S.',50,'Dunkerque','Pau FC'),(16,'Benet J.',59,'Grenoble','Laval'),(16,'Danger B.',15,'Rodez','Concarneau'),(16,'El Melali F.',42,'Angers','AC Ajaccio'),(16,'Gbelle G.',35,'QRM','Auxerre'),(16,'Goncalves A.',80,'Laval','Grenoble'),(16,'Hountondji A.',62,'Rodez','Concarneau'),(16,'Jacob V.',28,'AC Ajaccio','Angers'),(16,'Kebbal I.',70,'Paris FC','Guingamp'),(16,'Leautey A.',45,'Amiens','Saint-Étienne'),(16,'Lefebvre A.',34,'Troyes','Bordeaux'),(16,'Mendy A.',88,'Caen','Bastia'),(16,'Onaiwu A.',65,'Auxerre','QRM'),(16,'Perrin G.',45,'Auxerre','QRM'),(16,'Saivet H.',5,'Pau FC','Dunkerque'),(16,'Sinayoko L.',55,'Auxerre','QRM'),(16,'Soumano S.',40,'QRM','Auxerre'),(17,'Alfarela M.',13,'Bastia','Dunkerque'),(17,'Alfarela M.',68,'Bastia','Dunkerque'),(17,'Alfarela M.',90,'Bastia','Dunkerque'),(17,'Autret M.',80,'Caen','Annecy'),(17,'Bassouamina M.',72,'Pau FC','Valenciennes'),(17,'Camara M.',19,'QRM','Bordeaux'),(17,'Coulibaly K.',55,'QRM','Bordeaux'),(17,'Courtet G.',87,'Guingamp','Saint-Étienne'),(17,'Diony L.',34,'Angers','Grenoble'),(17,'Diop M.',21,'Troyes','Amiens'),(17,'Elis A.',78,'Bordeaux','QRM'),(17,'Elis A.',88,'Bordeaux','QRM'),(17,'Guillaume B.',55,'Guingamp','Saint-Étienne'),(17,'Hamel P.',1,'Paris FC','Rodez'),(17,'Hamel P.',23,'Paris FC','Rodez'),(17,'Jubal',38,'Auxerre','Concarneau'),(17,'Mendy A.',77,'Caen','Annecy'),(17,'Mouazan B.',89,'Concarneau','Auxerre'),(17,'Moueffek A.',21,'Saint-Étienne','Guingamp'),(17,'Nouri R.',90,'AC Ajaccio','Laval'),(17,'Ntamack S.',20,'Annecy','Caen'),(17,'Okou Y.',2,'Bastia','Dunkerque'),(17,'Perrin G.',16,'Auxerre','Concarneau'),(17,'Said R.',40,'Troyes','Amiens'),(17,'Sidibe K.',42,'Guingamp','Saint-Étienne'),(17,'Soumano S.',15,'QRM','Bordeaux'),(17,'Sylla M.',45,'Pau FC','Valenciennes'),(17,'Sylla M.',90,'Pau FC','Valenciennes'),(17,'Tomi F.',89,'Bastia','Dunkerque'),(17,'Touzghar Y.',60,'AC Ajaccio','Laval'),(17,'Venema N.',48,'Valenciennes','Pau FC'),(18,'Abdelli H.',55,'Angers','Troyes'),(18,'Benet J.',80,'Grenoble','Annecy'),(18,'Brahimi B.',8,'Caen','Dunkerque'),(18,'Capelle P.',31,'Angers','Troyes'),(18,'Carroll A.',26,'Amiens','Rodez'),(18,'Cherni A.',51,'Laval','Pau FC'),(18,'Corredor K.',48,'Rodez','Amiens'),(18,'Corredor K.',57,'Rodez','Amiens'),(18,'Diony L.',34,'Angers','Troyes'),(18,'Ferhat Z.',33,'Angers','Troyes'),(18,'Hamel P.',38,'Paris FC','Valenciennes'),(18,'Hanin F.',8,'Troyes','Angers'),(18,'Hein G.',18,'Auxerre','AC Ajaccio'),(18,'Hein G.',29,'Auxerre','AC Ajaccio'),(18,'Leautey A.',73,'Amiens','Rodez'),(18,'Mouazan B.',70,'Concarneau','Guingamp'),(18,'Sylla M.',64,'Pau FC','Laval'),(19,'Alfarela M.',71,'Bastia','Saint-Étienne'),(19,'Ba P. M.',37,'Grenoble','Concarneau'),(19,'Ba P. M.',85,'Grenoble','Concarneau'),(19,'Cafaro M.',63,'Saint-Étienne','Bastia'),(19,'Camara M.',67,'QRM','Paris FC'),(19,'Chambost D.',5,'Saint-Étienne','Bastia'),(19,'Chambost D.',9,'Saint-Étienne','Bastia'),(19,'Cherni A.',28,'Laval','Auxerre'),(19,'Diaby-Fadiga L.',47,'Paris FC','QRM'),(19,'Diony L.',24,'Angers','Guingamp'),(19,'Elis A.',70,'Bordeaux','Dunkerque'),(19,'Haouari Y.',31,'Valenciennes','AC Ajaccio'),(19,'Hein G.',69,'Auxerre','Laval'),(19,'Hountondji A.',8,'Rodez','Annecy'),(19,'Joseph L.',46,'Grenoble','Concarneau'),(19,'Keita C.',76,'Bastia','Saint-Étienne'),(19,'Kore Y.',19,'Paris FC','QRM'),(19,'Larose A.',55,'Annecy','Rodez'),(19,'Onaiwu A.',32,'Auxerre','Laval'),(19,'Rajot L.',66,'Rodez','Annecy'),(19,'Said R.',56,'Troyes','Pau FC'),(19,'Sinayoko L.',59,'Auxerre','Laval'),(19,'Soumano S.',24,'QRM','Paris FC'),(19,'Sylla M.',88,'Pau FC','Troyes'),(19,'Toure B.',8,'AC Ajaccio','Valenciennes'),(19,'Touzghar Y.',42,'AC Ajaccio','Valenciennes'),(19,'Vipotnik Z.',4,'Bordeaux','Dunkerque');
 /*!40000 ALTER TABLE `l2_scorer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `l2_stats`
+--
+
+DROP TABLE IF EXISTS `l2_stats`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `l2_stats` (
+  `journée` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team` varchar(30) NOT NULL,
+  `away_team` varchar(30) NOT NULL,
+  `home_team_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_acc_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_acc_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_corner` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_corner` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_yellow_card` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_yellow_card` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_exg` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_exg` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`journée`,`home_team`,`away_team`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `l2_stats`
+--
+
+LOCK TABLES `l2_stats` WRITE;
+/*!40000 ALTER TABLE `l2_stats` DISABLE KEYS */;
+/*!40000 ALTER TABLE `l2_stats` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -762,6 +830,40 @@ INSERT INTO `sA_scorer` VALUES (1,'Almqvist P.',85,'Lecce','Lazio'),(1,'Belotti 
 UNLOCK TABLES;
 
 --
+-- Table structure for table `sA_stats`
+--
+
+DROP TABLE IF EXISTS `sA_stats`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sA_stats` (
+  `journée` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team` varchar(30) NOT NULL,
+  `away_team` varchar(30) NOT NULL,
+  `home_team_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_acc_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_acc_shoot` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_corner` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_corner` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_yellow_card` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_yellow_card` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `home_team_exg` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `away_team_exg` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`journée`,`home_team`,`away_team`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sA_stats`
+--
+
+LOCK TABLES `sA_stats` WRITE;
+/*!40000 ALTER TABLE `sA_stats` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sA_stats` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sA_summary`
 --
 
@@ -801,4 +903,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-29  8:52:42
+-- Dump completed on 2023-12-29  9:15:44
