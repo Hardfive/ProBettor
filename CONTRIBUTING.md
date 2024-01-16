@@ -25,10 +25,9 @@ This project and everyone participating in it is governed by the [Probettor Code
 
 To get a sense of how this project is organized , take a look at the basic structure
 
-* [webscraping](./football/webscraping/) - This directory is the foundation of the project, consisting of multiple subdirectories with modules, classes, and functions for data collection and processing. Two tools are used to build web crawling robots:\
-**Selenium** et **Scrapy**.
+* [webscraping](./football/webscraping/) - This directory is the foundation of the project, consisting of multiple subdirectories with modules, classes, and functions for data collection and processing.
 * [analysis](./football/analysis/) - It is the second directory in the hierarchy, coming right after data collection. Exploratory Data Analysis (EDA) is conducted in notebooks. This analysis allows for visualization, interpretation, pattern discovery, and model building.
-* [data](./football/data/) - Contains CSV files for a quick overview of the data and a copy of the local database.
+* [data](./football/data/) - Contains CSV files for a quick overview of the data and a dump of the local database.
 
 this overview should be a good starting point.
 
@@ -82,9 +81,8 @@ This section guides you through submitting an enhancement suggestion for Probett
 ---
 
 - [x] Build a simple webscraper to collect data.
-- [ ] Explore the data and make a machine learning model based on it.
-- [ ] Interprete the results and orient the data collection process if needed, in order to have the data required to improve the model accuracy
-- [ ] Optimize webscraping and other module (make unitest and more crawler..)
 - [x] Design ProBettor logo
-- [ ] Migrate the project (database) to the cloud (Open Stack)
+- [x] Explore the data and make a machine learning model based on it.
+- [ ] Interprete the results and orient the data collection process if needed, in order to have the data required to improve the model accuracy
+- [ ] Migrate the project (database) to the cloud
 - [ ] Build a website for the project.
