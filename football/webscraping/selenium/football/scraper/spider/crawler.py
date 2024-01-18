@@ -161,7 +161,7 @@ class ResultSpider(Preprocessing):
                                                         MP_XP).text
         event_match = self.driver.find_elements(By.XPATH,
                                                 ResultSpider.EVENT_XP)
-        for event in event_match[self.start:self.events]:
+        for event in event_match[self.start:(self.events+self.start)]:
             ResultSpider.summary_page.append(f"https://www.flashscore.fr/match\
 /{event.get_attribute('id')[4:]}/#/resume-du-match/resume-du-match")
             ResultSpider.stats_page.append(f"https://www.flashscore.fr/match\
