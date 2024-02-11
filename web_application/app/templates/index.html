@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/style.css" rel="stylesheet">
+    <title>{% block title %}{% endblock %}Probettor AI: for Betting, Education Ressources and much more.</title>
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+    {% block nav %}
+    <nav>
+        <ul>
+            <li><a href="https://www.github.com/Hardfive/ProBettor">Documentation</a></li>
+            <li><a href="#faq">Blog</a></li>
+            <li><a href="#contact">Contacts</a></li>
+        </ul>
+    </nav>
+    {% endblock %}
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Enter a new era with the power of ProBettor AI</h1>
+            <h3>Cultivate originality</h3>
+            <p>Build your own model adaptable to your needs or use a pre-train one.</p>
+            <h3>Simplified learning</h3>
+            <p>Benefits from a large dataset for analysis and machine learning. Take your skills to the next level.</p>
+            <div class="buttons">
+                <a href="#login" class="btn">Connexion</a>
+                <a href="#signup" class="btn">Create an account</a>
+            </div>
+            <p class="notice">No credit card needed</p>
+        </div>
+    </div>
+    <div class="container">
+        <h2>About Us!</h2>
+        <p>Welcome to ProBettor AI, your ultimate destination for data-driven sports betting insights!</p>
+        <p>At proBettor, we harness the power of data science to revolutionize the way you approach sports betting. Our flagshup project, is designated to provide you with unparalleled predictive analytics and strategic guidance to enhance your betting experience.</p>
+        <p>ProBettor is powered by a dedicated team of data scientists, developers, and sports enthusiasts committeed to delivering cutting-edge solutions in the sports betting arena. Providing you with the tools and insights to succeed in the world of sports betting.</p>
+        <p>Join us on this exciting journey as we redefine the art of sports betting with ProBettor AI!</p>
+    </div>
+    <div id="feature-container">
+        <div class="feature"><strong>Under/Over predictions:</strong> Predicts the range of goals expected in a match, saving your time on data analysis.</div>
+        <div class="feature"><strong>Betting indicators:</strong> Provides precise and detailed indicators and optimized placement for safer gains in live betting.</div>
+        <div class="feature"><strong>statistics and graphs:</strong> hyper-detailed and understanble and graphs to help understand match dynamics.</div>
+        <div class="feature"><strong>AI-based betting strategy:</strong> Develops a betting strategy based on your betting habits, stakes, and bankroll amount.</div>
+        <div class="feature"><strong>Automation potential:</strong> Future plan to automate the bettig process, allowing for additional income even when you're away.</div>
+    </div>
+    {% block footer %}
+    <footer>
+        <div class="footer">
+            <p>&copy; 2024 ProBettor AI. All rights reserved.</p>
+        </div>
+    </footer>
+    {% endblock %}
+    {% endblock %}
+</body>
+</html>
