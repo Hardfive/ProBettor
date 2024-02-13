@@ -51,11 +51,11 @@ class FixtureSpider(Preprocessing):
             print("Connection failed\nTry check it.")
 
     def get_id(self):
-        all_matchs = self.driver.find_elements(By.XPATH,
+        """all_matchs = self.driver.find_elements(By.XPATH,
                                                FixtureSpider.ALL_EVENT_XP)
         for event in all_matchs[:(self.events-1)]: # because the last match aren't part of it. 
             FixtureSpider.summary_page.append(f"https://www.flashscore.fr/match\
-/{event.get_attribute('id')[4:]}/#/resume-du-match")
+/{event.get_attribute('id')[4:]}/#/resume-du-match")"""
         last_match = self.driver.find_element(By.XPATH,
                                               FixtureSpider.LAST_EVENT_XP)
         FixtureSpider.summary_page.append(f"https://www.flashscore.fr/match\
