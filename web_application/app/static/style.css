@@ -45,7 +45,36 @@ footer {
     color: #fff;
     padding: 10px;
     text-align: center;
-    position: fixed;
     bottom: 0;
     width: 100%;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgb(24, 6, 6);
+}
+
+.hero-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.buttons {
+    margin-top: 20px;
 }

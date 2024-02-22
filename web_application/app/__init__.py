@@ -8,8 +8,8 @@ def create_app():
     def index():
         return render_template('index.html')
     
-    @app.route('/underOver')
+    @app.route('/prediction')
     def underOver():
-        return render_template('overUnder.html')
+        return render_template('prediction.html')
     
     return app
