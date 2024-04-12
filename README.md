@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=500px height=500px src="./probettor.png" alt="Project logo"></a>
+ <img width=1000px height=500px src="./img/mainImgHomePage.jpg" alt="main Project img"></a>
 </p>
 
 <h3 align="center">By Us For Us</h3>
@@ -8,15 +8,13 @@
 <div align="center">
 
   [![Status](https://img.shields.io/badge/status-active-success.svg)]() 
-  [![GitHub Issues](https://img.shields.io/github/issues/Hardfive/ProBettor.svg)](https://github.com/Hardfive/ProBettor/issues)
-  [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/Hardfive/ProBettor.svg)](https://github.com/Hardfive/ProBettor/pulls)
   [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 </div>
 
 ## 🧐 About <a name = "about"></a>
-ProBettor is a Data Science project aimed at exploring the domain of sports betting, with the goal of assisting in making informed decisions when placing bets.
-While allowing contributors to improve their knowlegdge of data science, machine learning, and Artificial Intelligence.
+ProBettor is a Data Science project aimed at exploring the domain of sports analysis and betting, with the goal of assisting in making informed decisions when placing bets and more.
+While allowing contributors to improve and share their knowlegdge of data science, machine learning, and Artificial Intelligence.
 
 ## Context
 Today, sports betting is one of the most widely practiced forms of gambling worldwide, with online betting sites multiplying and continually attracting new enthusiasts.\

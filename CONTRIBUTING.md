@@ -19,7 +19,7 @@ The following is a set of guidelines for contributing to ProBettor, these are mo
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the [Probettor Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [hhdur5132@gmail.com](mailto:hhdur5132@gmail.com).
+This project and everyone participating in it is governed by the [Probettor Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. 
 
 ## What should I know before I get started?
 
@@ -80,9 +80,8 @@ This section guides you through submitting an enhancement suggestion for Probett
 
 ---
 
-- [x] Build a simple webscraper to collect data.
-- [x] Design ProBettor logo
+- [X] Build a simple webscraper to collect data.
 - [x] Explore the data and make a machine learning model based on it.
-- [ ] Interprete the results and orient the data collection process if needed, in order to have the data required to improve the model accuracy
+- [x] Interprete the results and orient the data collection process if needed, in order to have the data required to improve the model accuracy
+- [x] Build a website for the project.
 - [ ] Migrate the project (database) to the cloud
-- [ ] Build a website for the project.
